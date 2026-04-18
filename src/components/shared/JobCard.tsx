@@ -29,7 +29,7 @@ function MatchScoreBadge({ score }: { score: number }) {
     score >= 80
       ? "bg-emerald-50 text-emerald-700 border-emerald-200"
       : score >= 60
-      ? "bg-violet-50 text-violet-700 border-violet-200"
+      ? "bg-[#FF0078]/10 text-[#FF0078] border-[#FF0078]/30"
       : "bg-gray-50 text-gray-500 border-gray-200";
 
   return (
@@ -57,7 +57,7 @@ export function JobCard({ job, onClick, compact = false }: JobCardProps) {
   return (
     <div
       onClick={onClick}
-      className="group bg-white border border-gray-100 rounded-xl p-5 hover:border-violet-200 hover:shadow-md transition-all duration-200 cursor-pointer relative"
+      className="group bg-white border border-gray-100 rounded-xl p-5 hover:border-[#FF0078]/30 hover:shadow-md transition-all duration-200 cursor-pointer relative"
     >
       {/* Featured glow */}
       {job.featured && (
@@ -82,10 +82,10 @@ export function JobCard({ job, onClick, compact = false }: JobCardProps) {
               <div className="flex items-center gap-1.5 mb-0.5">
                 <p className="text-xs text-gray-400 font-medium">{job.orgName}</p>
                 {job.verified && (
-                  <ShieldCheck className="w-3.5 h-3.5 text-violet-500 shrink-0" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#FF0078] shrink-0" />
                 )}
               </div>
-              <h3 className="font-semibold text-gray-900 text-sm leading-tight group-hover:text-violet-700 transition-colors">
+              <h3 className="font-semibold text-gray-900 text-sm leading-tight group-hover:text-[#FF0078] transition-colors">
                 {job.title}
               </h3>
             </div>
@@ -94,10 +94,10 @@ export function JobCard({ job, onClick, compact = false }: JobCardProps) {
                 e.stopPropagation();
                 toggleSave(job.id);
               }}
-              className="text-gray-300 hover:text-violet-500 transition-colors shrink-0 mt-0.5"
+              className="text-gray-300 hover:text-[#FF0078] transition-colors shrink-0 mt-0.5"
             >
               {saved ? (
-                <BookmarkCheck className="w-4 h-4 text-violet-500" />
+                <BookmarkCheck className="w-4 h-4 text-[#FF0078]" />
               ) : (
                 <Bookmark className="w-4 h-4" />
               )}
@@ -141,7 +141,7 @@ export function JobCard({ job, onClick, compact = false }: JobCardProps) {
                   variant="secondary"
                   className={`text-xs px-2 py-0 ${
                     isMatch
-                      ? "bg-violet-50 text-violet-700 border border-violet-100"
+                      ? "bg-[#FF0078]/10 text-[#FF0078] border border-[#FF0078]/20"
                       : "bg-gray-50 text-gray-500"
                   }`}
                 >

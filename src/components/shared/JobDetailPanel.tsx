@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Job } from "@/types";
 import { useApp } from "@/lib/app-context";
+import { useLang } from "@/lib/language-context";
 import { computeMatchScore } from "@/lib/mock-data";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ interface JobDetailPanelProps {
 
 export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
   const { savedJobs, toggleSave, hasApplied, currentStudent, organizations } = useApp();
+  const { t } = useLang();
   const [applyOpen, setApplyOpen] = useState(false);
 
   if (!job) return null;
@@ -73,7 +75,7 @@ export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
                   <div className="flex items-center gap-1.5 mb-0.5">
                     <p className="text-xs text-gray-400 font-medium">{job.orgName}</p>
                     {job.verified && (
-                      <ShieldCheck className="w-3.5 h-3.5 text-violet-500" />
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#FF0078]" />
                     )}
                   </div>
                   <h2 className="font-bold text-gray-900 text-lg leading-tight">{job.title}</h2>
@@ -84,7 +86,7 @@ export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
                     </span>
                     {job.remote && (
                       <span className="flex items-center gap-1 text-xs text-gray-400">
-                        <Wifi className="w-3 h-3" /> Remote OK
+                        <Wifi className="w-3 h-3" /> {t('label_remoteOk')}
                       </span>
                     )}
                     {job.salary && (
@@ -94,10 +96,10 @@ export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
                 </div>
                 <button
                   onClick={() => toggleSave(job.id)}
-                  className="text-gray-300 hover:text-violet-500 transition-colors shrink-0 mt-1"
+                  className="text-gray-300 hover:text-[#FF0078] transition-colors shrink-0 mt-1"
                 >
                   {saved ? (
-                    <BookmarkCheck className="w-5 h-5 text-violet-500" />
+                    <BookmarkCheck className="w-5 h-5 text-[#FF0078]" />
                   ) : (
                     <Bookmark className="w-5 h-5" />
                   )}
@@ -112,18 +114,18 @@ export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
                 </span>
                 <span className="flex items-center gap-1">
                   <Users className="w-3 h-3" />
-                  {job.applicantCount} applied
+                  {job.applicantCount} {t('label_applicants')}
                 </span>
                 {isUrgent && job.daysUntilDeadline !== undefined && (
                   <span className="flex items-center gap-1 text-amber-600 font-semibold">
                     <AlertCircle className="w-3 h-3" />
-                    Closes in {job.daysUntilDeadline} days
+                    {job.daysUntilDeadline} {t('label_daysLeft')}
                   </span>
                 )}
                 {job.deadline && !isUrgent && (
                   <span className="flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
-                    Deadline: {job.deadline}
+                    {job.deadline}
                   </span>
                 )}
               </div>
@@ -135,20 +137,20 @@ export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
               {/* Match score */}
               <div className="bg-gray-50 rounded-xl p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Your Match</p>
+                  <p className="text-xs font-semibold text-gray-700 uppercase tracking-wide">{t('match_profile')}</p>
                   <span className={`text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
                     matchScore >= 80 ? "bg-emerald-50 text-emerald-700" :
-                    matchScore >= 60 ? "bg-violet-50 text-violet-700" :
+                    matchScore >= 60 ? "bg-[#FF0078]/10 text-[#FF0078]" :
                     "bg-gray-100 text-gray-600"
                   }`}>
-                    <Zap className="w-3 h-3" /> {matchScore}% match
+                    <Zap className="w-3 h-3" /> {matchScore}%
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-1.5 mb-3">
                   <div
                     className={`h-1.5 rounded-full ${
                       matchScore >= 80 ? "bg-emerald-500" :
-                      matchScore >= 60 ? "bg-violet-500" : "bg-gray-400"
+                      matchScore >= 60 ? "bg-[#FF0078]/100" : "bg-gray-400"
                     }`}
                     style={{ width: `${matchScore}%` }}
                   />
@@ -167,13 +169,13 @@ export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
 
               {/* Description */}
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-2">About the role</h3>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">{t('section_aboutRole')}</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">{job.description}</p>
               </div>
 
               {/* Requirements */}
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-3">What they're looking for</h3>
+                <h3 className="text-sm font-semibold text-gray-900 mb-3">{t('section_requirements')}</h3>
                 <ul className="space-y-2">
                   {job.requirements.map((req, i) => (
                     <li key={i} className="flex items-start gap-2.5 text-sm text-gray-600">
@@ -184,9 +186,9 @@ export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
                 </ul>
               </div>
 
-              {/* Hiring process — the differentiator */}
+              {/* Hiring process */}
               <div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-1">Hiring process</h3>
+                <h3 className="text-sm font-semibold text-gray-900 mb-1">{t('section_hiringProcess')}</h3>
                 <p className="text-xs text-gray-400 mb-4 flex items-center gap-1">
                   <Clock className="w-3 h-3" /> {job.timeline}
                 </p>
@@ -194,8 +196,8 @@ export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
                   {job.hiringProcess.map((stage, i) => (
                     <div key={i} className="flex items-start gap-3">
                       <div className="flex flex-col items-center">
-                        <div className="w-7 h-7 rounded-full bg-violet-50 border-2 border-violet-200 flex items-center justify-center shrink-0">
-                          <span className="text-xs font-bold text-violet-600">{stage.step}</span>
+                        <div className="w-7 h-7 rounded-full bg-[#FF0078]/10 border-2 border-[#FF0078]/30 flex items-center justify-center shrink-0">
+                          <span className="text-xs font-bold text-[#FF0078]">{stage.step}</span>
                         </div>
                         {i < job.hiringProcess.length - 1 && (
                           <div className="w-px h-6 bg-violet-100 mt-1" />
@@ -215,24 +217,24 @@ export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
                 <div className="border border-gray-100 rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-3">
                     <Building2 className="w-4 h-4 text-gray-400" />
-                    <h3 className="text-sm font-semibold text-gray-900">About {org.name}</h3>
+                    <h3 className="text-sm font-semibold text-gray-900">{org.name}</h3>
                     {org.verified && (
-                      <span className="flex items-center gap-1 text-xs text-violet-600 font-medium bg-violet-50 px-2 py-0.5 rounded-full ml-auto">
-                        <ShieldCheck className="w-3 h-3" /> Verified
+                      <span className="flex items-center gap-1 text-xs text-[#FF0078] font-medium bg-[#FF0078]/10 px-2 py-0.5 rounded-full ml-auto">
+                        <ShieldCheck className="w-3 h-3" /> {t('label_verified')}
                       </span>
                     )}
                   </div>
                   <p className="text-xs text-gray-500 leading-relaxed mb-3">{org.description}</p>
                   <div className="grid grid-cols-2 gap-2 text-xs text-gray-500">
                     <span>📍 {org.location}</span>
-                    <span>👥 {org.size} employees</span>
-                    {org.founded && <span>📅 Founded {org.founded}</span>}
+                    <span>👥 {org.size} {t('label_employees')}</span>
+                    {org.founded && <span>📅 {org.founded}</span>}
                     <span>⚡ {org.responseTime}</span>
                   </div>
                   {org.hiresCount > 0 && (
                     <p className="text-xs text-emerald-600 font-medium mt-3 flex items-center gap-1">
                       <CheckCircle2 className="w-3.5 h-3.5" />
-                      {org.hiresCount} students hired through Miku
+                      {org.hiresCount} {t('label_studentsHired')}
                     </p>
                   )}
                 </div>
@@ -244,11 +246,11 @@ export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
               {applied ? (
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-green-600 font-semibold flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4" /> Application sent
+                    <CheckCircle2 className="w-4 h-4" /> {t('btn_applied')}
                   </span>
                   <Link href="/student/applications">
                     <Button variant="outline" size="sm" className="text-xs gap-1">
-                      Track status <ArrowRight className="w-3 h-3" />
+                      {t('btn_trackStatus')} <ArrowRight className="w-3 h-3" />
                     </Button>
                   </Link>
                 </div>
@@ -260,16 +262,16 @@ export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
                     onClick={() => toggleSave(job.id)}
                   >
                     {saved ? (
-                      <><BookmarkCheck className="w-4 h-4 mr-1.5 text-violet-500" /> Saved</>
+                      <><BookmarkCheck className="w-4 h-4 mr-1.5 text-[#FF0078]" /> {t('btn_saved')}</>
                     ) : (
-                      <><Bookmark className="w-4 h-4 mr-1.5" /> Save</>
+                      <><Bookmark className="w-4 h-4 mr-1.5" /> {t('btn_save')}</>
                     )}
                   </Button>
                   <Button
-                    className="flex-1 bg-violet-600 hover:bg-violet-700 gap-1.5 font-semibold"
+                    className="flex-1 bg-[#FF0078] hover:bg-[#d60065] gap-1.5 font-semibold"
                     onClick={() => setApplyOpen(true)}
                   >
-                    <Zap className="w-4 h-4" /> Apply Now
+                    <Zap className="w-4 h-4" /> {t('btn_applyNow')}
                   </Button>
                 </div>
               )}

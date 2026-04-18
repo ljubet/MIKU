@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/lib/app-context";
+import { LanguageProvider } from "@/lib/language-context";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -10,9 +11,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Miku — Find internships in 60 seconds",
+  title: "Linker — Find internships in 60 seconds",
   description:
-    "Miku helps students discover and apply to internships and jobs faster than ever.",
+    "Linker helps students discover and apply to internships and jobs faster than ever.",
 };
 
 export default function RootLayout({
@@ -23,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable} h-full antialiased`}>
       <body className="min-h-full bg-white text-gray-900 font-[family-name:var(--font-poppins)]">
-        <AppProvider>{children}</AppProvider>
+        <LanguageProvider>
+          <AppProvider>{children}</AppProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

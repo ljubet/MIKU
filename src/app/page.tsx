@@ -2,10 +2,9 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useApp } from "@/lib/app-context";
+import { useLang } from "@/lib/language-context";
 import {
-  Zap,
   ArrowRight,
   ShieldCheck,
   Clock,
@@ -15,61 +14,53 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-const painPoints = [
-  "Scrolling through Discord for internship links",
-  "Applying and never hearing back",
-  "Not knowing if you even qualify",
-  "No idea what the interview process looks like",
-];
-
-const features = [
-  {
-    icon: Sparkles,
-    title: "Matched to you",
-    description:
-      "Every listing shows your match score based on your skills. No more guessing if you qualify.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Verified companies only",
-    description:
-      "Every organisation on Miku is verified. Real listings, active companies, real responses.",
-  },
-  {
-    icon: Clock,
-    title: "Apply in under 60 seconds",
-    description:
-      "Your profile is pre-filled. Add a note, hit apply. The fastest internship application you'll ever do.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Know what to expect",
-    description:
-      "Every listing shows the full hiring process — stages, timelines, and what each step involves.",
-  },
-];
-
-const stats = [
-  { value: "200+", label: "Open positions" },
-  { value: "50+", label: "Verified companies" },
-  { value: "< 60s", label: "To apply" },
-  { value: "3 days", label: "Avg. first response" },
-];
-
 export default function LandingPage() {
   const { setRole } = useApp();
+  const { t } = useLang();
+
+  const stats = [
+    { value: "200+", label: t('stats_openPositions') },
+    { value: "50+", label: t('stats_verifiedCompanies') },
+    { value: "< 60s", label: t('stats_toApply') },
+    { value: "3 days", label: t('stats_avgResponse') },
+  ];
+
+  const features = [
+    {
+      icon: Sparkles,
+      title: t('feature1_title'),
+      description: t('feature1_desc'),
+    },
+    {
+      icon: ShieldCheck,
+      title: t('feature2_title'),
+      description: t('feature2_desc'),
+    },
+    {
+      icon: Clock,
+      title: t('feature3_title'),
+      description: t('feature3_desc'),
+    },
+    {
+      icon: TrendingUp,
+      title: t('feature4_title'),
+      description: t('feature4_desc'),
+    },
+  ];
+
+  const steps = [
+    { step: "1", title: t('step1_title'), desc: t('step1_desc') },
+    { step: "2", title: t('step2_title'), desc: t('step2_desc') },
+    { step: "3", title: t('step3_title'), desc: t('step3_desc') },
+    { step: "4", title: t('step4_title'), desc: t('step4_desc') },
+  ];
 
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="border-b border-gray-100 px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-lg font-bold text-gray-900">Miku</span>
-          </div>
+          <img src="/Logo LINKER FINAL 3.png" alt="Linker" className="h-8 w-auto" />
           <div className="flex items-center gap-2 sm:gap-3">
             <Link href="/student/dashboard" className="hidden sm:block">
               <Button
@@ -78,7 +69,7 @@ export default function LandingPage() {
                 className="text-gray-500 font-medium"
                 onClick={() => setRole("student")}
               >
-                For Students
+                {t('landing_forStudents')}
               </Button>
             </Link>
             <Link href="/org/dashboard" className="hidden sm:block">
@@ -88,16 +79,16 @@ export default function LandingPage() {
                 className="text-gray-500 font-medium"
                 onClick={() => setRole("org")}
               >
-                For Organizations
+                {t('landing_forOrgs')}
               </Button>
             </Link>
             <Link href="/student/dashboard">
               <Button
                 size="sm"
-                className="bg-violet-600 hover:bg-violet-700 font-semibold"
+                className="bg-[#FF0078] hover:bg-[#d60065] font-semibold"
                 onClick={() => setRole("student")}
               >
-                Get started free
+                {t('landing_getStarted')}
               </Button>
             </Link>
           </div>
@@ -106,52 +97,33 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section className="max-w-4xl mx-auto px-6 pt-14 pb-8 text-center">
-        <Badge
-          variant="outline"
-          className="mb-6 text-violet-700 border-violet-200 bg-violet-50 px-3 py-1 text-xs inline-flex items-center gap-1.5 font-medium"
-        >
-          <ShieldCheck className="w-3 h-3" />
-          Built for students at UKIM & beyond
-        </Badge>
-
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-[1.15] mb-5 tracking-tight">
-          Stop hunting through{" "}
-          <span className="line-through text-gray-300">Discord groups.</span>
+          <span className="whitespace-nowrap">
+            {t('landing_headline_1')}{' '}
+            <span className="line-through text-gray-300">{t('landing_headline_strike')}</span>
+          </span>
           <br />
-          Find your internship here.
+          {t('landing_headline_2')}
         </h1>
 
         <p className="text-lg text-gray-500 mb-8 max-w-2xl mx-auto leading-relaxed">
-          Every verified internship and junior job in one place. See your match score before you
-          apply, know the full hiring process upfront, and apply in under 60 seconds.
+          {t('landing_subheadline')}
         </p>
-
-        {/* Pain point list */}
-        <div className="flex flex-col items-center gap-2 mb-10">
-          {painPoints.map((point) => (
-            <div key={point} className="flex items-center gap-2 text-sm text-gray-400">
-              <div className="w-4 h-4 rounded-full bg-red-50 flex items-center justify-center shrink-0">
-                <span className="text-red-400 text-xs">✕</span>
-              </div>
-              {point}
-            </div>
-          ))}
-        </div>
 
         <div className="flex items-center justify-center gap-4 flex-wrap">
           <Link href="/student/dashboard" onClick={() => setRole("student")}>
             <Button
               size="lg"
-              className="bg-violet-600 hover:bg-violet-700 gap-2 px-8 font-semibold text-base"
+              className="bg-[#FF0078] hover:bg-[#d60065] gap-2 px-8 font-semibold text-base"
             >
-              Browse open internships
+              {t('landing_browseBtn')}
               <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
           <Link href="/org/dashboard" onClick={() => setRole("org")}>
             <Button size="lg" variant="outline" className="gap-2 px-8 font-medium text-base">
               <Building2 className="w-4 h-4" />
-              Post a role
+              {t('landing_postBtn')}
             </Button>
           </Link>
         </div>
@@ -175,20 +147,20 @@ export default function LandingPage() {
       <section className="max-w-4xl mx-auto px-6 py-14">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-3">
-            Everything you were missing
+            {t('features_title')}
           </h2>
           <p className="text-gray-500 text-base max-w-xl mx-auto">
-            We built Miku to solve the exact frustrations you already have with internship hunting.
+            {t('features_subtitle')}
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {features.map(({ icon: Icon, title, description }) => (
             <div
               key={title}
-              className="bg-white border border-gray-100 rounded-xl p-6 hover:border-violet-200 hover:shadow-sm transition-all"
+              className="bg-white border border-gray-100 rounded-xl p-6 hover:border-[#FF0078]/30 hover:shadow-sm transition-all"
             >
-              <div className="w-10 h-10 rounded-lg bg-violet-50 flex items-center justify-center mb-4">
-                <Icon className="w-5 h-5 text-violet-600" />
+              <div className="w-10 h-10 rounded-lg bg-[#FF0078]/10 flex items-center justify-center mb-4">
+                <Icon className="w-5 h-5 text-[#FF0078]" />
               </div>
               <h3 className="font-bold text-gray-900 mb-2">{title}</h3>
               <p className="text-sm text-gray-500 leading-relaxed">{description}</p>
@@ -202,20 +174,15 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-3">
-              From zero to applied in 60 seconds
+              {t('howItWorks_title')}
             </h2>
-            <p className="text-gray-500 text-base">Here's exactly how it works.</p>
+            <p className="text-gray-500 text-base">{t('howItWorks_subtitle')}</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 relative">
-            {[
-              { step: "1", title: "Browse", desc: "See verified listings matched to your skills and year." },
-              { step: "2", title: "Understand", desc: "Read the full hiring process before you even apply." },
-              { step: "3", title: "Apply", desc: "Your profile is pre-filled. Add a note and submit." },
-              { step: "4", title: "Track", desc: "Follow every application status in one dashboard." },
-            ].map(({ step, title, desc }, i) => (
+            {steps.map(({ step, title, desc }, i) => (
               <div key={step} className="relative">
                 <div className="bg-white border border-gray-100 rounded-xl p-5 h-full">
-                  <div className="w-8 h-8 rounded-full bg-violet-600 flex items-center justify-center mb-3">
+                  <div className="w-8 h-8 rounded-full bg-[#FF0078] flex items-center justify-center mb-3">
                     <span className="text-white text-sm font-bold">{step}</span>
                   </div>
                   <h3 className="font-bold text-gray-900 mb-1">{title}</h3>
@@ -233,19 +200,19 @@ export default function LandingPage() {
       </section>
 
       {/* Social proof strip */}
-      <div className="bg-violet-50 border-y border-violet-100 py-6">
-        <div className="max-w-4xl mx-auto px-6 flex flex-wrap items-center justify-center gap-8 text-sm text-violet-700 font-medium">
+      <div className="bg-[#FF0078]/10 border-y border-[#FF0078]/20 py-6">
+        <div className="max-w-4xl mx-auto px-6 flex flex-wrap items-center justify-center gap-8 text-sm text-[#FF0078] font-medium">
           <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4" /> All companies manually verified
+            <CheckCircle2 className="w-4 h-4" /> {t('social_verified')}
           </span>
           <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4" /> Hiring process shown for every role
+            <CheckCircle2 className="w-4 h-4" /> {t('social_hiringProcess')}
           </span>
           <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4" /> Skill matching before you apply
+            <CheckCircle2 className="w-4 h-4" /> {t('social_skillMatch')}
           </span>
           <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4" /> Free for students, always
+            <CheckCircle2 className="w-4 h-4" /> {t('social_free')}
           </span>
         </div>
       </div>
@@ -254,17 +221,17 @@ export default function LandingPage() {
       <section className="max-w-4xl mx-auto px-6 py-14 text-center">
         <div className="bg-gradient-to-br from-violet-600 to-violet-700 rounded-2xl px-8 py-14 text-white shadow-lg shadow-violet-200">
           <h2 className="text-3xl font-extrabold mb-3 tracking-tight">
-            Your internship is already posted.
+            {t('cta_title')}
           </h2>
-          <p className="text-violet-200 mb-8 text-base max-w-md mx-auto">
-            Hundreds of students from UKIM are already using Miku. Don't miss the deadline.
+          <p className="text-white/60 mb-8 text-base max-w-md mx-auto">
+            {t('cta_subtitle')}
           </p>
           <Link href="/student/dashboard" onClick={() => setRole("student")}>
             <Button
               size="lg"
-              className="bg-white text-violet-700 hover:bg-violet-50 gap-2 font-bold px-8 text-base shadow-sm"
+              className="bg-white text-[#FF0078] hover:bg-[#FF0078]/10 gap-2 font-bold px-8 text-base shadow-sm"
             >
-              Find my match now
+              {t('cta_btn')}
               <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
@@ -274,10 +241,8 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="border-t border-gray-100 py-6 text-center text-xs text-gray-400">
         <div className="flex items-center justify-center gap-2">
-          <div className="w-5 h-5 rounded bg-violet-600 flex items-center justify-center">
-            <Zap className="w-3 h-3 text-white" />
-          </div>
-          <span>Miku — Made for students who deserve better than Discord DMs</span>
+          <img src="/Logo LINKER FINAL 3.png" alt="Linker" className="h-5 w-auto" />
+          <span>{t('footer_tagline')}</span>
         </div>
       </footer>
     </div>

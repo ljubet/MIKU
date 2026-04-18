@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Job } from "@/types";
 import { useApp } from "@/lib/app-context";
+import { useLang } from "@/lib/language-context";
 import { computeMatchScore } from "@/lib/mock-data";
 import {
   Dialog,
@@ -24,6 +25,7 @@ interface ApplyModalProps {
 
 export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
   const { applyToJob, hasApplied, currentStudent } = useApp();
+  const { t } = useLang();
   const [coverNote, setCoverNote] = useState("");
   const [applied, setApplied] = useState(false);
 
@@ -31,11 +33,11 @@ export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
 
   const alreadyApplied = hasApplied(job.id);
   const matchScore = computeMatchScore(job.tags, currentStudent.skills);
-  const matchedSkills = job.tags.filter((t) =>
-    currentStudent.skills.map((s) => s.toLowerCase()).includes(t.toLowerCase())
+  const matchedSkills = job.tags.filter((sk) =>
+    currentStudent.skills.map((s) => s.toLowerCase()).includes(sk.toLowerCase())
   );
   const missingSkills = job.tags.filter(
-    (t) => !currentStudent.skills.map((s) => s.toLowerCase()).includes(t.toLowerCase())
+    (sk) => !currentStudent.skills.map((s) => s.toLowerCase()).includes(sk.toLowerCase())
   );
 
   const handleApply = () => {
@@ -57,18 +59,18 @@ export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
             <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mb-4">
               <CheckCircle2 className="w-8 h-8 text-green-500" />
             </div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Application Sent!</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">{t('btn_applied')}!</h2>
             <p className="text-gray-500 text-sm mb-1">
-              You applied to <span className="font-semibold text-gray-800">{job.title}</span>
+              <span className="font-semibold text-gray-800">{job.title}</span>
             </p>
-            <p className="text-gray-400 text-xs mb-4">at {job.orgName}</p>
+            <p className="text-gray-400 text-xs mb-4">{job.orgName}</p>
             <div className="bg-gray-50 rounded-lg px-4 py-3 text-xs text-gray-500 mb-6 text-left w-full">
               <p className="flex items-center gap-1.5 font-medium text-gray-700 mb-1">
-                <Clock className="w-3.5 h-3.5" /> What happens next?
+                <Clock className="w-3.5 h-3.5" /> {t('section_hiringProcess')}
               </p>
-              <p>{job.timeline} · Check your Applications tab for status updates.</p>
+              <p>{job.timeline}</p>
             </div>
-            <Button onClick={handleClose} className="bg-violet-600 hover:bg-violet-700 w-full">
+            <Button onClick={handleClose} className="bg-[#FF0078] hover:bg-[#d60065] w-full">
               Done
             </Button>
           </div>
@@ -81,9 +83,9 @@ export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-lg font-bold">Quick Apply</DialogTitle>
+          <DialogTitle className="text-lg font-bold">{t('btn_applyNow')}</DialogTitle>
           <DialogDescription className="text-sm text-gray-500">
-            Your profile is pre-filled. Review and apply in seconds.
+            {t('match_profile')}
           </DialogDescription>
         </DialogHeader>
 
@@ -100,7 +102,7 @@ export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5">
                 <p className="font-semibold text-gray-900 text-sm">{job.title}</p>
-                {job.verified && <ShieldCheck className="w-3.5 h-3.5 text-violet-500 shrink-0" />}
+                {job.verified && <ShieldCheck className="w-3.5 h-3.5 text-[#FF0078] shrink-0" />}
               </div>
               <p className="text-xs text-gray-400">{job.orgName}</p>
             </div>
@@ -114,7 +116,7 @@ export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
             {job.remote && (
               <span className="flex items-center gap-1 text-xs text-gray-400">
                 <Wifi className="w-3 h-3" />
-                Remote OK
+                {t('label_remoteOk')}
               </span>
             )}
             {job.salary && (
@@ -131,19 +133,19 @@ export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
         <div className="border border-gray-100 rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <p className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
-              Your Skill Match
+              {t('match_yourScore')}
             </p>
             <span
               className={`text-xs font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
                 matchScore >= 80
                   ? "bg-emerald-50 text-emerald-700"
                   : matchScore >= 60
-                  ? "bg-violet-50 text-violet-700"
+                  ? "bg-[#FF0078]/10 text-[#FF0078]"
                   : "bg-gray-50 text-gray-600"
               }`}
             >
               <Zap className="w-3 h-3" />
-              {matchScore}% match
+              {matchScore}%
             </span>
           </div>
 
@@ -154,7 +156,7 @@ export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
                 matchScore >= 80
                   ? "bg-emerald-500"
                   : matchScore >= 60
-                  ? "bg-violet-500"
+                  ? "bg-[#FF0078]/100"
                   : "bg-gray-400"
               }`}
               style={{ width: `${matchScore}%` }}
@@ -185,7 +187,7 @@ export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
 
           {missingSkills.length > 0 && (
             <p className="text-xs text-gray-400 mt-2.5">
-              Missing {missingSkills.length} skill{missingSkills.length > 1 ? "s" : ""} — but many students apply without a perfect match. Your profile still looks strong.
+              {t('match_notOnProfile')}: {missingSkills.length}
             </p>
           )}
         </div>
@@ -193,7 +195,7 @@ export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
         {/* Profile preview */}
         <div className="border border-gray-100 rounded-xl p-4">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
-            Applying as
+            {t('profile_nameUniversity')}
           </p>
           <div className="flex items-center gap-3">
             <img
@@ -214,14 +216,14 @@ export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
         <div>
           <label className="text-xs font-medium text-gray-500 block mb-1.5">
             Cover Note{" "}
-            <span className="text-gray-300 font-normal">(optional — but recommended)</span>
+            <span className="text-gray-300 font-normal">(optional)</span>
           </label>
           <textarea
             value={coverNote}
             onChange={(e) => setCoverNote(e.target.value)}
             placeholder="Why are you a great fit? 2–3 sentences is plenty."
             rows={3}
-            className="w-full text-sm border border-gray-200 rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent placeholder:text-gray-300 font-[family-name:var(--font-poppins)]"
+            className="w-full text-sm border border-gray-200 rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#FF0078] focus:border-transparent placeholder:text-gray-300 font-[family-name:var(--font-poppins)]"
           />
         </div>
 
@@ -231,10 +233,10 @@ export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
           </Button>
           <Button
             onClick={handleApply}
-            className="flex-1 bg-violet-600 hover:bg-violet-700 gap-1.5 font-semibold"
+            className="flex-1 bg-[#FF0078] hover:bg-[#d60065] gap-1.5 font-semibold"
           >
             <Zap className="w-4 h-4" />
-            Apply Now
+            {t('btn_applyNow')}
           </Button>
         </div>
       </DialogContent>

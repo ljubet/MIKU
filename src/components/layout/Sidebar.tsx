@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useApp } from "@/lib/app-context";
+import { useLang } from "@/lib/language-context";
+import { LANGUAGES } from "@/lib/translations";
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
 import {
@@ -14,28 +16,28 @@ import {
   PlusCircle,
   List,
   Users,
-  Zap,
 } from "lucide-react";
-
-const studentNav = [
-  { href: "/student/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/student/saved", label: "Saved Jobs", icon: Bookmark },
-  { href: "/student/applications", label: "Applications", icon: FileText },
-  { href: "/student/profile", label: "My Profile", icon: User },
-];
-
-const orgNav = [
-  { href: "/org/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/org/post", label: "Post a Job", icon: PlusCircle },
-  { href: "/org/listings", label: "Listings", icon: List },
-  { href: "/org/applicants", label: "Applicants", icon: Users },
-  { href: "/org/profile", label: "Company Profile", icon: Building2 },
-];
 
 export function Sidebar({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
   const { role, setRole, currentStudent, currentOrg } = useApp();
+  const { lang, setLang, t } = useLang();
+
+  const studentNav = [
+    { href: "/student/dashboard", label: t('nav_dashboard'), icon: LayoutDashboard },
+    { href: "/student/saved", label: t('nav_savedJobs'), icon: Bookmark },
+    { href: "/student/applications", label: t('nav_applications'), icon: FileText },
+    { href: "/student/profile", label: t('nav_myProfile'), icon: User },
+  ];
+
+  const orgNav = [
+    { href: "/org/dashboard", label: t('nav_dashboard'), icon: LayoutDashboard },
+    { href: "/org/post", label: t('nav_postJob'), icon: PlusCircle },
+    { href: "/org/listings", label: t('nav_listings'), icon: List },
+    { href: "/org/applicants", label: t('nav_applicants'), icon: Users },
+    { href: "/org/profile", label: t('nav_companyProfile'), icon: Building2 },
+  ];
 
   // Auto-sync role from URL so direct navigation always works
   useEffect(() => {
@@ -64,11 +66,8 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
     <aside className="w-64 shrink-0 h-screen sticky top-0 bg-white border-r border-gray-100 flex flex-col">
       {/* Logo */}
       <div className="px-6 py-5 border-b border-gray-50">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
-            <Zap className="w-4 h-4 text-white" />
-          </div>
-          <span className="text-lg font-bold text-gray-900">Miku</span>
+        <Link href="/">
+          <img src="/Logo LINKER FINAL 3.png" alt="Linker" className="h-8 w-auto" />
         </Link>
       </div>
 
@@ -80,22 +79,22 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
             className={cn(
               "flex-1 text-xs font-medium py-1.5 rounded-md transition-all",
               role === "student"
-                ? "bg-white text-violet-700 shadow-sm"
+                ? "bg-white text-[#FF0078] shadow-sm"
                 : "text-gray-400 hover:text-gray-600"
             )}
           >
-            Student
+            {t('role_student')}
           </button>
           <button
             onClick={() => switchRole("org")}
             className={cn(
               "flex-1 text-xs font-medium py-1.5 rounded-md transition-all",
               role === "org"
-                ? "bg-white text-violet-700 shadow-sm"
+                ? "bg-white text-[#FF0078] shadow-sm"
                 : "text-gray-400 hover:text-gray-600"
             )}
           >
-            Org
+            {t('role_org')}
           </button>
         </div>
       </div>
@@ -112,14 +111,14 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all group",
                 active
-                  ? "bg-violet-50 text-violet-700"
+                  ? "bg-[#FF0078]/10 text-[#FF0078]"
                   : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
               )}
             >
               <Icon
                 className={cn(
                   "w-4 h-4 shrink-0",
-                  active ? "text-violet-600" : "text-gray-400 group-hover:text-gray-600"
+                  active ? "text-[#FF0078]" : "text-gray-400 group-hover:text-gray-600"
                 )}
               />
               {label}
@@ -127,6 +126,21 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
           );
         })}
       </nav>
+
+      {/* Language selector */}
+      <div className="px-4 py-3 border-t border-gray-50">
+        <select
+          value={lang}
+          onChange={(e) => setLang(e.target.value as typeof lang)}
+          className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-[#FF0078]/30 focus:border-[#FF0078]/50 cursor-pointer transition-colors hover:border-gray-300"
+        >
+          {LANGUAGES.map(({ code, label, flag }) => (
+            <option key={code} value={code}>
+              {flag} {label}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {/* User profile at bottom */}
       <div className="px-4 py-4 border-t border-gray-50">

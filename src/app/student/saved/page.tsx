@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useApp } from "@/lib/app-context";
+import { useLang } from "@/lib/language-context";
 import { JobCard } from "@/components/shared/JobCard";
 import { JobDetailPanel } from "@/components/shared/JobDetailPanel";
 import { Job } from "@/types";
@@ -11,6 +12,7 @@ import { Button } from "@/components/ui/button";
 
 export default function SavedPage() {
   const { savedJobs, jobs } = useApp();
+  const { t } = useLang();
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
 
@@ -20,9 +22,9 @@ export default function SavedPage() {
     <>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Saved Jobs</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t('nav_savedJobs')}</h1>
           <p className="text-gray-400 text-sm mt-1">
-            {saved.length} saved {saved.length === 1 ? "position" : "positions"}
+            {saved.length} {t('btn_saved').toLowerCase()} {saved.length === 1 ? '' : ''}
           </p>
         </div>
 
@@ -31,13 +33,13 @@ export default function SavedPage() {
             <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-4">
               <Bookmark className="w-7 h-7 text-gray-300" />
             </div>
-            <p className="font-semibold text-gray-700">Nothing saved yet</p>
+            <p className="font-semibold text-gray-700">{t('empty_noResults')}</p>
             <p className="text-sm text-gray-400 mt-1 mb-6">
-              Bookmark roles from Discover — they'll appear here.
+              {t('empty_noResultsHint')}
             </p>
             <Link href="/student/dashboard">
-              <Button size="sm" className="bg-violet-600 hover:bg-violet-700 gap-1.5">
-                Browse open roles <ArrowRight className="w-3.5 h-3.5" />
+              <Button size="sm" className="bg-[#FF0078] hover:bg-[#d60065] gap-1.5">
+                {t('landing_browseBtn')} <ArrowRight className="w-3.5 h-3.5" />
               </Button>
             </Link>
           </div>

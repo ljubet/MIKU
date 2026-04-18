@@ -1,28 +1,30 @@
 "use client";
 
 import { useApp } from "@/lib/app-context";
+import { useLang } from "@/lib/language-context";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Edit3, MapPin, Globe, Users, Calendar, Building2, Clock, CheckCircle2 } from "lucide-react";
 
 export default function OrgProfilePage() {
   const { currentOrg, jobs } = useApp();
+  const { t } = useLang();
   const orgJobs = jobs.filter((j) => j.orgId === currentOrg.id && j.status === "open");
 
   return (
     <div className="space-y-6 max-w-2xl">
       <div className="flex items-start justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Company Profile</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('page_companyProfile')}</h1>
         <Button variant="outline" size="sm" className="gap-1.5">
           <Edit3 className="w-3.5 h-3.5" />
-          Edit
+          {t('btn_edit')}
         </Button>
       </div>
 
       {/* Company card */}
       <div className="bg-white border border-gray-100 rounded-xl p-6">
         <div className="flex items-center gap-5">
-          <div className="w-16 h-16 rounded-xl bg-violet-50 border border-violet-100 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-xl bg-[#FF0078]/10 border border-[#FF0078]/20 flex items-center justify-center">
             <img
               src={`https://api.dicebear.com/7.x/initials/svg?seed=${currentOrg.name}`}
               alt={currentOrg.name}
@@ -45,22 +47,22 @@ export default function OrgProfilePage() {
           <div className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-gray-300" />
             <div>
-              <p className="text-xs text-gray-400">Location</p>
+              <p className="text-xs text-gray-400">{t('label_location')}</p>
               <p className="text-sm font-medium text-gray-900">{currentOrg.location}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <Users className="w-4 h-4 text-gray-300" />
             <div>
-              <p className="text-xs text-gray-400">Company size</p>
-              <p className="text-sm font-medium text-gray-900">{currentOrg.size} employees</p>
+              <p className="text-xs text-gray-400">{t('label_companySize')}</p>
+              <p className="text-sm font-medium text-gray-900">{currentOrg.size} {t('label_employees')}</p>
             </div>
           </div>
           {currentOrg.website && (
             <div className="flex items-center gap-2">
               <Globe className="w-4 h-4 text-gray-300" />
               <div>
-                <p className="text-xs text-gray-400">Website</p>
+                <p className="text-xs text-gray-400">{t('label_website')}</p>
                 <p className="text-sm font-medium text-gray-900">{currentOrg.website}</p>
               </div>
             </div>
@@ -69,7 +71,7 @@ export default function OrgProfilePage() {
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-gray-300" />
               <div>
-                <p className="text-xs text-gray-400">Founded</p>
+                <p className="text-xs text-gray-400">{t('label_founded')}</p>
                 <p className="text-sm font-medium text-gray-900">{currentOrg.founded}</p>
               </div>
             </div>
@@ -80,12 +82,12 @@ export default function OrgProfilePage() {
       {/* Active jobs */}
       <div className="bg-white border border-gray-100 rounded-xl p-6">
         <h3 className="font-semibold text-gray-900 mb-4">
-          Open positions ({orgJobs.length})
+          {t('section_openPositions')} ({orgJobs.length})
         </h3>
         {orgJobs.length === 0 ? (
           <div className="text-center py-8 text-gray-400">
             <Building2 className="w-6 h-6 mx-auto mb-2 opacity-30" />
-            <p className="text-sm">No open positions right now</p>
+            <p className="text-sm">{t('label_noOpenPositions')}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -101,7 +103,7 @@ export default function OrgProfilePage() {
                   </p>
                 </div>
                 <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-0.5 rounded-full">
-                  Open
+                  {t('label_open')}
                 </span>
               </div>
             ))}
@@ -117,23 +119,23 @@ export default function OrgProfilePage() {
           </div>
           <div>
             <p className="text-xl font-bold text-gray-900 leading-none">{currentOrg.hiresCount}</p>
-            <p className="text-xs text-gray-400 mt-0.5">Students hired via Miku</p>
+            <p className="text-xs text-gray-400 mt-0.5">{t('label_studentsHired')}</p>
           </div>
         </div>
         <div className="bg-white border border-gray-100 rounded-xl p-4 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg bg-violet-50 flex items-center justify-center shrink-0">
-            <Clock className="w-4 h-4 text-violet-600" />
+          <div className="w-9 h-9 rounded-lg bg-[#FF0078]/10 flex items-center justify-center shrink-0">
+            <Clock className="w-4 h-4 text-[#FF0078]" />
           </div>
           <div>
             <p className="text-sm font-semibold text-gray-900 leading-tight">{currentOrg.responseTime}</p>
-            <p className="text-xs text-gray-400 mt-0.5">Response time</p>
+            <p className="text-xs text-gray-400 mt-0.5">{t('label_responseTime')}</p>
           </div>
         </div>
       </div>
 
       {/* Contact */}
       <div className="bg-white border border-gray-100 rounded-xl p-6">
-        <h3 className="font-semibold text-gray-900 mb-4">Contact</h3>
+        <h3 className="font-semibold text-gray-900 mb-4">{t('section_contact')}</h3>
         <p className="text-sm text-gray-600">{currentOrg.email}</p>
       </div>
     </div>

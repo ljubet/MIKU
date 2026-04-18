@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Sidebar } from "./Sidebar";
-import { Menu, X, Zap } from "lucide-react";
+import { Menu } from "lucide-react";
 import Link from "next/link";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -31,11 +31,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="flex-1 flex flex-col min-w-0">
         {/* Mobile top bar */}
         <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-white border-b border-gray-100 sticky top-0 z-40">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-violet-600 flex items-center justify-center">
-              <Zap className="w-3.5 h-3.5 text-white" />
-            </div>
-            <span className="text-base font-bold text-gray-900">Miku</span>
+          <Link href="/">
+            <img src="/Logo LINKER FINAL 3.png" alt="Linker" className="h-7 w-auto" />
           </Link>
           <button
             onClick={() => setOpen(true)}

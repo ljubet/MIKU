@@ -1,6 +1,7 @@
 "use client";
 
 import { useApp } from "@/lib/app-context";
+import { useLang } from "@/lib/language-context";
 import { mockOrgApplicants } from "@/lib/mock-data";
 import { AppStatusBadge, JobTypeBadge } from "@/components/shared/StatusBadge";
 import { List, Users, TrendingUp } from "lucide-react";
@@ -9,6 +10,7 @@ import { Button } from "@/components/ui/button";
 
 export default function OrgDashboard() {
   const { currentOrg, jobs } = useApp();
+  const { t } = useLang();
 
   const orgJobs = jobs.filter((j) => j.orgId === currentOrg.id);
   const totalApplicants = orgJobs.reduce((sum, j) => sum + j.applicantCount, 0);
@@ -17,15 +19,15 @@ export default function OrgDashboard() {
 
   const stats = [
     {
-      label: "Active Listings",
+      label: t('stat_activeListings'),
       value: openJobs,
       icon: List,
       href: "/org/listings",
-      color: "text-violet-600",
-      bg: "bg-violet-50",
+      color: "text-[#FF0078]",
+      bg: "bg-[#FF0078]/10",
     },
     {
-      label: "Total Applicants",
+      label: t('stat_totalApplicants'),
       value: totalApplicants,
       icon: Users,
       href: "/org/applicants",
@@ -33,7 +35,7 @@ export default function OrgDashboard() {
       bg: "bg-blue-50",
     },
     {
-      label: "In Interview",
+      label: t('stat_inInterview'),
       value: mockOrgApplicants.filter((a) => a.status === "interview").length,
       icon: TrendingUp,
       href: "/org/applicants",
@@ -48,15 +50,12 @@ export default function OrgDashboard() {
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
-            Welcome, {currentOrg.name} 👋
+            {t('page_welcome')} {currentOrg.name} 👋
           </h1>
-          <p className="text-gray-400 text-sm mt-1">
-            Manage your listings and review applicants.
-          </p>
         </div>
         <Link href="/org/post" className="shrink-0">
-          <Button className="bg-violet-600 hover:bg-violet-700 gap-1.5 w-full sm:w-auto">
-            + Post a Job
+          <Button className="bg-[#FF0078] hover:bg-[#d60065] gap-1.5 w-full sm:w-auto">
+            {t('btn_postJob')}
           </Button>
         </Link>
       </div>
@@ -65,7 +64,7 @@ export default function OrgDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {stats.map(({ label, value, icon: Icon, href, color, bg }) => (
           <Link key={label} href={href}>
-            <div className="bg-white border border-gray-100 rounded-xl p-5 hover:border-violet-200 hover:shadow-sm transition-all">
+            <div className="bg-white border border-gray-100 rounded-xl p-5 hover:border-[#FF0078]/30 hover:shadow-sm transition-all">
               <div className={`w-9 h-9 rounded-lg ${bg} flex items-center justify-center mb-3`}>
                 <Icon className={`w-4 h-4 ${color}`} />
               </div>
@@ -79,10 +78,10 @@ export default function OrgDashboard() {
       {/* Your listings */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-gray-900">Your listings</h2>
+          <h2 className="font-semibold text-gray-900">{t('section_yourListings')}</h2>
           <Link href="/org/listings">
-            <Button variant="ghost" size="sm" className="text-violet-600 text-xs">
-              Manage all →
+            <Button variant="ghost" size="sm" className="text-[#FF0078] text-xs">
+              {t('btn_manageAll')}
             </Button>
           </Link>
         </div>
@@ -108,7 +107,7 @@ export default function OrgDashboard() {
                       : "bg-gray-100 text-gray-500"
                   }`}
                 >
-                  {job.status}
+                  {job.status === "open" ? t('label_open') : t('label_closed')}
                 </span>
               </div>
             </div>
@@ -119,10 +118,10 @@ export default function OrgDashboard() {
       {/* Recent applicants */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-gray-900">Recent applicants</h2>
+          <h2 className="font-semibold text-gray-900">{t('section_recentApplicants')}</h2>
           <Link href="/org/applicants">
-            <Button variant="ghost" size="sm" className="text-violet-600 text-xs">
-              View all →
+            <Button variant="ghost" size="sm" className="text-[#FF0078] text-xs">
+              {t('btn_viewAll')}
             </Button>
           </Link>
         </div>
@@ -139,7 +138,7 @@ export default function OrgDashboard() {
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900">{app.studentName}</p>
                   <p className="text-xs text-gray-400 truncate">
-                    {app.studentMajor} · Applied for {job?.title}
+                    {app.studentMajor} · {t('label_appliedFor')} {job?.title}
                   </p>
                 </div>
                 <AppStatusBadge status={app.status} />

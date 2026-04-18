@@ -1,6 +1,7 @@
 "use client";
 
 import { useApp } from "@/lib/app-context";
+import { useLang } from "@/lib/language-context";
 import { AppStatusBadge } from "@/components/shared/StatusBadge";
 import { ApplicationStatus } from "@/types";
 import { formatDistanceToNow } from "date-fns";
@@ -16,31 +17,32 @@ const STATUS_ORDER: ApplicationStatus[] = [
   "rejected",
 ];
 
-const nextActionTip: Record<ApplicationStatus, { text: string; tone: string }> = {
-  applied: {
-    text: "Most companies review within 5–7 days. Hang tight.",
-    tone: "text-blue-500",
-  },
-  reviewing: {
-    text: "Your profile is being evaluated. If it's been over a week, it's okay to follow up.",
-    tone: "text-amber-500",
-  },
-  interview: {
-    text: "Research the company, review the hiring process, and prepare for common questions.",
-    tone: "text-violet-600",
-  },
-  offered: {
-    text: "You got an offer! Review the terms carefully before accepting.",
-    tone: "text-emerald-600",
-  },
-  rejected: {
-    text: "Not every role is the right fit. Keep applying — your next yes is closer.",
-    tone: "text-gray-400",
-  },
-};
-
 export default function ApplicationsPage() {
   const { applications, jobs } = useApp();
+  const { t } = useLang();
+
+  const nextActionTip: Record<ApplicationStatus, { text: string; tone: string }> = {
+    applied: {
+      text: t('tip_applied'),
+      tone: "text-blue-500",
+    },
+    reviewing: {
+      text: t('tip_reviewing'),
+      tone: "text-amber-500",
+    },
+    interview: {
+      text: t('tip_interview'),
+      tone: "text-[#FF0078]",
+    },
+    offered: {
+      text: t('tip_offered'),
+      tone: "text-emerald-600",
+    },
+    rejected: {
+      text: t('tip_rejected'),
+      tone: "text-gray-400",
+    },
+  };
 
   const sorted = [...applications].sort(
     (a, b) => STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status)
@@ -49,10 +51,10 @@ export default function ApplicationsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Applications</h1>
+        <h1 className="text-2xl font-bold text-gray-900">{t('page_applications')}</h1>
         <p className="text-gray-400 text-sm mt-1">
-          {applications.length} total ·{" "}
-          {applications.filter((a) => a.status === "interview").length} in interview
+          {applications.length} {t('label_total')} ·{" "}
+          {applications.filter((a) => a.status === "interview").length} {t('label_inInterview')}
         </p>
       </div>
 
@@ -81,13 +83,13 @@ export default function ApplicationsPage() {
           <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-4">
             <FileText className="w-7 h-7 text-gray-300" />
           </div>
-          <p className="font-semibold text-gray-700">No applications yet</p>
+          <p className="font-semibold text-gray-700">{t('empty_noApplications')}</p>
           <p className="text-sm text-gray-400 mt-1 mb-6">
-            Apply to your first role in under 60 seconds.
+            {t('empty_noApplicationsHint')}
           </p>
           <Link href="/student/dashboard">
-            <Button size="sm" className="bg-violet-600 hover:bg-violet-700 gap-1.5">
-              Find internships <ArrowRight className="w-3.5 h-3.5" />
+            <Button size="sm" className="bg-[#FF0078] hover:bg-[#d60065] gap-1.5">
+              {t('btn_findInternships')} <ArrowRight className="w-3.5 h-3.5" />
             </Button>
           </Link>
         </div>
@@ -101,7 +103,7 @@ export default function ApplicationsPage() {
             return (
               <div
                 key={app.id}
-                className="bg-white border border-gray-100 rounded-xl p-5 hover:border-violet-200 hover:shadow-sm transition-all"
+                className="bg-white border border-gray-100 rounded-xl p-5 hover:border-[#FF0078]/30 hover:shadow-sm transition-all"
               >
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0">
