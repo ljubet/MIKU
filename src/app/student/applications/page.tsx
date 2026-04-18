@@ -57,7 +57,7 @@ export default function ApplicationsPage() {
       </div>
 
       {/* Status summary */}
-      <div className="grid grid-cols-5 gap-2">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
         {(["applied", "reviewing", "interview", "offered", "rejected"] as ApplicationStatus[]).map(
           (status) => {
             const count = applications.filter((a) => a.status === status).length;

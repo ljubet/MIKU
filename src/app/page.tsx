@@ -70,8 +70,8 @@ export default function LandingPage() {
             </div>
             <span className="text-lg font-bold text-gray-900">Miku</span>
           </div>
-          <div className="flex items-center gap-3">
-            <Link href="/student/dashboard">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link href="/student/dashboard" className="hidden sm:block">
               <Button
                 variant="ghost"
                 size="sm"
@@ -81,7 +81,7 @@ export default function LandingPage() {
                 For Students
               </Button>
             </Link>
-            <Link href="/org/dashboard">
+            <Link href="/org/dashboard" className="hidden sm:block">
               <Button
                 variant="ghost"
                 size="sm"
@@ -114,7 +114,7 @@ export default function LandingPage() {
           Built for students at UKIM & beyond
         </Badge>
 
-        <h1 className="text-5xl font-extrabold text-gray-900 leading-[1.15] mb-5 tracking-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-[1.15] mb-5 tracking-tight">
           Stop hunting through{" "}
           <span className="line-through text-gray-300">Discord groups.</span>
           <br />
@@ -160,7 +160,7 @@ export default function LandingPage() {
       {/* Stats bar */}
       <div className="border-y border-gray-100 bg-gray-50 py-8">
         <div className="max-w-4xl mx-auto px-6">
-          <div className="grid grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map(({ value, label }) => (
               <div key={label} className="text-center">
                 <p className="text-2xl font-extrabold text-gray-900 tracking-tight">{value}</p>
@@ -206,7 +206,7 @@ export default function LandingPage() {
             </h2>
             <p className="text-gray-500 text-base">Here's exactly how it works.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 relative">
             {[
               { step: "1", title: "Browse", desc: "See verified listings matched to your skills and year." },
               { step: "2", title: "Understand", desc: "Read the full hiring process before you even apply." },

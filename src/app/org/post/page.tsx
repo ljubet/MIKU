@@ -98,7 +98,7 @@ export default function PostJobPage() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label className="text-xs text-gray-500 mb-1.5 block">Job type *</Label>
               <div className="flex gap-2 flex-wrap">
@@ -131,7 +131,7 @@ export default function PostJobPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label className="text-xs text-gray-500 mb-1.5 block">
                 Salary / Compensation

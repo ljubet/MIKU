@@ -86,7 +86,7 @@ export default function ApplicantsPage() {
       </div>
 
       {/* Pipeline overview */}
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {pipeline.map(({ status, label, color }) => {
           const count = applicants.filter((a) => a.status === status).length;
           return (

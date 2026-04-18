@@ -45,7 +45,7 @@ export default function OrgDashboard() {
   return (
     <div className="space-y-8">
       {/* Welcome */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
             Welcome, {currentOrg.name} 👋
@@ -54,15 +54,15 @@ export default function OrgDashboard() {
             Manage your listings and review applicants.
           </p>
         </div>
-        <Link href="/org/post">
-          <Button className="bg-violet-600 hover:bg-violet-700 gap-1.5">
+        <Link href="/org/post" className="shrink-0">
+          <Button className="bg-violet-600 hover:bg-violet-700 gap-1.5 w-full sm:w-auto">
             + Post a Job
           </Button>
         </Link>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {stats.map(({ label, value, icon: Icon, href, color, bg }) => (
           <Link key={label} href={href}>
             <div className="bg-white border border-gray-100 rounded-xl p-5 hover:border-violet-200 hover:shadow-sm transition-all">

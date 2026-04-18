@@ -41,7 +41,7 @@ export default function OrgProfilePage() {
 
         <p className="text-sm text-gray-600 mt-5 leading-relaxed">{currentOrg.description}</p>
 
-        <div className="grid grid-cols-2 gap-4 mt-5 pt-5 border-t border-gray-50">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5 pt-5 border-t border-gray-50">
           <div className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-gray-300" />
             <div>
