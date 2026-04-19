@@ -1,9 +1,9 @@
 import type { ElementType } from "react";
 import { BadgeCheck, CalendarCheck, Clock, Medal, Rocket, ShieldCheck, Sparkles, Target, Trophy, Zap } from "lucide-react";
-import { Achievement, AchievementCategory, AchievementIcon } from "@/types";
+import type { Achievement, AchievementCategory, AchievementIcon as AchievementIconType } from "@/types";
 import { cn } from "@/lib/utils";
 
-const ICONS: Record<AchievementIcon, ElementType> = {
+const ICONS: Record<AchievementIconType, ElementType> = {
   sparkles: Sparkles,
   "shield-check": ShieldCheck,
   zap: Zap,
