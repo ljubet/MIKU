@@ -1,14 +1,20 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import { ApplicationStatus, JobType } from "@/types";
+import { useLang } from "@/lib/language-context";
 import { cn } from "@/lib/utils";
 
-const statusConfig: Record<ApplicationStatus, { label: string; className: string }> = {
-  applied: { label: "Applied", className: "bg-blue-50 text-blue-700 border-blue-200" },
-  shortlisted: { label: "Shortlisted", className: "bg-violet-50 text-violet-700 border-violet-200" },
-  reviewing: { label: "Reviewing", className: "bg-amber-50 text-amber-700 border-amber-200" },
-  interview: { label: "Interview", className: "bg-[#FF0078]/10 text-[#FF0078] border-[#FF0078]/30" },
-  offered: { label: "Offered!", className: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-  rejected: { label: "Rejected", className: "bg-red-50 text-red-700 border-red-200" },
+const statusStyles: Record<ApplicationStatus, string> = {
+  applied: "bg-blue-50 text-blue-700 border-blue-200",
+  shortlisted: "bg-violet-50 text-violet-700 border-violet-200",
+  reviewing: "bg-amber-50 text-amber-700 border-amber-200",
+  interview: "bg-[#FF0078]/10 text-[#FF0078] border-[#FF0078]/30",
+  interview_invited: "bg-[#FF0078]/10 text-[#FF0078] border-[#FF0078]/30",
+  interview_scheduled: "bg-[#FF0078]/10 text-[#FF0078] border-[#FF0078]/30",
+  interview_confirmed: "bg-[#FF0078]/10 text-[#FF0078] border-[#FF0078]/30",
+  offered: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  rejected: "bg-red-50 text-red-700 border-red-200",
 };
 
 const typeConfig: Record<JobType, { label: string; className: string }> = {
@@ -19,10 +25,22 @@ const typeConfig: Record<JobType, { label: string; className: string }> = {
 };
 
 export function AppStatusBadge({ status }: { status: ApplicationStatus }) {
-  const config = statusConfig[status];
+  const { t } = useLang();
+  const labelMap: Record<ApplicationStatus, string> = {
+    applied: t("status_applied"),
+    shortlisted: t("status_shortlisted"),
+    reviewing: t("status_reviewing"),
+    interview: t("status_interview"),
+    interview_invited: t("status_interview_invited"),
+    interview_scheduled: t("status_interview_scheduled"),
+    interview_confirmed: t("status_interview_confirmed"),
+    offered: t("status_offered"),
+    rejected: t("status_rejected"),
+  };
+  const className = statusStyles[status] ?? statusStyles.interview;
   return (
-    <Badge variant="outline" className={cn("text-xs font-medium", config.className)}>
-      {config.label}
+    <Badge variant="outline" className={cn("text-xs font-medium", className)}>
+      {labelMap[status]}
     </Badge>
   );
 }

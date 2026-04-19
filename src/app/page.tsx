@@ -109,31 +109,13 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <img src="/Logo LINKER FINAL 3.png" alt="Linker" className="h-8 w-auto" />
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link href="/auth/candidate" className="hidden sm:block">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-gray-500 font-medium"
-                onClick={() => setRole("student")}
-              >
-                {t('landing_forStudents')}
-              </Button>
-            </Link>
-            <Link href="/auth/provider" className="hidden sm:block">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-gray-500 font-medium"
-                onClick={() => setRole("org")}
-              >
-                {t('landing_forOrgs')}
+            <Link href="/auth" className="hidden sm:block">
+              <Button variant="ghost" size="sm" className="text-gray-500 font-medium">
+                {t('landing_login')}
               </Button>
             </Link>
             <Link href="/auth">
-              <Button
-                size="sm"
-                className="bg-[#FF0078] hover:bg-[#d60065] font-semibold"
-              >
+              <Button size="sm" className="bg-[#FF0078] hover:bg-[#d60065] font-semibold">
                 {t('landing_getStarted')}
               </Button>
             </Link>
@@ -249,24 +231,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Social proof strip */}
-      <div className="bg-[#FF0078]/10 border-y border-[#FF0078]/20 py-6">
-        <div className="max-w-4xl mx-auto px-6 flex flex-wrap items-center justify-center gap-8 text-sm text-[#FF0078] font-medium">
-          <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4" /> {t('social_verified')}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4" /> {t('social_hiringProcess')}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4" /> {t('social_skillMatch')}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <CheckCircle2 className="w-4 h-4" /> {t('social_free')}
-          </span>
-        </div>
-      </div>
-
       {/* Pricing */}
       <section className="max-w-6xl mx-auto px-6 py-16">
         <div className="text-center mb-12">
@@ -323,23 +287,36 @@ export default function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="max-w-4xl mx-auto px-6 py-14 text-center">
-        <div className="bg-gradient-to-br from-violet-600 to-violet-700 rounded-2xl px-8 py-14 text-white shadow-lg shadow-violet-200">
-          <h2 className="text-3xl font-extrabold mb-3 tracking-tight">
-            {t('cta_title')}
-          </h2>
-          <p className="text-white/60 mb-8 text-base max-w-md mx-auto">
-            {t('cta_subtitle')}
-          </p>
-          <Link href="/auth/candidate">
-            <Button
-              size="lg"
-              className="bg-white text-[#FF0078] hover:bg-[#FF0078]/10 gap-2 font-bold px-8 text-base shadow-sm"
-            >
-              {t('cta_btn')}
-              <ArrowRight className="w-4 h-4" />
-            </Button>
-          </Link>
+      <section className="max-w-6xl mx-auto px-6 py-14">
+        <div className="bg-[#FFF0F6] rounded-[36px] px-8 py-12 lg:px-14 lg:py-16 shadow-[0_24px_60px_rgba(255,0,120,0.15)]">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
+            <div>
+              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#FF0078] mb-5">
+                {t('cta_title')}
+              </h2>
+              <p className="text-lg text-[#9E4A74] mb-10 max-w-xl">
+                {t('cta_subtitle')}
+              </p>
+              <Link href="/auth/candidate">
+                <Button
+                  size="lg"
+                  className="bg-[#FF0078] hover:bg-[#d60065] text-white gap-2 font-semibold px-8 text-base rounded-2xl shadow-md shadow-[#FF0078]/30"
+                >
+                  {t('cta_btn')}
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+            </div>
+            <div className="relative h-[280px] sm:h-[320px]">
+              <div className="absolute right-0 top-2 h-48 w-64 rounded-3xl bg-white shadow-[0_20px_50px_rgba(255,0,120,0.18)] border border-white/60" />
+              <div className="absolute right-10 top-16 h-36 w-56 rounded-3xl bg-gradient-to-br from-[#FF4DA3] to-[#FF0078] shadow-[0_20px_50px_rgba(255,0,120,0.35)]" />
+              <div className="absolute left-0 bottom-0 h-28 w-[70%] rounded-3xl bg-white shadow-[0_20px_50px_rgba(255,0,120,0.18)] border border-white/60" />
+              <div className="absolute left-6 bottom-8 h-6 w-1.5 rounded-full bg-[#FF0078]" />
+              <div className="absolute left-10 bottom-10 text-xs font-semibold text-[#8B2A5C]">
+                Linker match
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

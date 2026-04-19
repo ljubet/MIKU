@@ -1,16 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import { useApp } from "@/lib/app-context";
 import { useLang } from "@/lib/language-context";
 import { AppStatusBadge } from "@/components/shared/StatusBadge";
 import { ApplicationStatus } from "@/types";
 import { formatDistanceToNow } from "date-fns";
-import { FileText, Clock, MapPin, ArrowRight, Lightbulb } from "lucide-react";
+import { FileText, Clock, MapPin, ArrowRight, Lightbulb, ChevronDown, ChevronUp, Lock } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const STATUS_ORDER: ApplicationStatus[] = [
   "shortlisted",
+  "interview_confirmed",
+  "interview_scheduled",
+  "interview_invited",
   "interview",
   "offered",
   "reviewing",
@@ -20,7 +24,15 @@ const STATUS_ORDER: ApplicationStatus[] = [
 
 export default function ApplicationsPage() {
   const { applications, jobs, applicationsLoading } = useApp();
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const interviewInviteStatuses: ApplicationStatus[] = [
+    "interview_invited",
+    "interview_scheduled",
+    "interview_confirmed",
+  ];
+  const isInterviewStatus = (status: ApplicationStatus) =>
+    status === "interview" || interviewInviteStatuses.includes(status);
 
   const nextActionTip: Record<ApplicationStatus, { text: string; tone: string }> = {
     applied: {
@@ -36,6 +48,18 @@ export default function ApplicationsPage() {
       tone: "text-amber-500",
     },
     interview: {
+      text: t('tip_interview'),
+      tone: "text-[#FF0078]",
+    },
+    interview_invited: {
+      text: t('tip_interview'),
+      tone: "text-[#FF0078]",
+    },
+    interview_scheduled: {
+      text: t('tip_interview'),
+      tone: "text-[#FF0078]",
+    },
+    interview_confirmed: {
       text: t('tip_interview'),
       tone: "text-[#FF0078]",
     },
@@ -59,7 +83,7 @@ export default function ApplicationsPage() {
         <h1 className="text-2xl font-bold text-gray-900">{t('page_applications')}</h1>
         <p className="text-gray-400 text-sm mt-1">
           {applications.length} {t('label_total')} ·{" "}
-          {applications.filter((a) => a.status === "interview").length} {t('label_inInterview')}
+          {applications.filter((a) => isInterviewStatus(a.status)).length} {t('label_inInterview')}
         </p>
       </div>
 
@@ -69,7 +93,9 @@ export default function ApplicationsPage() {
           ["applied", "shortlisted", "reviewing", "interview", "offered", "rejected"] as ApplicationStatus[]
         ).map(
           (status) => {
-            const count = applications.filter((a) => a.status === status).length;
+            const count = status === "interview"
+              ? applications.filter((a) => isInterviewStatus(a.status)).length
+              : applications.filter((a) => a.status === status).length;
             return (
               <div
                 key={status}
@@ -108,11 +134,44 @@ export default function ApplicationsPage() {
             const job = jobs.find((j) => j.id === app.jobId);
             if (!job) return null;
             const tip = nextActionTip[app.status];
+            const isMk = lang === "mk";
+            const jobTitle = isMk && job.titleMk ? job.titleMk : job.title;
+            const jobDescription = isMk && job.descriptionMk ? job.descriptionMk : job.description;
+            const insights =
+              (isMk ? job.interviewInsightsMk : job.interviewInsights) ?? {
+                intro: t('interview_insights_intro'),
+                interviewQuestions: [
+                  "Tell us about a recent project you’re proud of.",
+                  "How do you handle feedback and iterate on your work?",
+                  "What would you improve if you had two more weeks on your last project?",
+                ],
+                preparationTips: [
+                  "Review the role requirements and map them to your past work.",
+                  "Prepare 2–3 concrete examples that show your impact.",
+                  "Be ready to walk through your decision-making process.",
+                ],
+                interviewStages: [
+                  "Round 1: Intro chat with the team",
+                  "Round 2: Role-focused interview or task review",
+                ],
+              };
+            const insightsUnlocked = interviewInviteStatuses.includes(app.status);
+
+            const isExpanded = expandedId === app.id;
 
             return (
               <div
                 key={app.id}
-                className="bg-white border border-gray-100 rounded-xl p-5 hover:border-[#FF0078]/30 hover:shadow-sm transition-all"
+                className="bg-white border border-gray-100 rounded-xl p-5 hover:border-[#FF0078]/30 hover:shadow-sm transition-all cursor-pointer"
+                role="button"
+                tabIndex={0}
+                onClick={() => setExpandedId(isExpanded ? null : app.id)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setExpandedId(isExpanded ? null : app.id);
+                  }
+                }}
               >
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0">
@@ -125,7 +184,7 @@ export default function ApplicationsPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <p className="text-sm font-semibold text-gray-900">{job.title}</p>
+                        <p className="text-sm font-semibold text-gray-900">{jobTitle}</p>
                         <div className="flex items-center gap-3 mt-0.5">
                           <span className="text-xs text-gray-400">{job.orgName}</span>
                           <span className="flex items-center gap-1 text-xs text-gray-300">
@@ -140,6 +199,10 @@ export default function ApplicationsPage() {
                           <Clock className="w-3 h-3" />
                           {formatDistanceToNow(new Date(app.appliedAt), { addSuffix: true })}
                         </span>
+                        <span className="flex items-center gap-1 text-[11px] text-gray-300">
+                          {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                          {t('btn_viewDetails')}
+                        </span>
                       </div>
                     </div>
 
@@ -147,6 +210,78 @@ export default function ApplicationsPage() {
                       <p className="text-xs text-gray-400 mt-2 italic line-clamp-1 border-l-2 border-gray-100 pl-2">
                         &ldquo;{app.coverNote}&rdquo;
                       </p>
+                    )}
+
+                    {isExpanded && (
+                      <>
+                        <div className="mt-3 rounded-lg border border-gray-100 bg-gray-50 p-3 text-xs text-gray-500 leading-relaxed">
+                          {jobDescription}
+                        </div>
+
+                        <div className="mt-4 pt-4 border-t border-gray-50">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-sm font-semibold text-gray-900">
+                              {t('interview_insights_title')}
+                            </h3>
+                            <span className="text-[11px] text-gray-400">{t('interview_insights_helper')}</span>
+                          </div>
+
+                          {insightsUnlocked ? (
+                            <div className="mt-3 space-y-4 text-xs text-gray-600">
+                              <p className="text-gray-500">{insights.intro}</p>
+
+                              <div>
+                                <p className="text-xs font-semibold text-gray-700 mb-2">
+                                  {t('interview_insights_questions')}
+                                </p>
+                                <ul className="list-disc pl-4 space-y-1 text-gray-500">
+                                  {insights.interviewQuestions.map((q) => (
+                                    <li key={q}>{q}</li>
+                                  ))}
+                                </ul>
+                              </div>
+
+                              <div>
+                                <p className="text-xs font-semibold text-gray-700 mb-2">
+                                  {t('interview_insights_prepare')}
+                                </p>
+                                <ul className="list-disc pl-4 space-y-1 text-gray-500">
+                                  {insights.preparationTips.map((tipItem) => (
+                                    <li key={tipItem}>{tipItem}</li>
+                                  ))}
+                                </ul>
+                              </div>
+
+                              <div>
+                                <p className="text-xs font-semibold text-gray-700 mb-2">
+                                  {t('interview_insights_process')}
+                                </p>
+                                <ul className="list-disc pl-4 space-y-1 text-gray-500">
+                                  {insights.interviewStages.map((stage) => (
+                                    <li key={stage}>{stage}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="mt-3 rounded-xl border border-dashed border-[#FF0078]/30 bg-[#FF0078]/5 p-4">
+                              <div className="flex items-start gap-3">
+                                <div className="w-9 h-9 rounded-lg bg-white flex items-center justify-center border border-[#FF0078]/20">
+                                  <Lock className="w-4 h-4 text-[#FF0078]" />
+                                </div>
+                                <div>
+                                  <p className="text-sm font-semibold text-gray-900">
+                                    {t('interview_insights_locked_title')}
+                                  </p>
+                                  <p className="text-xs text-gray-500 mt-1">
+                                    {t('interview_insights_locked_desc')}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </>
                     )}
 
                     {/* Next action tip */}

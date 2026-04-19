@@ -31,6 +31,7 @@ const mk = {
   landing_postBtn: 'Објави позиција',
   landing_forStudents: 'За кандидати',
   landing_forOrgs: 'За компании',
+  landing_login: 'Најави се',
   landing_getStarted: 'Започни бесплатно',
   landing_tagline: 'Помалку апликации. Подобри совпаѓања.',
 
@@ -75,6 +76,15 @@ const mk = {
   cta_subtitle: 'Стотици кандидати веќе го користат Linker. Не го пропуштај рокот.',
   cta_btn: 'Најди го моето совпаѓање',
 
+  // Auth
+  auth_title: 'Избери ја твојата улога',
+  auth_subtitle: 'Кажи ни дали си кандидат или компанија за да продолжиш.',
+  auth_back: 'Назад',
+  auth_candidate_title: 'Јас сум кандидат',
+  auth_candidate_desc: 'Барам практикантство или работа',
+  auth_org_title: 'Јас сум компанија',
+  auth_org_desc: 'Објавувам позиции за мојата организација',
+
   // Footer
   footer_tagline: 'Linker — Создаден за кандидати кои заслужуваат повеќе од Discord пораки',
 
@@ -114,8 +124,12 @@ const mk = {
   label_total: 'вкупно',
   label_inInterview: 'во интервју',
   status_applied: 'Аплициран',
+  status_shortlisted: 'Во потесен избор',
   status_reviewing: 'Во преглед',
   status_interview: 'Интервју',
+  status_interview_invited: 'Покана за интервју',
+  status_interview_scheduled: 'Закажано интервју',
+  status_interview_confirmed: 'Потврдено интервју',
   status_offered: 'Понуда!',
   status_rejected: 'Одбиен',
   tip_applied: 'Повеќето компании прегледуваат за 5–7 дена. Почекај малку.',
@@ -126,6 +140,15 @@ const mk = {
   empty_noApplications: 'Нема пријави сè уште',
   empty_noApplicationsHint: 'Аплицирај за твојата прва позиција за помалку од 60 секунди.',
   btn_findInternships: 'Најди можности',
+  btn_viewDetails: 'Детали',
+  interview_insights_title: 'Интервју увиди',
+  interview_insights_helper: 'Достапно по покана',
+  interview_insights_intro: 'Ова се насоки за подготовка за претстојното интервју.',
+  interview_insights_questions: 'Можно интервју прашања',
+  interview_insights_prepare: 'За што да се подготвиш',
+  interview_insights_process: 'Преглед на процесот',
+  interview_insights_locked_title: 'Интервју увидите се отклучуваат по покана за интервју',
+  interview_insights_locked_desc: 'Добиј покана за да ги видиш веројатните прашања и совети за подготовка.',
 
   // Candidate profile
   page_myProfile: 'Профил',
@@ -282,6 +305,7 @@ const en: typeof mk = {
   landing_postBtn: 'Post a role',
   landing_forStudents: 'For Candidates',
   landing_forOrgs: 'For Companies',
+  landing_login: 'Log in',
   landing_getStarted: 'Get started free',
   landing_tagline: 'Fewer applications. Better matches.',
 
@@ -326,6 +350,15 @@ const en: typeof mk = {
   cta_subtitle: 'Hundreds of candidates are already using Linker. Don\'t miss the deadline.',
   cta_btn: 'Find my match now',
 
+  // Auth
+  auth_title: 'Choose your role',
+  auth_subtitle: 'Tell us if you’re a candidate or a company to continue.',
+  auth_back: 'Back',
+  auth_candidate_title: 'I’m a Candidate',
+  auth_candidate_desc: 'Looking for internships or jobs',
+  auth_org_title: 'I’m a Company',
+  auth_org_desc: 'Posting roles for my organization',
+
   // Footer
   footer_tagline: 'Linker — Made for candidates who deserve better than Discord DMs',
 
@@ -365,8 +398,12 @@ const en: typeof mk = {
   label_total: 'total',
   label_inInterview: 'in interview',
   status_applied: 'Applied',
+  status_shortlisted: 'Shortlisted',
   status_reviewing: 'Reviewing',
   status_interview: 'Interview',
+  status_interview_invited: 'Interview invited',
+  status_interview_scheduled: 'Interview scheduled',
+  status_interview_confirmed: 'Interview confirmed',
   status_offered: 'Offered!',
   status_rejected: 'Rejected',
   tip_applied: 'Most companies review within 5–7 days. Hang tight.',
@@ -377,6 +414,15 @@ const en: typeof mk = {
   empty_noApplications: 'No applications yet',
   empty_noApplicationsHint: 'Apply to your first role in under 60 seconds.',
   btn_findInternships: 'Find opportunities',
+  btn_viewDetails: 'Details',
+  interview_insights_title: 'Interview Insights',
+  interview_insights_helper: 'Unlocked after invite',
+  interview_insights_intro: 'Preparation guidance for your upcoming interview.',
+  interview_insights_questions: 'Likely interview questions',
+  interview_insights_prepare: 'What to prepare for',
+  interview_insights_process: 'Interview process overview',
+  interview_insights_locked_title: 'Interview Insights unlock once you’re invited',
+  interview_insights_locked_desc: 'Get invited to access likely questions and preparation tips.',
 
   // Candidate profile
   page_myProfile: 'Profile',
@@ -533,6 +579,7 @@ const sq: typeof mk = {
   landing_postBtn: 'Posto një rol',
   landing_forStudents: 'Për kandidatë',
   landing_forOrgs: 'Për organizatat',
+  landing_login: 'Hyr',
   landing_getStarted: 'Fillo falas',
   landing_tagline: 'Fewer applications. Better matches.',
 
@@ -577,6 +624,15 @@ const sq: typeof mk = {
   cta_subtitle: 'Qindra kandidatë nga UKIM tashmë po përdorin Linker. Mos humb afatin.',
   cta_btn: 'Gjej përputhjen time tani',
 
+  // Auth
+  auth_title: 'Zgjidh rolin tënd',
+  auth_subtitle: 'Na trego nëse je kandidat apo kompani për të vazhduar.',
+  auth_back: 'Mbrapa',
+  auth_candidate_title: 'Jam kandidat',
+  auth_candidate_desc: 'Po kërkoj praktikë ose punë',
+  auth_org_title: 'Jam kompani',
+  auth_org_desc: 'Postoj pozicione për organizatën time',
+
   // Footer
   footer_tagline: 'Linker — Krijuar për kandidatë që meritojnë më shumë se mesazhe Discord',
 
@@ -616,8 +672,12 @@ const sq: typeof mk = {
   label_total: 'gjithsej',
   label_inInterview: 'në intervistë',
   status_applied: 'Aplikuar',
+  status_shortlisted: 'Në përzgjedhje',
   status_reviewing: 'Në shqyrtim',
   status_interview: 'Intervistë',
+  status_interview_invited: 'Ftesë për intervistë',
+  status_interview_scheduled: 'Intervistë e caktuar',
+  status_interview_confirmed: 'Intervistë e konfirmuar',
   status_offered: 'Ofertë!',
   status_rejected: 'Refuzuar',
   tip_applied: 'Shumica e kompanive shqyrtojnë brenda 5–7 ditëve. Prit pak.',
@@ -628,6 +688,15 @@ const sq: typeof mk = {
   empty_noApplications: 'Ende nuk ka aplikime',
   empty_noApplicationsHint: 'Apliko për rolin tënd të parë në më pak se 60 sekonda.',
   btn_findInternships: 'Gjej praktika',
+  btn_viewDetails: 'Detaje',
+  interview_insights_title: 'Interview Insights',
+  interview_insights_helper: 'E disponueshme pas ftesës',
+  interview_insights_intro: 'Udhëzime për përgatitje për intervistën e ardhshme.',
+  interview_insights_questions: 'Pyetje të mundshme interviste',
+  interview_insights_prepare: 'Çfarë të përgatitësh',
+  interview_insights_process: 'Përmbledhje e procesit të intervistës',
+  interview_insights_locked_title: 'Interview Insights hapen vetëm pas ftesës',
+  interview_insights_locked_desc: 'Merr ftesë për të parë pyetjet dhe këshillat e përgatitjes.',
 
   // Candidate profile
   page_myProfile: 'Profili im',
@@ -784,6 +853,7 @@ const sr: typeof mk = {
   landing_postBtn: 'Objavi poziciju',
   landing_forStudents: 'Za kandidate',
   landing_forOrgs: 'Za organizacije',
+  landing_login: 'Prijavi se',
   landing_getStarted: 'Počni besplatno',
   landing_tagline: 'Fewer applications. Better matches.',
 
@@ -828,6 +898,15 @@ const sr: typeof mk = {
   cta_subtitle: 'Stotine studenata sa UKIM-a već koriste Linker. Ne propusti rok.',
   cta_btn: 'Pronađi moje podudaranje',
 
+  // Auth
+  auth_title: 'Izaberi svoju ulogu',
+  auth_subtitle: 'Reci nam da li si kandidat ili kompanija da nastaviš.',
+  auth_back: 'Nazad',
+  auth_candidate_title: 'Ja sam kandidat',
+  auth_candidate_desc: 'Tražim praksu ili posao',
+  auth_org_title: 'Ja sam kompanija',
+  auth_org_desc: 'Objavljujem pozicije za svoju organizaciju',
+
   // Footer
   footer_tagline: 'Linker — Napravljen za kandidate koji zaslužuju više od Discord poruka',
 
@@ -867,8 +946,12 @@ const sr: typeof mk = {
   label_total: 'ukupno',
   label_inInterview: 'u intervjuu',
   status_applied: 'Aplicirano',
+  status_shortlisted: 'U užem izboru',
   status_reviewing: 'U razmatranju',
   status_interview: 'Intervju',
+  status_interview_invited: 'Poziv na intervju',
+  status_interview_scheduled: 'Zakazan intervju',
+  status_interview_confirmed: 'Potvrđen intervju',
   status_offered: 'Ponuda!',
   status_rejected: 'Odbijeno',
   tip_applied: 'Većina kompanija pregleda za 5–7 dana. Strpi se.',
@@ -879,6 +962,15 @@ const sr: typeof mk = {
   empty_noApplications: 'Nema prijava još uvek',
   empty_noApplicationsHint: 'Apliciraj za prvu poziciju za manje od 60 sekundi.',
   btn_findInternships: 'Pronađi prakse',
+  btn_viewDetails: 'Detalji',
+  interview_insights_title: 'Interview Insights',
+  interview_insights_helper: 'Dostupno posle poziva',
+  interview_insights_intro: 'Smernice za pripremu za predstojeći intervju.',
+  interview_insights_questions: 'Moguća pitanja na intervjuu',
+  interview_insights_prepare: 'Za šta se pripremiti',
+  interview_insights_process: 'Pregled procesa intervjua',
+  interview_insights_locked_title: 'Interview Insights se otključava nakon poziva',
+  interview_insights_locked_desc: 'Dobij poziv da vidiš pitanja i savete za pripremu.',
 
   // Candidate profile
   page_myProfile: 'Moj profil',
@@ -1035,6 +1127,7 @@ const tr: typeof mk = {
   landing_postBtn: 'Pozisyon yayınla',
   landing_forStudents: 'Adaylar için',
   landing_forOrgs: 'Kuruluşlar için',
+  landing_login: 'Giriş yap',
   landing_getStarted: 'Ücretsiz başla',
   landing_tagline: 'Fewer applications. Better matches.',
 
@@ -1079,6 +1172,15 @@ const tr: typeof mk = {
   cta_subtitle: "UKIM'den yüzlerce öğrenci Linker'ı zaten kullanıyor. Son tarihi kaçırma.",
   cta_btn: 'Eşleşmemi şimdi bul',
 
+  // Auth
+  auth_title: 'Rolünü seç',
+  auth_subtitle: 'Devam etmek için aday mı şirket mi olduğunu söyle.',
+  auth_back: 'Geri',
+  auth_candidate_title: 'Ben adayım',
+  auth_candidate_desc: 'Staj veya iş arıyorum',
+  auth_org_title: 'Ben bir şirketim',
+  auth_org_desc: 'Kuruluşum için pozisyon yayınlıyorum',
+
   // Footer
   footer_tagline: "Linker — Discord DM'lerinden daha fazlasını hak eden öğrenciler için yapıldı",
 
@@ -1118,8 +1220,12 @@ const tr: typeof mk = {
   label_total: 'toplam',
   label_inInterview: 'mülakatta',
   status_applied: 'Başvuruldu',
+  status_shortlisted: 'Kısa liste',
   status_reviewing: 'İnceleniyor',
   status_interview: 'Mülakat',
+  status_interview_invited: 'Mülakat daveti',
+  status_interview_scheduled: 'Mülakat planlandı',
+  status_interview_confirmed: 'Mülakat onaylandı',
   status_offered: 'Teklif!',
   status_rejected: 'Reddedildi',
   tip_applied: 'Çoğu şirket 5–7 gün içinde inceler. Sabırla bekle.',
@@ -1130,6 +1236,15 @@ const tr: typeof mk = {
   empty_noApplications: 'Henüz başvuru yok',
   empty_noApplicationsHint: 'İlk pozisyona 60 saniyeden kısa sürede başvur.',
   btn_findInternships: 'Staj bul',
+  btn_viewDetails: 'Detaylar',
+  interview_insights_title: 'Interview Insights',
+  interview_insights_helper: 'Davet sonrası açılır',
+  interview_insights_intro: 'Yaklaşan mülakat için hazırlık rehberi.',
+  interview_insights_questions: 'Olası mülakat soruları',
+  interview_insights_prepare: 'Neye hazırlanmalı',
+  interview_insights_process: 'Mülakat süreci özeti',
+  interview_insights_locked_title: 'Interview Insights davet edilince açılır',
+  interview_insights_locked_desc: 'Olası sorular ve hazırlık ipuçları için davet al.',
 
   // Candidate profile
   page_myProfile: 'Profilim',
@@ -1286,6 +1401,7 @@ const bs: typeof mk = {
   landing_postBtn: 'Objavi poziciju',
   landing_forStudents: 'Za kandidate',
   landing_forOrgs: 'Za organizacije',
+  landing_login: 'Prijavi se',
   landing_getStarted: 'Počni besplatno',
   landing_tagline: 'Fewer applications. Better matches.',
 
@@ -1330,6 +1446,15 @@ const bs: typeof mk = {
   cta_subtitle: 'Stotine studenata s UKIM-a već koriste Linker. Ne propusti rok.',
   cta_btn: 'Pronađi moje podudaranje',
 
+  // Auth
+  auth_title: 'Odaberi svoju ulogu',
+  auth_subtitle: 'Reci nam jesi li kandidat ili kompanija da nastaviš.',
+  auth_back: 'Nazad',
+  auth_candidate_title: 'Ja sam kandidat',
+  auth_candidate_desc: 'Tražim praksu ili posao',
+  auth_org_title: 'Ja sam kompanija',
+  auth_org_desc: 'Objavljujem pozicije za svoju organizaciju',
+
   // Footer
   footer_tagline: 'Linker — Napravljen za kandidate koji zaslužuju više od Discord poruka',
 
@@ -1369,8 +1494,12 @@ const bs: typeof mk = {
   label_total: 'ukupno',
   label_inInterview: 'u intervjuu',
   status_applied: 'Aplicirano',
+  status_shortlisted: 'U užem izboru',
   status_reviewing: 'U razmatranju',
   status_interview: 'Intervju',
+  status_interview_invited: 'Poziv na intervju',
+  status_interview_scheduled: 'Zakazan intervju',
+  status_interview_confirmed: 'Potvrđen intervju',
   status_offered: 'Ponuda!',
   status_rejected: 'Odbijeno',
   tip_applied: 'Većina kompanija pregleda za 5–7 dana. Strpi se.',
@@ -1381,6 +1510,15 @@ const bs: typeof mk = {
   empty_noApplications: 'Nema prijava još uvijek',
   empty_noApplicationsHint: 'Apliciraj za prvu poziciju za manje od 60 sekundi.',
   btn_findInternships: 'Pronađi prakse',
+  btn_viewDetails: 'Detalji',
+  interview_insights_title: 'Interview Insights',
+  interview_insights_helper: 'Dostupno nakon poziva',
+  interview_insights_intro: 'Smjernice za pripremu za predstojeći intervju.',
+  interview_insights_questions: 'Moguća pitanja na intervjuu',
+  interview_insights_prepare: 'Za šta se pripremiti',
+  interview_insights_process: 'Pregled procesa intervjua',
+  interview_insights_locked_title: 'Interview Insights se otključava nakon poziva',
+  interview_insights_locked_desc: 'Dobij poziv da vidiš pitanja i savjete za pripremu.',
 
   // Candidate profile
   page_myProfile: 'Moj profil',

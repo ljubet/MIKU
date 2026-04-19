@@ -1,4 +1,4 @@
-import { Job, Student, Organization, Application } from "@/types";
+import { Job, Student, Organization, Application, OrgReview } from "@/types";
 
 export const mockStudent: Student = {
   id: "22222222-2222-2222-2222-222222222222",
@@ -56,11 +56,13 @@ export const mockOrganizations: Organization[] = [
   {
     id: "o2",
     name: "Alkaloid",
+    logo: "/alkaloid.png",
     email: "careers@alkaloid.com.mk",
     industry: "Pharma & Tech",
     size: "1000+",
     location: "Skopje, MK",
-    description: "Leading pharmaceutical and technology company in the region.",
+    website: "alkaloid.com.mk",
+    description: "Leading pharmaceutical and technology company in the region. We combine deep scientific expertise with modern software to build healthcare solutions used across Southeast Europe.",
     founded: "1936",
     verified: true,
     hiresCount: 61,
@@ -70,11 +72,13 @@ export const mockOrganizations: Organization[] = [
   {
     id: "o3",
     name: "Sorsix",
+    logo: "/sorsix.jpeg",
     email: "jobs@sorsix.com",
     industry: "Software",
     size: "50–200",
     location: "Skopje, MK",
-    description: "Software consulting and product development.",
+    website: "sorsix.com",
+    description: "Software consulting and product development for global clients. We build backend systems, APIs, and infrastructure for companies across the US and Europe.",
     founded: "2012",
     verified: true,
     hiresCount: 34,
@@ -84,11 +88,13 @@ export const mockOrganizations: Organization[] = [
   {
     id: "o4",
     name: "Brainster",
+    logo: "/brainster.png",
     email: "careers@brainster.co",
     industry: "EdTech",
     size: "10–50",
     location: "Skopje, MK",
-    description: "The leading tech education company in the Western Balkans.",
+    website: "brainster.co",
+    description: "The leading tech education company in the Western Balkans. We run bootcamps, academies, and corporate training programs that have launched over 3,000 careers in tech.",
     founded: "2017",
     verified: true,
     hiresCount: 18,
@@ -98,11 +104,13 @@ export const mockOrganizations: Organization[] = [
   {
     id: "o5",
     name: "Netcetera",
+    logo: "/netcetera.png",
     email: "careers@netcetera.com",
     industry: "Software",
     size: "500–1000",
     location: "Skopje, MK",
-    description: "Swiss software company with a major development hub in Macedonia.",
+    website: "netcetera.com",
+    description: "Swiss software company with a major development hub in Macedonia. We build secure, high-quality digital products for banking, transport, and retail clients worldwide.",
     founded: "1999",
     verified: true,
     hiresCount: 89,
@@ -118,12 +126,15 @@ export const mockJobs: Job[] = [
     orgName: "TechMK",
     orgLogo: "/techmk.png",
     title: "Frontend Engineering Intern",
+    titleMk: "Практикант за Frontend инженерство",
     type: "internship",
     location: "Skopje, MK",
     remote: true,
     salary: "€400–600/mo",
     description:
       "Join our product team to build beautiful, fast web interfaces. You'll work directly with senior engineers on real features shipped to thousands of users. No ticket monkey work — you'll own small features end to end.",
+    descriptionMk:
+      "Придружи се на продукт тимот за да изградиш брзи и елегантни веб интерфејси. Ќе работиш директно со сениор инженери на функции што се користат од илјадници корисници. Без ситни задачи — ќе водиш мали функционалности од почеток до крај.",
     requirements: [
       "Experience with React or Vue",
       "Basic TypeScript knowledge",
@@ -185,12 +196,15 @@ export const mockJobs: Job[] = [
     orgName: "Netcetera",
     orgLogo: "/netcetera.png",
     title: "Mobile Developer Intern (iOS/Android)",
+    titleMk: "Практикант за мобилен развој (iOS/Android)",
     type: "internship",
     location: "Skopje, MK",
     remote: false,
     salary: "€500–700/mo",
     description:
       "Build real mobile features for millions of users across Europe. You'll be embedded in a cross-functional team from day one, working on apps used in banking and fintech.",
+    descriptionMk:
+      "Гради реални мобилни функционалности за милиони корисници низ Европа. Од првиот ден ќе бидеш дел од крос‑функционален тим и ќе работиш на апликации за банкарство и финтек.",
     requirements: [
       "Basic Swift or Kotlin experience",
       "Passion for mobile UX",
@@ -219,12 +233,15 @@ export const mockJobs: Job[] = [
     orgName: "Brainster",
     orgLogo: "/brainster.png",
     title: "UX/UI Design Intern",
+    titleMk: "Практикант за UX/UI дизајн",
     type: "internship",
     location: "Skopje, MK",
     remote: true,
     salary: "€300–450/mo",
     description:
       "Help shape the learning experience for thousands of candidates. Work in Figma, run user interviews, and iterate on designs weekly. Your work ships — no mockups sitting in a drawer.",
+    descriptionMk:
+      "Помогни да го обликуваш искуството за учење на илјадници кандидати. Работи во Figma, води кориснички интервјуа и подобрувај дизајни секоја недела. Твојата работа се објавува — без mockups во фиока.",
     requirements: [
       "Figma proficiency",
       "Portfolio of UI work (2+ projects)",
@@ -244,6 +261,44 @@ export const mockJobs: Job[] = [
       { step: 2, label: "Design Challenge", description: "Short redesign exercise, ~2 hours." },
       { step: 3, label: "Offer", description: "Fast process — usually done in under 2 weeks." },
     ],
+    interviewInsights: {
+      intro: "These insights help you prepare for the upcoming interview based on this role's hiring process.",
+      interviewQuestions: [
+        "Walk us through a recent UX project and the decisions you made.",
+        "How do you approach user research when time is limited?",
+        "Tell us about a time you collaborated with engineers to ship a design.",
+        "What design systems or accessibility principles do you follow?",
+      ],
+      preparationTips: [
+        "Review the role requirements and map them to 2–3 concrete examples.",
+        "Prepare a short walkthrough of your portfolio, focusing on impact and tradeoffs.",
+        "Be ready to explain your design process and how you validate decisions.",
+        "Practice communicating constraints and how you prioritize feedback.",
+      ],
+      interviewStages: [
+        "Round 1: Portfolio review with the design lead (30–40 min)",
+        "Round 2: Short design challenge discussion (45–60 min)",
+      ],
+    },
+    interviewInsightsMk: {
+      intro: "Овие увиди ти помагаат да се подготвиш за претстојното интервју според процесот за оваа улога.",
+      interviewQuestions: [
+        "Раскажи ни за последен UX проект и клучните одлуки што ги донесе.",
+        "Како пристапуваш кон корисничко истражување кога имаш ограничено време?",
+        "Опиши ситуација кога соработуваше со инженери за да испорачаш дизајн.",
+        "Кои дизајн системи или принципи за пристапност ги следиш?",
+      ],
+      preparationTips: [
+        "Поврзи ги барањата на улогата со 2–3 конкретни примери од твојата работа.",
+        "Подготви кратка прошетка низ портфолиото, со фокус на резултат и компромиси.",
+        "Објасни го твојот процес и како ги валидираш дизајнерските одлуки.",
+        "Вежбај јасна комуникација за ограничувања и приоритизација на фидбек.",
+      ],
+      interviewStages: [
+        "Прва рунда: Преглед на портфолио со дизајн лидер (30–40 мин)",
+        "Втора рунда: Разговор за краток дизајн предизвик (45–60 мин)",
+      ],
+    },
   },
   {
     id: "j5",
@@ -516,7 +571,7 @@ export const mockJobs: Job[] = [
 export const mockApplications: Application[] = [
   {
     id: "a1",
-    jobId: "aaaaaaaa-0000-0000-0000-000000000001",
+    jobId: "j1",
     studentId: "s1",
     studentName: "Alex Petrov",
     studentEmail: "alex.petrov@candidates.ukim.mk",
@@ -531,7 +586,7 @@ export const mockApplications: Application[] = [
   },
   {
     id: "a2",
-    jobId: "aaaaaaaa-0000-0000-0000-000000000003",
+    jobId: "j3",
     studentId: "s1",
     studentName: "Alex Petrov",
     studentEmail: "alex.petrov@candidates.ukim.mk",
@@ -545,14 +600,14 @@ export const mockApplications: Application[] = [
   },
   {
     id: "a3",
-    jobId: "aaaaaaaa-0000-0000-0000-000000000004",
+    jobId: "j4",
     studentId: "s1",
     studentName: "Alex Petrov",
     studentEmail: "alex.petrov@candidates.ukim.mk",
     studentUniversity: "Ss. Cyril and Methodius University",
     studentMajor: "Computer Science",
     studentAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
-    status: "interview",
+    status: "interview_invited",
     appliedAt: "2026-04-12",
     updatedAt: "2026-04-15",
   },
@@ -718,5 +773,113 @@ export const mockOrgApplicants: Application[] = [
     status: "shortlisted",
     appliedAt: "2026-04-15",
     updatedAt: "2026-04-17",
+  },
+];
+
+export const mockOrgReviews: OrgReview[] = [
+  // TechMK (id: "11111111-1111-1111-1111-111111111111")
+  {
+    id: "r1",
+    organizationId: "11111111-1111-1111-1111-111111111111",
+    reviewerName: "Stefan M.",
+    role: "Frontend Intern",
+    rating: 5,
+    reviewText: "One of the best internship experiences I've had. Real ownership from day one — I shipped features to production in my first week. The team was incredibly supportive and gave honest feedback.",
+    isVerifiedWorker: true,
+    createdAt: "2026-03-14",
+  },
+  {
+    id: "r2",
+    organizationId: "11111111-1111-1111-1111-111111111111",
+    reviewerName: "Ana K.",
+    role: "Full-stack Developer",
+    rating: 4,
+    reviewText: "Great culture and modern tech stack. The pace is fast but the team helps you keep up. Would have appreciated more structured onboarding, but overall a very positive experience.",
+    isVerifiedWorker: true,
+    createdAt: "2026-02-28",
+  },
+  {
+    id: "r3",
+    organizationId: "11111111-1111-1111-1111-111111111111",
+    reviewerName: "Bojan T.",
+    role: "Backend Intern",
+    rating: 4,
+    reviewText: "Solid company. Good mentors, interesting problems, reasonable hours. The internship was paid fairly for the region. I'd recommend it to any junior dev looking for real experience.",
+    isVerifiedWorker: false,
+    createdAt: "2026-01-10",
+  },
+  // Sorsix (id: "o3")
+  {
+    id: "r4",
+    organizationId: "o3",
+    reviewerName: "Maja R.",
+    role: "Software Engineer Intern",
+    rating: 5,
+    reviewText: "Incredible learning environment. The codebase is well-maintained and the senior devs take time to explain the architecture. I learned more in 3 months here than in a year of university projects.",
+    isVerifiedWorker: true,
+    createdAt: "2026-03-01",
+  },
+  {
+    id: "r5",
+    organizationId: "o3",
+    reviewerName: "Darko S.",
+    role: "Java Developer Intern",
+    rating: 3,
+    reviewText: "Good technical exposure and international projects. The work is interesting but the onboarding process could be smoother. Communication between teams can sometimes be slow.",
+    isVerifiedWorker: true,
+    createdAt: "2025-12-20",
+  },
+  // Brainster (id: "o4")
+  {
+    id: "r6",
+    organizationId: "o4",
+    reviewerName: "Kristina V.",
+    role: "Product Management Intern",
+    rating: 5,
+    reviewText: "Brainster gave me a front-row seat to how an edtech startup operates. I owned real tasks — user interviews, roadmap work, sprint planning. The team is sharp and moves fast.",
+    isVerifiedWorker: true,
+    createdAt: "2026-02-15",
+  },
+  {
+    id: "r7",
+    organizationId: "o4",
+    reviewerName: "Lazar P.",
+    role: "Marketing Intern",
+    rating: 4,
+    reviewText: "Energetic place with a strong mission. Lots of autonomy, which I appreciated. The role stretched me beyond my comfort zone in a good way. Great first job out of university.",
+    isVerifiedWorker: false,
+    createdAt: "2025-11-30",
+  },
+  // Netcetera (id: "o5")
+  {
+    id: "r8",
+    organizationId: "o5",
+    reviewerName: "Teodora G.",
+    role: "QA Engineer Intern",
+    rating: 4,
+    reviewText: "Very professional environment. Swiss-level standards applied to everything — processes, code quality, documentation. You learn rigorous engineering practices here. Slightly slower-paced than startups but very stable.",
+    isVerifiedWorker: true,
+    createdAt: "2026-03-22",
+  },
+  {
+    id: "r9",
+    organizationId: "o5",
+    reviewerName: "Ivan B.",
+    role: "Backend Developer",
+    rating: 5,
+    reviewText: "The best company I've worked at in Macedonia. International clients, great tools, and a team that actually cares about quality. The code review culture alone is worth it.",
+    isVerifiedWorker: true,
+    createdAt: "2026-01-18",
+  },
+  // Alkaloid (id: "o2")
+  {
+    id: "r10",
+    organizationId: "o2",
+    reviewerName: "Vlatko N.",
+    role: "Software Developer Intern",
+    rating: 3,
+    reviewText: "Large company feel — lots of process but also lots of resources. The tech stack is modern and the team was helpful. If you want startup pace this isn't it, but if you want stability and learning, it works.",
+    isVerifiedWorker: true,
+    createdAt: "2026-02-05",
   },
 ];

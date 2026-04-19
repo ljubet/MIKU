@@ -1,4 +1,15 @@
 export type Role = "student" | "org";
+
+export interface OrgReview {
+  id: string;
+  organizationId: string;
+  reviewerName: string;
+  role: string;
+  rating: number; // 1–5
+  reviewText: string;
+  isVerifiedWorker: boolean;
+  createdAt: string;
+}
 export type AccountType = "candidate" | "provider";
 
 export interface StudentProject {
@@ -56,17 +67,26 @@ export interface HiringStage {
   description: string;
 }
 
+export interface InterviewInsights {
+  intro: string;
+  interviewQuestions: string[];
+  preparationTips: string[];
+  interviewStages: string[];
+}
+
 export interface Job {
   id: string;
   orgId: string;
   orgName: string;
   orgLogo?: string;
   title: string;
+  titleMk?: string;
   type: JobType;
   location: string;
   remote: boolean;
   salary?: string;
   description: string;
+  descriptionMk?: string;
   requirements: string[];
   tags: string[];
   status: JobStatus;
@@ -80,6 +100,8 @@ export interface Job {
   matchScore?: number;     // 0–100, computed per student
   verified: boolean;
   featured?: boolean;
+  interviewInsights?: InterviewInsights;
+  interviewInsightsMk?: InterviewInsights;
 }
 
 export type ApplicationStatus =
@@ -87,6 +109,9 @@ export type ApplicationStatus =
   | "shortlisted"
   | "reviewing"
   | "interview"
+  | "interview_invited"
+  | "interview_scheduled"
+  | "interview_confirmed"
   | "offered"
   | "rejected";
 

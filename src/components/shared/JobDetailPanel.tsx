@@ -75,12 +75,14 @@ export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1.5 mb-0.5">
-                    <p className="text-xs text-gray-400 font-medium">{job.orgName}</p>
-                    {job.verified && (
-                      <ShieldCheck className="w-3.5 h-3.5 text-[#FF0078]" />
-                    )}
-                  </div>
+                  <Link
+                    href={`/student/org/${encodeURIComponent(job.orgName)}`}
+                    onClick={onClose}
+                    className="flex items-center gap-1.5 mb-0.5 w-fit hover:text-[#FF0078] transition-colors"
+                  >
+                    <p className="text-xs text-gray-400 font-medium hover:text-[#FF0078]">{job.orgName}</p>
+                    {job.verified && <ShieldCheck className="w-3.5 h-3.5 text-[#FF0078]" />}
+                  </Link>
                   <h2 className="font-bold text-gray-900 text-lg leading-tight">{job.title}</h2>
                   <div className="flex flex-wrap items-center gap-2 mt-2">
                     <JobTypeBadge type={job.type} />
@@ -218,15 +220,19 @@ export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
               {/* Company info */}
               {org && (
                 <div className="border border-gray-100 rounded-xl p-4">
-                  <div className="flex items-center gap-2 mb-3">
+                  <Link
+                    href={`/student/org/${encodeURIComponent(org.name)}`}
+                    onClick={onClose}
+                    className="flex items-center gap-2 mb-3 group w-fit"
+                  >
                     <Building2 className="w-4 h-4 text-gray-400" />
-                    <h3 className="text-sm font-semibold text-gray-900">{org.name}</h3>
+                    <h3 className="text-sm font-semibold text-gray-900 group-hover:text-[#FF0078] transition-colors">{org.name}</h3>
                     {org.verified && (
-                      <span className="flex items-center gap-1 text-xs text-[#FF0078] font-medium bg-[#FF0078]/10 px-2 py-0.5 rounded-full ml-auto">
+                      <span className="flex items-center gap-1 text-xs text-[#FF0078] font-medium bg-[#FF0078]/10 px-2 py-0.5 rounded-full">
                         <ShieldCheck className="w-3 h-3" /> {t('label_verified')}
                       </span>
                     )}
-                  </div>
+                  </Link>
                   <p className="text-xs text-gray-500 leading-relaxed mb-3">{org.description}</p>
                   <div className="grid grid-cols-2 gap-2 text-xs text-gray-500">
                     <span>📍 {org.location}</span>

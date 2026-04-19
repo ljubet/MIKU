@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useApp } from "@/lib/app-context";
 import { useLang } from "@/lib/language-context";
 import { computeMatchScore } from "@/lib/match";
@@ -19,7 +20,6 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const TYPE_STYLES: Record<string, string> = {
@@ -107,10 +107,14 @@ export default function SavedPage() {
                       </div>
                       <div className="min-w-0">
                         <p className="font-semibold text-gray-900 text-sm leading-tight truncate">{job.title}</p>
-                        <p className="text-xs text-gray-500 mt-0.5 flex items-center gap-1">
+                        <Link
+                          href={`/student/org/${encodeURIComponent(job.orgName)}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-xs text-gray-500 mt-0.5 flex items-center gap-1 hover:text-[#FF0078] transition-colors w-fit"
+                        >
                           {job.orgName}
                           {job.verified && <ShieldCheck className="w-3 h-3 text-[#FF0078]" />}
-                        </p>
+                        </Link>
                         <p className="text-xs text-gray-400 mt-0.5 flex items-center gap-1">
                           <MapPin className="w-3 h-3 shrink-0" />
                           {job.location}
@@ -164,7 +168,7 @@ export default function SavedPage() {
                 <div className="flex-1 min-w-0">
                   <h1 className="text-xl font-bold text-gray-900 leading-tight">{selectedJob.title}</h1>
                   <p className="text-sm text-gray-500 mt-0.5 flex items-center gap-1.5 flex-wrap">
-                    {selectedJob.orgName}
+                    <Link href={`/student/org/${encodeURIComponent(selectedJob.orgName)}`} className="hover:text-[#FF0078] transition-colors">{selectedJob.orgName}</Link>
                     {selectedJob.verified && <ShieldCheck className="w-3.5 h-3.5 text-[#FF0078]" />}
                     <span className="text-gray-300">·</span>
                     <MapPin className="w-3.5 h-3.5" />

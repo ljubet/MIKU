@@ -17,6 +17,9 @@ const STATUS_COLOR: Record<ApplicationStatus, string> = {
   shortlisted: "border-l-violet-500",
   reviewing:   "border-l-amber-400",
   interview:   "border-l-[#FF0078]",
+  interview_invited: "border-l-[#FF0078]",
+  interview_scheduled: "border-l-[#FF0078]",
+  interview_confirmed: "border-l-[#FF0078]",
   offered:     "border-l-emerald-500",
   rejected:    "border-l-gray-200",
 };
@@ -35,6 +38,12 @@ export default function ApplicantsPage() {
   const [selectedJobId, setSelectedJobId] = useState<string>("all");
   const [selectedAppId, setSelectedAppId] = useState<string>("");
   const [jobDropOpen, setJobDropOpen] = useState(false);
+  const interviewStatuses: ApplicationStatus[] = [
+    "interview",
+    "interview_invited",
+    "interview_scheduled",
+    "interview_confirmed",
+  ];
 
   // Jobs that belong to this org
   const orgJobs = useMemo(() => jobs.filter((j) => j.orgId === "11111111-1111-1111-1111-111111111111" || j.orgName === "TechMK"), [jobs]);
@@ -107,7 +116,7 @@ export default function ApplicantsPage() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">{t("page_applicants")}</h1>
         <p className="text-sm text-gray-400 mt-0.5">
-          {orgApplications.length} {t("label_total")} · {orgApplications.filter((a) => a.status === "interview").length} {t("label_inInterview")} · {orgApplications.filter((a) => a.status === "offered").length} {t("tab_offered").toLowerCase()}
+          {orgApplications.length} {t("label_total")} · {orgApplications.filter((a) => interviewStatuses.includes(a.status)).length} {t("label_inInterview")} · {orgApplications.filter((a) => a.status === "offered").length} {t("tab_offered").toLowerCase()}
         </p>
       </div>
 
