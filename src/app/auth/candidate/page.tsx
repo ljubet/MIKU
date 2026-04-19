@@ -1,14 +1,17 @@
 "use client";
 
-import { useTransition } from "react";
+import { Suspense, useTransition } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { AuthCard } from "@/components/auth/AuthCard";
 import { signInWithGoogle, signInWithIKnow } from "@/lib/actions/auth";
 import { GraduationCap } from "lucide-react";
 
-export default function CandidateAuthPage() {
+function CandidateAuthContent() {
   const [isPendingGoogle, startGoogle] = useTransition();
   const [isPendingIKnow, startIKnow] = useTransition();
+  const searchParams = useSearchParams();
+  const mode = searchParams.get("mode") === "signup" ? "signup" : "signin";
 
   const socialButtons = [
     {
@@ -53,11 +56,20 @@ export default function CandidateAuthPage() {
           title="Sign in with email"
           subtitle="Find internships and jobs that match you."
           socialButtons={socialButtons}
+          defaultMode={mode}
         />
-        <Link href="/auth" className="mt-5 text-xs text-gray-400 hover:text-gray-600 transition">
+        <Link href={`/auth?mode=${mode}`} className="mt-5 text-xs text-gray-400 hover:text-gray-600 transition">
           ← Choose a different account type
         </Link>
       </main>
     </div>
+  );
+}
+
+export default function CandidateAuthPage() {
+  return (
+    <Suspense fallback={null}>
+      <CandidateAuthContent />
+    </Suspense>
   );
 }

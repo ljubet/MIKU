@@ -1,12 +1,15 @@
 "use client";
 
-import { useTransition } from "react";
+import { Suspense, useTransition } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { AuthCard } from "@/components/auth/AuthCard";
 import { signInWithGoogle } from "@/lib/actions/auth";
 
-export default function ProviderAuthPage() {
+function ProviderAuthContent() {
   const [isPending, startGoogle] = useTransition();
+  const searchParams = useSearchParams();
+  const mode = searchParams.get("mode") === "signup" ? "signup" : "signin";
 
   const socialButtons = [
     {
@@ -38,11 +41,20 @@ export default function ProviderAuthPage() {
           title="Sign in with email"
           subtitle="Post positions and manage your applicants."
           socialButtons={socialButtons}
+          defaultMode={mode}
         />
-        <Link href="/auth" className="mt-5 text-xs text-gray-400 hover:text-gray-600 transition">
+        <Link href={`/auth?mode=${mode}`} className="mt-5 text-xs text-gray-400 hover:text-gray-600 transition">
           ← Choose a different account type
         </Link>
       </main>
     </div>
+  );
+}
+
+export default function ProviderAuthPage() {
+  return (
+    <Suspense fallback={null}>
+      <ProviderAuthContent />
+    </Suspense>
   );
 }

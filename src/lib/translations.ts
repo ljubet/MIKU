@@ -87,6 +87,7 @@ const mk = {
 
   // Footer
   footer_tagline: 'Linker — Создаден за кандидати кои заслужуваат повеќе од Discord пораки',
+  footer_cta_tagline: 'Стоп за масовно аплицирање. Започни да се совпаѓаш.',
 
   // Candidate dashboard
   search_placeholder: 'Пребарај по наслов, компанија или вештина...',
@@ -361,6 +362,7 @@ const en: typeof mk = {
 
   // Footer
   footer_tagline: 'Linker — Made for candidates who deserve better than Discord DMs',
+  footer_cta_tagline: 'Stop mass applying. Start matching.',
 
   // Candidate dashboard
   search_placeholder: 'Search by title, company, or skill...',
@@ -635,6 +637,7 @@ const sq: typeof mk = {
 
   // Footer
   footer_tagline: 'Linker — Krijuar për kandidatë që meritojnë më shumë se mesazhe Discord',
+  footer_cta_tagline: 'Ndalo aplikimet masive. Fillo përputhjen.',
 
   // Candidate dashboard
   search_placeholder: 'Kërko sipas titullit, kompanisë ose aftësisë...',
@@ -909,6 +912,7 @@ const sr: typeof mk = {
 
   // Footer
   footer_tagline: 'Linker — Napravljen za kandidate koji zaslužuju više od Discord poruka',
+  footer_cta_tagline: 'Prestani s masovnim apliciranjem. Započni podudaranje.',
 
   // Candidate dashboard
   search_placeholder: 'Pretraži po naslovu, kompaniji ili veštini...',
@@ -1183,6 +1187,7 @@ const tr: typeof mk = {
 
   // Footer
   footer_tagline: "Linker — Discord DM'lerinden daha fazlasını hak eden öğrenciler için yapıldı",
+  footer_cta_tagline: 'Toplu başvurmayı bırak. Eşleşmeye başla.',
 
   // Candidate dashboard
   search_placeholder: 'Başlık, şirket veya beceriye göre ara...',
@@ -1457,6 +1462,7 @@ const bs: typeof mk = {
 
   // Footer
   footer_tagline: 'Linker — Napravljen za kandidate koji zaslužuju više od Discord poruka',
+  footer_cta_tagline: 'Prestani s masovnim apliciranjem. Započni podudaranje.',
 
   // Candidate dashboard
   search_placeholder: 'Pretraži po naslovu, kompaniji ili vještini...',
