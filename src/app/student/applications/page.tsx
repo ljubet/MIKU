@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useApp } from "@/lib/app-context";
 import { useLang } from "@/lib/language-context";
 import { AppStatusBadge } from "@/components/shared/StatusBadge";
+import { getJobDescription, getJobInterviewInsights, getJobTitle } from "@/lib/job-copy";
 import { ApplicationStatus } from "@/types";
 import { formatDistanceToNow } from "date-fns";
 import { FileText, Clock, MapPin, ArrowRight, Lightbulb, ChevronDown, ChevronUp, Lock } from "lucide-react";
@@ -134,25 +135,24 @@ export default function ApplicationsPage() {
             const job = jobs.find((j) => j.id === app.jobId);
             if (!job) return null;
             const tip = nextActionTip[app.status];
-            const isMk = lang === "mk";
-            const jobTitle = isMk && job.titleMk ? job.titleMk : job.title;
-            const jobDescription = isMk && job.descriptionMk ? job.descriptionMk : job.description;
+            const jobTitle = getJobTitle(job, lang);
+            const jobDescription = getJobDescription(job, lang);
             const insights =
-              (isMk ? job.interviewInsightsMk : job.interviewInsights) ?? {
+              getJobInterviewInsights(job, lang) ?? {
                 intro: t('interview_insights_intro'),
                 interviewQuestions: [
-                  "Tell us about a recent project you’re proud of.",
-                  "How do you handle feedback and iterate on your work?",
-                  "What would you improve if you had two more weeks on your last project?",
+                  t("interview_insights_fallback_q1"),
+                  t("interview_insights_fallback_q2"),
+                  t("interview_insights_fallback_q3"),
                 ],
                 preparationTips: [
-                  "Review the role requirements and map them to your past work.",
-                  "Prepare 2–3 concrete examples that show your impact.",
-                  "Be ready to walk through your decision-making process.",
+                  t("interview_insights_fallback_tip1"),
+                  t("interview_insights_fallback_tip2"),
+                  t("interview_insights_fallback_tip3"),
                 ],
                 interviewStages: [
-                  "Round 1: Intro chat with the team",
-                  "Round 2: Role-focused interview or task review",
+                  t("interview_insights_fallback_stage1"),
+                  t("interview_insights_fallback_stage2"),
                 ],
               };
             const insightsUnlocked = interviewInviteStatuses.includes(app.status);

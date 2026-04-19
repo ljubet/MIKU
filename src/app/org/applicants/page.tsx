@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { ApplicationStatus } from "@/types";
 import { AppStatusBadge } from "@/components/shared/StatusBadge";
 import { useLang } from "@/lib/language-context";
 import { formatDistanceToNow } from "date-fns";
 import { getHighlightedAchievements } from "@/lib/achievements";
+import { useSearchParams } from "next/navigation";
 import {
   Users, CheckCircle2, XCircle, ShieldCheck, Zap,
   Briefcase, ChevronDown, BookOpen, Lightbulb, Clock, ExternalLink, Star,
@@ -32,9 +33,10 @@ const NEXT_STATUS: Partial<Record<ApplicationStatus, ApplicationStatus>> = {
   interview: "offered",
 };
 
-export default function ApplicantsPage() {
+function ApplicantsContent() {
   const { orgApplications, jobs, setOrgApplicationStatus } = useApp();
   const { t } = useLang();
+  const searchParams = useSearchParams();
 
   const [filter, setFilter] = useState<ApplicationStatus | "all">("all");
   const [selectedJobId, setSelectedJobId] = useState<string>("all");
@@ -75,6 +77,13 @@ export default function ApplicantsPage() {
       return true;
     });
   }, [orgApplications, filter, selectedJobId]);
+
+  useEffect(() => {
+    const selected = searchParams.get("selected");
+    if (!selected) return;
+    const exists = orgApplications.some((a) => a.id === selected);
+    if (exists) setSelectedAppId(selected);
+  }, [searchParams, orgApplications]);
 
   const selectedApp = filtered.find((a) => a.id === selectedAppId) ?? filtered[0] ?? null;
   const selectedJob = selectedApp ? jobMap.get(selectedApp.jobId) : null;
@@ -450,5 +459,13 @@ export default function ApplicantsPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ApplicantsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50" />}>
+      <ApplicantsContent />
+    </Suspense>
   );
 }

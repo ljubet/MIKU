@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useApp } from "@/lib/app-context";
 import { useLang } from "@/lib/language-context";
 import { computeMatchScore } from "@/lib/match";
+import { getJobDescription, getJobHiringProcess, getJobRequirements, getJobTitle } from "@/lib/job-copy";
 import {
   Bookmark,
   BookmarkCheck,
@@ -30,7 +31,7 @@ const TYPE_STYLES: Record<string, string> = {
 
 export default function SavedPage() {
   const { savedJobs, toggleSave, hasApplied, applyToJob, currentStudent, jobs, applicationQuota } = useApp();
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [selectedJobId, setSelectedJobId] = useState<string>("");
 
   const saved = jobs.filter((j) => savedJobs.includes(j.id));
@@ -106,7 +107,7 @@ export default function SavedPage() {
                         )}
                       </div>
                       <div className="min-w-0">
-                        <p className="font-semibold text-gray-900 text-sm leading-tight truncate">{job.title}</p>
+                        <p className="font-semibold text-gray-900 text-sm leading-tight truncate">{getJobTitle(job, lang)}</p>
                         <Link
                           href={`/student/org/${encodeURIComponent(job.orgName)}`}
                           onClick={(e) => e.stopPropagation()}
@@ -226,13 +227,13 @@ export default function SavedPage() {
 
               <div className="px-6 py-5 border-b border-gray-100">
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">{t('section_aboutRole')}</p>
-                <p className="text-sm text-gray-600 leading-relaxed">{selectedJob.description}</p>
+                <p className="text-sm text-gray-600 leading-relaxed">{getJobDescription(selectedJob, lang)}</p>
               </div>
 
               <div className="px-6 py-5 border-b border-gray-100">
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">{t('section_requirements')}</p>
                 <div className="space-y-3">
-                  {selectedJob.requirements.map((req, i) => (
+                  {getJobRequirements(selectedJob, lang).map((req, i) => (
                     <div key={i} className="flex items-start justify-between gap-6">
                       <p className="text-sm text-gray-700 leading-snug">{req}</p>
                       <span className="text-xs text-gray-300 shrink-0 mt-0.5">#{i + 1}</span>
@@ -244,7 +245,7 @@ export default function SavedPage() {
               <div className="px-6 py-5">
                 <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">{t('section_hiringProcess')}</p>
                 <div className="space-y-4">
-                  {selectedJob.hiringProcess.map((stage, i) => (
+                  {getJobHiringProcess(selectedJob, lang).map((stage, i) => (
                     <div key={i} className="flex items-start justify-between gap-6">
                       <div>
                         <p className="text-sm font-medium text-gray-800">{stage.label}</p>

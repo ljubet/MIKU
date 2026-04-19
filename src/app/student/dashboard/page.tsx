@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import { computeMatchScore } from "@/lib/match";
+import { getJobDescription, getJobHiringProcess, getJobRequirements, getJobTitle } from "@/lib/job-copy";
 import { Job, JobType } from "@/types";
 import { useApp } from "@/lib/app-context";
 import { useLang } from "@/lib/language-context";
@@ -41,7 +42,7 @@ export default function DashboardPage() {
     jobs,
     applicationQuota,
   } = useApp();
-  const { t } = useLang();
+  const { t, lang } = useLang();
 
   const [query, setQuery] = useState("");
   const [selectedJobId, setSelectedJobId] = useState<string>("");
@@ -64,7 +65,8 @@ export default function DashboardPage() {
     const cutoff: Record<string, number> = { "7days": 7, "14days": 14, "30days": 30 };
     const results = jobs.filter((job) => {
       const q = query.toLowerCase();
-      if (q && !job.title.toLowerCase().includes(q) && !job.orgName.toLowerCase().includes(q) && !job.tags.some((t) => t.toLowerCase().includes(q))) return false;
+      const title = getJobTitle(job, lang).toLowerCase();
+      if (q && !title.includes(q) && !job.orgName.toLowerCase().includes(q) && !job.tags.some((t) => t.toLowerCase().includes(q))) return false;
       if (jobTypes.length && !jobTypes.includes(job.type)) return false;
       if (salaryOnly && !job.salary) return false;
       if (salaryMin !== null && job.salary) {
@@ -141,7 +143,7 @@ export default function DashboardPage() {
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-xl font-bold text-gray-900 leading-tight">{job.title}</h1>
+              <h1 className="text-xl font-bold text-gray-900 leading-tight">{getJobTitle(job, lang)}</h1>
               <p className="text-sm text-gray-500 mt-0.5 flex items-center gap-1.5 flex-wrap">
                 <Link
                   href={`/student/org/${encodeURIComponent(job.orgName)}`}
@@ -231,7 +233,7 @@ export default function DashboardPage() {
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
               {t('section_aboutRole')}
             </p>
-            <p className="text-sm text-gray-600 leading-relaxed">{job.description}</p>
+            <p className="text-sm text-gray-600 leading-relaxed">{getJobDescription(job, lang)}</p>
           </div>
 
           {/* Requirements */}
@@ -240,7 +242,7 @@ export default function DashboardPage() {
               {t('section_requirements')}
             </p>
             <div className="space-y-3">
-              {job.requirements.map((req, i) => (
+              {getJobRequirements(job, lang).map((req, i) => (
                 <div key={i} className="flex items-start justify-between gap-6">
                   <p className="text-sm text-gray-700 leading-snug">{req}</p>
                   <span className="text-xs text-gray-300 shrink-0 mt-0.5">#{i + 1}</span>
@@ -255,7 +257,7 @@ export default function DashboardPage() {
               {t('section_hiringProcess')}
             </p>
             <div className="space-y-4">
-              {job.hiringProcess.map((stage, i) => (
+              {getJobHiringProcess(job, lang).map((stage, i) => (
                 <div key={i} className="flex items-start justify-between gap-6">
                   <div>
                     <p className="text-sm font-medium text-gray-800">{stage.label}</p>
@@ -519,7 +521,7 @@ export default function DashboardPage() {
                         </div>
                         <div className="min-w-0">
                           <p className="font-semibold text-gray-900 text-sm leading-tight truncate">
-                            {job.title}
+                            {getJobTitle(job, lang)}
                           </p>
                           <Link
                             href={`/student/org/${encodeURIComponent(job.orgName)}`}

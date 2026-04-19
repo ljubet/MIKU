@@ -6,6 +6,7 @@ import { Job } from "@/types";
 import { useApp } from "@/lib/app-context";
 import { useLang } from "@/lib/language-context";
 import { computeMatchScore } from "@/lib/match";
+import { getJobDescription, getJobHiringProcess, getJobRequirements, getJobTitle } from "@/lib/job-copy";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,7 +38,7 @@ interface JobDetailPanelProps {
 export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
   const { savedJobs, toggleSave, hasApplied, currentStudent, organizations, applicationQuota } =
     useApp();
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [applyOpen, setApplyOpen] = useState(false);
 
   if (!job) return null;

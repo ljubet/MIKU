@@ -4,7 +4,7 @@ import { useApp } from "@/lib/app-context";
 import { useLang } from "@/lib/language-context";
 import { ApplicationStatus } from "@/types";
 import { AppStatusBadge, JobTypeBadge } from "@/components/shared/StatusBadge";
-import { List, Users, TrendingUp } from "lucide-react";
+import { Eye, List, TrendingUp, Users } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getHighlightedAchievements } from "@/lib/achievements";
@@ -51,6 +51,20 @@ export default function OrgDashboard() {
       bg: "bg-emerald-50",
     },
   ];
+  const visibilityStats = [
+    {
+      label: t("stat_profileViews"),
+      value: "1.1k",
+      icon: Eye,
+      hint: t("stat_profileViewsHint"),
+    },
+    {
+      label: t("stat_jobViews"),
+      value: "4.6k",
+      icon: TrendingUp,
+      hint: t("stat_jobViewsHint"),
+    },
+  ];
 
   return (
     <div className="space-y-8">
@@ -81,6 +95,25 @@ export default function OrgDashboard() {
             </div>
           </Link>
         ))}
+      </div>
+
+      {/* Visibility */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="font-semibold text-gray-900">{t("section_orgInsights")}</h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {visibilityStats.map(({ label, value, icon: Icon, hint }) => (
+            <div key={label} className="bg-white border border-gray-100 rounded-xl p-5">
+              <div className="w-9 h-9 rounded-lg bg-[#FF0078]/10 flex items-center justify-center mb-3">
+                <Icon className="w-4 h-4 text-[#FF0078]" />
+              </div>
+              <p className="text-2xl font-bold text-gray-900">{value}</p>
+              <p className="text-xs text-gray-400 mt-0.5">{label}</p>
+              <p className="text-[11px] text-gray-300 mt-2">{hint}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Your listings */}
@@ -158,7 +191,11 @@ export default function OrgDashboard() {
             const job = jobs.find((j) => j.id === app.jobId);
             const highlighted = getHighlightedAchievements(app.studentAchievements);
             return (
-              <div key={app.id} className="flex items-center gap-4 px-5 py-4">
+              <Link
+                key={app.id}
+                href={`/org/applicants?selected=${app.id}`}
+                className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50 transition-colors"
+              >
                 <img
                   src={app.studentAvatar}
                   alt={app.studentName}
@@ -180,7 +217,7 @@ export default function OrgDashboard() {
                   </p>
                 </div>
                 <AppStatusBadge status={app.status} />
-              </div>
+              </Link>
             );
           })}
         </div>

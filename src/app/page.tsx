@@ -22,6 +22,7 @@ export default function LandingPage() {
   const { setRole } = useApp();
   const { t, lang, setLang } = useLang();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [billing, setBilling] = useState<"weekly" | "yearly">("weekly");
   const pricingTiers = [
     {
       name: t("pricing_tier_starter_name"),
@@ -31,6 +32,7 @@ export default function LandingPage() {
       highlight: false,
       cta: t("pricing_cta_start_free"),
       ctaHref: "/auth/provider",
+      billing: "weekly" as const,
       features: [
         t("pricing_feature_starter_1"),
         t("pricing_feature_starter_2"),
@@ -47,6 +49,7 @@ export default function LandingPage() {
       highlight: false,
       cta: t("pricing_cta_start"),
       ctaHref: "/auth/provider",
+      billing: "weekly" as const,
       features: [
         t("pricing_feature_basic_1"),
         t("pricing_feature_basic_2"),
@@ -63,6 +66,7 @@ export default function LandingPage() {
       highlight: true,
       cta: t("pricing_cta_start"),
       ctaHref: "/auth/provider",
+      billing: "weekly" as const,
       features: [
         t("pricing_feature_growth_1"),
         t("pricing_feature_growth_2"),
@@ -80,6 +84,7 @@ export default function LandingPage() {
       highlight: false,
       cta: t("pricing_cta_start"),
       ctaHref: "/auth/provider",
+      billing: "weekly" as const,
       features: [
         t("pricing_feature_pro_1"),
         t("pricing_feature_pro_2"),
@@ -98,6 +103,7 @@ export default function LandingPage() {
       highlight: false,
       cta: t("pricing_cta_start"),
       ctaHref: "/auth/provider",
+      billing: "yearly" as const,
       features: [
         t("pricing_feature_growth_1"),
         t("pricing_feature_growth_2"),
@@ -107,6 +113,7 @@ export default function LandingPage() {
       ],
     },
   ];
+  const displayedTiers = pricingTiers.filter((tier) => tier.billing === billing);
 
   const stats = [
     { value: "200+", label: t('stats_openPositions') },
@@ -303,8 +310,28 @@ export default function LandingPage() {
           </h2>
           <p className="text-gray-500 text-base">{t("pricing_subtitle")}</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-start">
-          {pricingTiers.map((tier) => (
+        <div className="flex justify-center sm:justify-end mb-6">
+          <div className="inline-flex rounded-full border border-gray-200 bg-white p-1 text-xs font-semibold text-gray-500">
+            <button
+              type="button"
+              onClick={() => setBilling("weekly")}
+              className={`px-3 py-1 rounded-full transition ${billing === "weekly" ? "bg-[#FF0078] text-white" : "hover:text-gray-700"}`}
+            >
+              {t("pricing_toggle_weekly")}
+            </button>
+            <button
+              type="button"
+              onClick={() => setBilling("yearly")}
+              className={`px-3 py-1 rounded-full transition ${billing === "yearly" ? "bg-[#FF0078] text-white" : "hover:text-gray-700"}`}
+            >
+              {t("pricing_toggle_yearly")}
+            </button>
+          </div>
+        </div>
+        <div
+          className={`grid gap-5 items-start ${billing === "yearly" ? "grid-cols-1 max-w-md mx-auto" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"}`}
+        >
+          {displayedTiers.map((tier) => (
             <div
               key={tier.name}
               data-anim="pricing-card"

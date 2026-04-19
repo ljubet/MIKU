@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/lib/app-context";
@@ -27,6 +28,10 @@ export default function RootLayout({
         <LanguageProvider>
           <AppProvider>{children}</AppProvider>
         </LanguageProvider>
+        <Script
+          src="https://widget.easeaccess24.com/sdk.js?key=R3Nm9UmVcX"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

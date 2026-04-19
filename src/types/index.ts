@@ -116,13 +116,16 @@ export interface Job {
   orgLogo?: string;
   title: string;
   titleMk?: string;
+  titleSq?: string;
   type: JobType;
   location: string;
   remote: boolean;
   salary?: string;
   description: string;
   descriptionMk?: string;
+  descriptionSq?: string;
   requirements: string[];
+  requirementsSq?: string[];
   tags: string[];
   status: JobStatus;
   postedAt: string;
@@ -131,12 +134,14 @@ export interface Job {
   applicantCount: number;
   // New trust + intelligence fields
   hiringProcess: HiringStage[];
+  hiringProcessSq?: HiringStage[];
   timeline: string;        // e.g. "2–3 weeks from application to offer"
   matchScore?: number;     // 0–100, computed per student
   verified: boolean;
   featured?: boolean;
   interviewInsights?: InterviewInsights;
   interviewInsightsMk?: InterviewInsights;
+  interviewInsightsSq?: InterviewInsights;
 }
 
 export type ApplicationStatus =
