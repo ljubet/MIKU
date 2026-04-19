@@ -12,6 +12,7 @@ interface AppContextType {
   applications: Application[];
   applicationsLoading: boolean;
   applyToJob: (job: Job) => Promise<{ ok: boolean; reason?: "limit" | "duplicate" }>;
+  cancelApplication: (jobId: string) => Promise<void>;
   hasApplied: (jobId: string) => boolean;
   currentStudent: Student;
   profileStatus: "loading" | "ready" | "missing" | "error";
@@ -113,6 +114,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return { ok: true };
   };
 
+  const cancelApplication = async (jobId: string) => {
+    setApplications((prev) => prev.filter((app) => app.jobId !== jobId));
+    setApplicationQuota((prev) => ({
+      ...prev,
+      used: Math.max(0, prev.used - 1),
+      remaining: Math.min(WEEKLY_LIMIT, prev.remaining + 1),
+    }));
+  };
+
   const updateStudentProfile = async (profile: Student) => {
     setCurrentStudent(profile);
     setProfileStatus("ready");
@@ -136,6 +146,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         applications,
         applicationsLoading: false,
         applyToJob,
+        cancelApplication,
         hasApplied,
         currentStudent,
         profileStatus,

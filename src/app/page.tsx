@@ -16,12 +16,14 @@ import {
   Plus,
   TrendingUp,
   Zap,
+  Menu,
 } from "lucide-react";
 
 export default function LandingPage() {
   const { setRole } = useApp();
   const { t, lang, setLang } = useLang();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pricingTiers = [
     {
       name: t("pricing_tier_starter_name"),
@@ -131,10 +133,10 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="border-b border-gray-100 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
+      <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur px-4 sm:px-6 py-4 pt-[calc(env(safe-area-inset-top)+1rem)] sm:pt-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between gap-3 flex-wrap sm:flex-nowrap">
           <img src="/Logo LINKER FINAL 3.png" alt="Linker" className="h-8 w-auto" />
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
             <select
               value={lang}
               onChange={(event) => setLang(event.target.value as typeof lang)}
@@ -152,17 +154,46 @@ export default function LandingPage() {
                 {t('landing_login')}
               </Button>
             </Link>
-            <Link href="/auth?mode=signup">
+            <Link href="/auth?mode=signup" className="hidden sm:block">
               <Button size="sm" className="bg-[#FF0078] hover:bg-[#d60065] font-semibold">
                 {t('landing_getStarted')}
               </Button>
             </Link>
+            <div className="relative sm:hidden">
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen((prev) => !prev)}
+                className="h-9 w-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:border-gray-300 transition-colors"
+                aria-label="Open menu"
+                aria-expanded={mobileMenuOpen}
+              >
+                <Menu className="w-4 h-4" />
+              </button>
+              {mobileMenuOpen && (
+                <div className="absolute right-0 mt-2 w-44 rounded-2xl border border-gray-100 bg-white shadow-lg p-2 z-50">
+                  <Link
+                    href="/auth?mode=signin"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block rounded-xl px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    {t('landing_login')}
+                  </Link>
+                  <Link
+                    href="/auth?mode=signup"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block rounded-xl px-3 py-2 text-sm font-semibold text-[#FF0078] hover:bg-[#FF0078]/10"
+                  >
+                    {t('landing_getStarted')}
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </header>
 
       {/* Hero */}
-      <section data-anim="hero" className="relative max-w-4xl mx-auto px-6 pt-14 pb-8 text-center overflow-hidden">
+      <section data-anim="hero" className="relative max-w-4xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-8 text-center overflow-hidden">
         <h1 data-anim="hero-item" className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-[1.15] mb-5 tracking-tight">
           <span>
             {t('landing_headline_1')}{' '}
@@ -182,18 +213,18 @@ export default function LandingPage() {
           {t('landing_subheadline')}
         </p>
 
-        <div data-anim="hero-item" className="flex items-center justify-center gap-4 flex-wrap">
+        <div data-anim="hero-item" className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
           <Link href="/auth/candidate">
             <Button
               size="lg"
-              className="bg-[#FF0078] hover:bg-[#d60065] gap-2 px-8 font-semibold text-base"
+              className="bg-[#FF0078] hover:bg-[#d60065] gap-2 px-8 font-semibold text-base w-full sm:w-auto"
             >
               {t('landing_browseBtn')}
               <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
           <Link href="/auth/provider">
-            <Button size="lg" variant="outline" className="gap-2 px-8 font-medium text-base">
+            <Button size="lg" variant="outline" className="gap-2 px-8 font-medium text-base w-full sm:w-auto">
               <Building2 className="w-4 h-4" />
               {t('landing_postBtn')}
             </Button>
@@ -203,7 +234,7 @@ export default function LandingPage() {
 
       {/* Stats bar */}
       <div data-anim="stats" className="border-y border-gray-100 bg-gray-50 py-8">
-        <div className="max-w-4xl mx-auto px-6">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map(({ value, label }) => (
               <div key={label} data-anim="stat" className="text-center">
@@ -216,7 +247,7 @@ export default function LandingPage() {
       </div>
 
       {/* Features */}
-      <section data-anim="features" className="relative max-w-4xl mx-auto px-6 py-14 overflow-hidden">
+      <section data-anim="features" className="relative max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-14 overflow-hidden">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-3">
             {t('features_title')}
@@ -243,8 +274,8 @@ export default function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section data-anim="steps" className="relative bg-gray-50 border-y border-gray-100 py-14 overflow-hidden">
-        <div className="max-w-4xl mx-auto px-6">
+      <section data-anim="steps" className="relative bg-gray-50 border-y border-gray-100 py-12 sm:py-14 overflow-hidden">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-3">
               {t('howItWorks_title')}
@@ -273,7 +304,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing */}
-      <section data-anim="pricing" className="relative max-w-6xl mx-auto px-6 py-16 overflow-hidden">
+      <section data-anim="pricing" className="relative max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-16 overflow-hidden">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-medium text-gray-900 tracking-tight mb-3">
             {t("pricing_title")}{" "}
@@ -288,7 +319,7 @@ export default function LandingPage() {
               data-anim="pricing-card"
               className={`relative rounded-3xl p-6 flex flex-col gap-5 ${
                 tier.highlight
-                  ? "bg-[#FF0078] text-white shadow-2xl shadow-[#FF0078]/30 scale-[1.03]"
+                  ? "bg-[#FF0078] text-white lg:shadow-2xl lg:shadow-[#FF0078]/30 lg:scale-[1.03]"
                   : "bg-white border border-gray-200 text-gray-900"
               }`}
             >
@@ -330,32 +361,32 @@ export default function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section data-anim="cta" className="relative max-w-6xl mx-auto px-6 py-14 overflow-hidden">
-        <div className="bg-white rounded-[32px] px-8 py-12 lg:px-14 lg:py-16 border border-gray-100 shadow-[0_20px_50px_rgba(15,23,42,0.06)]">
+      <section data-anim="cta" className="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-14 overflow-hidden">
+        <div className="bg-white rounded-[32px] px-6 sm:px-8 py-10 sm:py-12 lg:px-14 lg:py-16 border border-gray-100 shadow-[0_20px_50px_rgba(15,23,42,0.06)]">
           <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
             <div>
-              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 mb-5">
+              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-gray-900 mb-5">
                 {t('cta_title')}
               </h2>
-              <p className="text-lg text-gray-500 mb-10 max-w-xl">
+              <p className="text-base sm:text-lg text-gray-500 mb-8 sm:mb-10 max-w-xl">
                 {t('cta_subtitle')}
               </p>
               <Link href="/auth/candidate">
                 <Button
                   size="lg"
-                  className="bg-[#FF0078] hover:bg-[#d60065] text-white gap-2 font-semibold px-8 text-base rounded-2xl shadow-md shadow-[#FF0078]/20"
+                  className="bg-[#FF0078] hover:bg-[#d60065] text-white gap-2 font-semibold px-8 text-base rounded-2xl shadow-md shadow-[#FF0078]/20 w-full sm:w-auto"
                 >
                   {t('cta_btn')}
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
             </div>
-            <div className="relative h-[280px] sm:h-[320px]">
-              <div className="absolute right-0 top-2 h-48 w-64 rounded-3xl bg-white shadow-[0_20px_50px_rgba(15,23,42,0.08)] border border-gray-100" />
-              <div className="absolute right-10 top-16 h-36 w-56 rounded-3xl bg-gradient-to-br from-gray-900 to-gray-800 shadow-[0_20px_50px_rgba(15,23,42,0.2)]" />
-              <div className="absolute left-0 bottom-0 h-28 w-[70%] rounded-3xl bg-white shadow-[0_20px_50px_rgba(15,23,42,0.08)] border border-gray-100" />
-              <div className="absolute left-6 bottom-8 h-6 w-1.5 rounded-full bg-[#FF0078]" />
-              <div className="absolute left-10 bottom-10 text-xs font-semibold text-gray-500">
+            <div className="relative h-[220px] sm:h-[320px]">
+              <div className="absolute left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-0 top-2 h-48 w-64 rounded-3xl bg-white shadow-[0_20px_50px_rgba(15,23,42,0.08)] border border-gray-100" />
+              <div className="absolute left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-10 top-16 h-36 w-56 rounded-3xl bg-gradient-to-br from-gray-900 to-gray-800 shadow-[0_20px_50px_rgba(15,23,42,0.2)]" />
+              <div className="absolute left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 bottom-0 h-28 w-[70%] rounded-3xl bg-white shadow-[0_20px_50px_rgba(15,23,42,0.08)] border border-gray-100" />
+              <div className="absolute left-1/2 -translate-x-1/2 sm:left-6 sm:translate-x-0 bottom-8 h-6 w-1.5 rounded-full bg-[#FF0078]" />
+              <div className="absolute left-1/2 -translate-x-1/2 sm:left-10 sm:translate-x-0 bottom-10 text-xs font-semibold text-gray-500">
                 {t("cta_match_label")}
               </div>
             </div>
@@ -365,7 +396,7 @@ export default function LandingPage() {
 
       {/* FAQ */}
       <section className="bg-[#FFE9F1] border-y border-[#FF0078]/10">
-        <div className="max-w-4xl mx-auto px-6 py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14 sm:py-16">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-10">
             {t('faq_title')}
           </h2>
@@ -407,19 +438,19 @@ export default function LandingPage() {
 
       {/* CTA Footer */}
       <section data-anim="footer-cta" className="relative bg-gray-50 border-t border-gray-100 overflow-hidden">
-        <div className="max-w-6xl mx-auto px-6 py-12 sm:py-16 text-center">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center">
           <p className="text-sm sm:text-base text-gray-500 mb-6">{t('footer_cta_tagline')}</p>
           <Link href="/auth?mode=signup">
             <Button
               size="lg"
-              className="rounded-full bg-[#FF0078] hover:bg-[#d60065] text-white font-semibold px-10 shadow-md shadow-[#FF0078]/25"
+              className="rounded-full bg-[#FF0078] hover:bg-[#d60065] text-white font-semibold px-10 shadow-md shadow-[#FF0078]/25 w-full sm:w-auto"
             >
               {t('landing_getStarted')}
             </Button>
           </Link>
         </div>
         <div className="border-t border-gray-100">
-          <div className="max-w-6xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <img src="/Logo LINKER FINAL 3.png" alt="Linker" className="h-5 w-auto" />
             <div className="flex items-center gap-4 text-gray-400">
               <a href="#" aria-label="X" className="hover:text-gray-700 transition-colors">
