@@ -2,10 +2,13 @@
 
 import { useApp } from "@/lib/app-context";
 import { useLang } from "@/lib/language-context";
+import { ApplicationStatus } from "@/types";
 import { AppStatusBadge, JobTypeBadge } from "@/components/shared/StatusBadge";
 import { List, Users, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { getHighlightedAchievements } from "@/lib/achievements";
+import { AchievementIcon } from "@/components/shared/AchievementBadge";
 
 export default function OrgDashboard() {
   const { currentOrg, jobs, orgApplications } = useApp();
@@ -15,6 +18,12 @@ export default function OrgDashboard() {
   const totalApplicants = orgJobs.reduce((sum, j) => sum + j.applicantCount, 0);
   const openJobs = orgJobs.filter((j) => j.status === "open").length;
   const recentApplicants = orgApplications.slice(0, 4);
+  const interviewStatuses: ApplicationStatus[] = [
+    "interview",
+    "interview_invited",
+    "interview_scheduled",
+    "interview_confirmed",
+  ];
 
   const stats = [
     {
@@ -124,9 +133,30 @@ export default function OrgDashboard() {
             </Button>
           </Link>
         </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+          {([
+            { status: "applied" as ApplicationStatus, label: t("tab_applied"), color: "bg-blue-100 text-blue-700" },
+            { status: "shortlisted" as ApplicationStatus, label: t("tab_shortlisted"), color: "bg-violet-100 text-violet-700" },
+            { status: "interview" as ApplicationStatus, label: t("tab_interview"), color: "bg-[#FF0078]/10 text-[#FF0078]" },
+            { status: "offered" as ApplicationStatus, label: t("tab_offered"), color: "bg-emerald-100 text-emerald-700" },
+          ] as const).map(({ status, label, color }) => {
+            const count = status === "interview"
+              ? orgApplications.filter((a) => interviewStatuses.includes(a.status)).length
+              : orgApplications.filter((a) => a.status === status).length;
+            return (
+              <div key={status} className="bg-white border border-gray-100 rounded-xl px-3 py-2">
+                <p className="text-lg font-bold text-gray-900 leading-none">{count}</p>
+                <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full mt-1 inline-block ${color}`}>
+                  {label}
+                </span>
+              </div>
+            );
+          })}
+        </div>
         <div className="bg-white border border-gray-100 rounded-xl divide-y divide-gray-50">
           {recentApplicants.map((app) => {
             const job = jobs.find((j) => j.id === app.jobId);
+            const highlighted = getHighlightedAchievements(app.studentAchievements);
             return (
               <div key={app.id} className="flex items-center gap-4 px-5 py-4">
                 <img
@@ -135,7 +165,16 @@ export default function OrgDashboard() {
                   className="w-9 h-9 rounded-full border border-gray-100"
                 />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900">{app.studentName}</p>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <p className="text-sm font-medium text-gray-900">{app.studentName}</p>
+                    {highlighted.length > 0 && (
+                      <span className="flex items-center gap-1">
+                        {highlighted.map((achievement) => (
+                          <AchievementIcon key={achievement.id} achievement={achievement} />
+                        ))}
+                      </span>
+                    )}
+                  </div>
                   <p className="text-xs text-gray-400 truncate">
                     {app.studentMajor} · {t('label_appliedFor')} {job?.title}
                   </p>

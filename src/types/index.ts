@@ -20,12 +20,44 @@ export interface StudentProject {
   skills?: string[];
 }
 
+export type AchievementCategory =
+  | "profile"
+  | "verification"
+  | "matching"
+  | "activity"
+  | "projects"
+  | "competition";
+
+export type AchievementIcon =
+  | "sparkles"
+  | "shield-check"
+  | "zap"
+  | "clock"
+  | "rocket"
+  | "medal"
+  | "trophy"
+  | "badge-check"
+  | "calendar-check"
+  | "target";
+
+export interface Achievement {
+  id: string;
+  title: string;
+  description?: string;
+  icon: AchievementIcon;
+  category: AchievementCategory;
+  earned: boolean;
+  earnedAt?: string;
+  highlighted?: boolean;
+}
+
 export interface Student {
   id: string;
   name: string;
   email: string;
   avatar?: string;
   iknow_verified?: boolean;
+  headline?: string;
   university: string;
   major: string;
   year: string;
@@ -34,10 +66,13 @@ export interface Student {
   skills: string[];
   projects?: StudentProject[];
   interests?: string[];
+  experience?: string[];
+  education?: string[];
   availability?: string;
   linkedin?: string;
   github?: string;
   resume?: string;
+  achievements?: Achievement[];
 }
 
 export interface Organization {
@@ -135,6 +170,7 @@ export interface Application {
   studentLinkedin?: string;
   studentGithub?: string;
   studentIknowVerified?: boolean;
+  studentAchievements?: Achievement[];
   coverNote?: string;
   status: ApplicationStatus;
   appliedAt: string;

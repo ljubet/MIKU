@@ -99,6 +99,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       studentMajor: currentStudent.major,
       studentAvatar: currentStudent.avatar,
       studentSkills: currentStudent.skills,
+      studentAchievements: currentStudent.achievements,
       status: "applied",
       appliedAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

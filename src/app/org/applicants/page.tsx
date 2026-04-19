@@ -5,12 +5,14 @@ import { ApplicationStatus } from "@/types";
 import { AppStatusBadge } from "@/components/shared/StatusBadge";
 import { useLang } from "@/lib/language-context";
 import { formatDistanceToNow } from "date-fns";
+import { getHighlightedAchievements } from "@/lib/achievements";
 import {
   Users, CheckCircle2, XCircle, ShieldCheck, Zap,
   Briefcase, ChevronDown, BookOpen, Lightbulb, Clock, ExternalLink, Star,
 } from "lucide-react";
 import { useApp } from "@/lib/app-context";
 import { computeMatchScore } from "@/lib/match";
+import { AchievementIcon } from "@/components/shared/AchievementBadge";
 
 const STATUS_COLOR: Record<ApplicationStatus, string> = {
   applied:     "border-l-blue-400",
@@ -76,6 +78,7 @@ export default function ApplicantsPage() {
 
   const selectedApp = filtered.find((a) => a.id === selectedAppId) ?? filtered[0] ?? null;
   const selectedJob = selectedApp ? jobMap.get(selectedApp.jobId) : null;
+  const selectedHighlights = selectedApp ? getHighlightedAchievements(selectedApp.studentAchievements) : [];
 
   const matchScore = selectedJob && selectedApp?.studentSkills
     ? computeMatchScore(selectedJob.tags, selectedApp.studentSkills)
@@ -195,6 +198,7 @@ export default function ApplicantsPage() {
               const job = jobMap.get(app.jobId);
               const score = job && app.studentSkills ? computeMatchScore(job.tags, app.studentSkills) : null;
               const isSelected = app.id === (selectedApp?.id ?? "");
+              const highlighted = getHighlightedAchievements(app.studentAchievements);
 
               return (
                 <div
@@ -209,6 +213,13 @@ export default function ApplicantsPage() {
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5">
                             <p className="text-sm font-semibold text-gray-900 truncate">{app.studentName}</p>
+                            {highlighted.length > 0 && (
+                              <span className="flex items-center gap-1">
+                                {highlighted.map((achievement) => (
+                                  <AchievementIcon key={achievement.id} achievement={achievement} />
+                                ))}
+                              </span>
+                            )}
                             {app.studentIknowVerified && <ShieldCheck className="w-3.5 h-3.5 text-[#FF0078] shrink-0" />}
                           </div>
                           <p className="text-xs text-gray-400 truncate">{app.studentMajor} · {app.studentUniversity}</p>
@@ -252,6 +263,13 @@ export default function ApplicantsPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap mb-0.5">
                     <h2 className="text-xl font-bold text-gray-900">{selectedApp.studentName}</h2>
+                    {selectedHighlights.length > 0 && (
+                      <span className="flex items-center gap-1">
+                        {selectedHighlights.map((achievement) => (
+                          <AchievementIcon key={achievement.id} achievement={achievement} />
+                        ))}
+                      </span>
+                    )}
                     {selectedApp.studentIknowVerified && (
                       <span className="flex items-center gap-1 text-xs font-semibold text-[#FF0078] bg-[#FF0078]/10 border border-[#FF0078]/20 px-2 py-0.5 rounded-full">
                         <ShieldCheck className="w-3 h-3" /> Verified via iKnow

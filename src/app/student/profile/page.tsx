@@ -4,8 +4,11 @@ import { useEffect, useState } from "react";
 import { useApp } from "@/lib/app-context";
 import { useLang } from "@/lib/language-context";
 import { computeMatchScore } from "@/lib/match";
+import { CVInsights, CVParsedProfile, mockParseCv } from "@/lib/cv-parser";
+import { getEarnedAchievements, getHighlightedAchievements } from "@/lib/achievements";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { AchievementBadge, AchievementIcon } from "@/components/shared/AchievementBadge";
 import {
   Edit3,
   Star,
@@ -15,6 +18,10 @@ import {
   CheckCircle2,
   ArrowRight,
   GraduationCap,
+  Upload,
+  FileText,
+  Loader2,
+  Sparkles,
 } from "lucide-react";
 import Link from "next/link";
 import { Student, StudentProject } from "@/types";
@@ -30,6 +37,21 @@ export default function ProfilePage() {
     currentStudent.interests?.join(", ") ?? ""
   );
   const [projects, setProjects] = useState<StudentProject[]>(currentStudent.projects ?? []);
+  const [headlineInput, setHeadlineInput] = useState(currentStudent.headline ?? "");
+  const [experienceInput, setExperienceInput] = useState(
+    currentStudent.experience?.join("\n") ?? ""
+  );
+  const [educationInput, setEducationInput] = useState(
+    currentStudent.education?.join("\n") ?? ""
+  );
+  const [cvState, setCvState] = useState<"idle" | "scanning" | "review">("idle");
+  const [cvMeta, setCvMeta] = useState<{ name: string; size: number; type: string } | null>(null);
+  const [cvError, setCvError] = useState<string | null>(null);
+  const [cvData, setCvData] = useState<CVParsedProfile | null>(null);
+  const [cvInsights, setCvInsights] = useState<CVInsights | null>(null);
+  const [cvEdits, setCvEdits] = useState<CVParsedProfile | null>(null);
+  const [cvChoices, setCvChoices] = useState<Record<string, "keep" | "replace" | "merge">>({});
+  const [cvSuccess, setCvSuccess] = useState<string | null>(null);
   const [newProject, setNewProject] = useState({
     name: "",
     description: "",
@@ -42,6 +64,9 @@ export default function ProfilePage() {
     setSkillsInput(currentStudent.skills.join(", "));
     setInterestsInput(currentStudent.interests?.join(", ") ?? "");
     setProjects(currentStudent.projects ?? []);
+    setHeadlineInput(currentStudent.headline ?? "");
+    setExperienceInput(currentStudent.experience?.join("\n") ?? "");
+    setEducationInput(currentStudent.education?.join("\n") ?? "");
   }, [currentStudent]);
 
   const openJobs = jobs.filter((j) => j.status === "open");
@@ -62,17 +87,28 @@ export default function ProfilePage() {
   ];
   const doneCount = completeness.filter((c) => c.done).length;
   const pct = Math.round((doneCount / completeness.length) * 100);
+  const earnedAchievements = getEarnedAchievements(currentStudent.achievements);
+  const highlightedAchievements = getHighlightedAchievements(currentStudent.achievements);
 
   const handleSave = async () => {
     setSaving(true);
     const next: Student = {
       ...draft,
+      headline: headlineInput.trim() || undefined,
       skills: skillsInput
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean),
       interests: interestsInput
         .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+      experience: experienceInput
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean),
+      education: educationInput
+        .split("\n")
         .map((s) => s.trim())
         .filter(Boolean),
       projects,
@@ -120,6 +156,114 @@ export default function ProfilePage() {
     setProjects((prev) => prev.filter((project) => project.id !== id));
   };
 
+  const handleCvFile = async (file: File) => {
+    const allowedTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "image/png",
+      "image/jpeg",
+    ];
+    const allowedExt = /\.(pdf|doc|docx|png|jpe?g)$/i;
+    const isValid = allowedTypes.includes(file.type) || allowedExt.test(file.name);
+    if (!isValid) {
+      setCvError(t("cv_error_filetype"));
+      return;
+    }
+
+    setCvError(null);
+    setCvSuccess(null);
+    setCvMeta({ name: file.name, size: file.size, type: file.type });
+    setCvState("scanning");
+    const result = await mockParseCv(file);
+    setCvData(result.profile);
+    setCvInsights(result.insights);
+    setCvEdits(result.profile);
+    setCvChoices({
+      fullName: currentStudent.name ? "keep" : "replace",
+      headline: currentStudent.headline ? "keep" : "replace",
+      skills: currentStudent.skills.length ? "merge" : "replace",
+      projects: currentStudent.projects?.length ? "merge" : "replace",
+      interests: currentStudent.interests?.length ? "merge" : "replace",
+      experience: currentStudent.experience?.length ? "merge" : "replace",
+      education: currentStudent.education?.length ? "merge" : "replace",
+      availability: currentStudent.availability ? "keep" : "replace",
+    });
+    setCvState("review");
+  };
+
+  const applyList = (current: string[] | undefined, incoming: string[] | undefined, choice: string) => {
+    if (!incoming?.length) return current;
+    if (choice === "keep") return current;
+    if (choice === "replace") return incoming;
+    const merged = [...(current ?? []), ...incoming].map((s) => s.trim()).filter(Boolean);
+    return Array.from(new Set(merged));
+  };
+
+  const applyProjects = (
+    current: StudentProject[] | undefined,
+    incoming: StudentProject[] | undefined,
+    choice: string
+  ) => {
+    if (!incoming?.length) return current;
+    if (choice === "keep") return current;
+    if (choice === "replace") return incoming;
+    const map = new Map<string, StudentProject>();
+    [...(current ?? []), ...incoming].forEach((p) => map.set(p.name.toLowerCase(), p));
+    return Array.from(map.values());
+  };
+
+  const handleApplyCv = async () => {
+    if (!cvEdits) return;
+    const next: Student = {
+      ...currentStudent,
+      name:
+        cvChoices.fullName === "replace" && cvEdits.fullName
+          ? cvEdits.fullName
+          : currentStudent.name,
+      headline:
+        cvChoices.headline === "replace" && cvEdits.headline
+          ? cvEdits.headline
+          : currentStudent.headline,
+      skills: applyList(currentStudent.skills, cvEdits.skills, cvChoices.skills) ?? [],
+      projects: applyProjects(currentStudent.projects, cvEdits.projects, cvChoices.projects),
+      interests: applyList(currentStudent.interests, cvEdits.interests, cvChoices.interests),
+      experience: applyList(currentStudent.experience, cvEdits.experience, cvChoices.experience),
+      education: applyList(currentStudent.education, cvEdits.education, cvChoices.education),
+      availability:
+        cvChoices.availability === "replace" && cvEdits.availability
+          ? cvEdits.availability
+          : currentStudent.availability,
+      resume: cvMeta?.name ?? currentStudent.resume,
+    };
+
+    await updateStudentProfile(next);
+    setCvSuccess(t("cv_success_applied"));
+  };
+
+  const updateCvProject = (id: string, field: keyof StudentProject, value: string) => {
+    if (!cvEdits) return;
+    setCvEdits({
+      ...cvEdits,
+      projects: cvEdits.projects.map((project) =>
+        project.id === id
+          ? {
+              ...project,
+              [field]:
+                field === "skills"
+                  ? value.split(",").map((s) => s.trim()).filter(Boolean)
+                  : value,
+            }
+          : project
+      ),
+    });
+  };
+
+  const removeCvProject = (id: string) => {
+    if (!cvEdits) return;
+    setCvEdits({ ...cvEdits, projects: cvEdits.projects.filter((p) => p.id !== id) });
+  };
+
   return (
     <div className="space-y-5 max-w-2xl">
       <div className="flex items-start justify-between">
@@ -164,15 +308,24 @@ export default function ProfilePage() {
         {/* Top colour band */}
         <div className="h-16 bg-gradient-to-r from-violet-500 to-violet-600" />
         <div className="px-6 pb-6">
-          <div className="flex items-end gap-4 -mt-8 mb-4">
-            <img
-              src={currentStudent.avatar}
-              alt={currentStudent.name}
-              className="w-16 h-16 rounded-full border-4 border-white shadow-sm"
-            />
+          <div className="flex items-end gap-4 mb-4">
+            <div className="-mt-8">
+              <img
+                src={currentStudent.avatar}
+                alt={currentStudent.name}
+                className="w-16 h-16 rounded-full border-4 border-white shadow-sm"
+              />
+            </div>
             <div className="pb-1">
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-lg font-bold text-gray-900">{currentStudent.name}</h2>
+                {highlightedAchievements.length > 0 && (
+                  <div className="flex items-center gap-1">
+                    {highlightedAchievements.map((achievement) => (
+                      <AchievementIcon key={achievement.id} achievement={achievement} />
+                    ))}
+                  </div>
+                )}
                 {currentStudent.iknow_verified && (
                   <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-600 bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded-full">
                     <GraduationCap className="w-3 h-3" />
@@ -180,7 +333,19 @@ export default function ProfilePage() {
                   </span>
                 )}
               </div>
-              <p className="text-xs text-gray-400">{currentStudent.email}</p>
+              {editing ? (
+                <input
+                  value={headlineInput}
+                  onChange={(e) => setHeadlineInput(e.target.value)}
+                  placeholder={t('placeholder_headline')}
+                  className="mt-1 w-full text-xs border border-gray-200 rounded-lg px-2.5 py-1.5"
+                />
+              ) : (
+                <p className="text-xs text-gray-500 mt-1">
+                  {currentStudent.headline ?? t('empty_headline')}
+                </p>
+              )}
+              <p className="text-xs text-gray-400 mt-1">{currentStudent.email}</p>
             </div>
           </div>
 
@@ -211,6 +376,329 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Achievements */}
+      <div className="bg-white border border-gray-100 rounded-xl p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="font-semibold text-gray-900">{t("section_achievements")}</h3>
+        </div>
+        {earnedAchievements.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {earnedAchievements.map((achievement) => (
+              <AchievementBadge key={achievement.id} achievement={achievement} />
+            ))}
+          </div>
+        ) : (
+          <div className="border border-dashed border-gray-200 rounded-xl p-4 text-center">
+            <p className="text-sm font-semibold text-gray-700">{t("achievements_empty_title")}</p>
+            <p className="text-xs text-gray-400 mt-1">{t("achievements_empty_desc")}</p>
+          </div>
+        )}
+      </div>
+
+      {/* CV Upload + Autofill */}
+      <div className="bg-white border border-gray-100 rounded-xl p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-[#FF0078]" />
+            <h3 className="font-semibold text-gray-900">{t('section_cvUpload')}</h3>
+          </div>
+          {cvMeta && (
+            <span className="text-xs text-gray-400">{cvMeta.name}</span>
+          )}
+        </div>
+        <div className="border border-dashed border-gray-200 rounded-xl p-4">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-lg bg-[#FF0078]/10 flex items-center justify-center">
+              <FileText className="w-5 h-5 text-[#FF0078]" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-gray-900">{t('cv_upload_title')}</p>
+              <p className="text-xs text-gray-400 mt-1">{t('cv_upload_desc')}</p>
+            </div>
+          </div>
+          <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-3">
+            <label
+              htmlFor="cv-upload"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-white bg-[#FF0078] hover:bg-[#d60065] px-4 py-2 rounded-lg cursor-pointer"
+            >
+              <Upload className="w-4 h-4" />
+              {t('cv_upload_button')}
+            </label>
+            <span className="text-xs text-gray-400">{t('cv_upload_formats')}</span>
+          </div>
+          <input
+            id="cv-upload"
+            type="file"
+            accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+              handleCvFile(file);
+              e.currentTarget.value = "";
+            }}
+          />
+        </div>
+        {cvError && (
+          <p className="text-xs text-red-600">{cvError}</p>
+        )}
+        {cvState === "scanning" && (
+          <div className="flex items-center gap-2 text-xs text-gray-500">
+            <Loader2 className="w-4 h-4 animate-spin" />
+            {t('cv_upload_processing')}
+          </div>
+        )}
+        {cvSuccess && (
+          <div className="text-xs text-emerald-600 flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4" /> {cvSuccess}
+          </div>
+        )}
+        {cvState === "review" && cvEdits && cvInsights && (
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-sm font-semibold text-gray-900">{t('cv_review_title')}</h4>
+              <p className="text-xs text-gray-400 mt-1">{t('cv_review_desc')}</p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+                <p className="text-xs text-gray-400">{t('cv_field_fullName')}</p>
+                <input
+                  value={cvEdits.fullName ?? ""}
+                  onChange={(e) => setCvEdits({ ...cvEdits, fullName: e.target.value })}
+                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2"
+                />
+                <select
+                  value={cvChoices.fullName}
+                  onChange={(e) => setCvChoices({ ...cvChoices, fullName: e.target.value as "keep" | "replace" })}
+                  className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white"
+                >
+                  <option value="keep">{t('cv_choice_keep')}</option>
+                  <option value="replace">{t('cv_choice_replace')}</option>
+                </select>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+                <p className="text-xs text-gray-400">{t('cv_field_headline')}</p>
+                <input
+                  value={cvEdits.headline ?? ""}
+                  onChange={(e) => setCvEdits({ ...cvEdits, headline: e.target.value })}
+                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2"
+                />
+                <select
+                  value={cvChoices.headline}
+                  onChange={(e) => setCvChoices({ ...cvChoices, headline: e.target.value as "keep" | "replace" })}
+                  className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white"
+                >
+                  <option value="keep">{t('cv_choice_keep')}</option>
+                  <option value="replace">{t('cv_choice_replace')}</option>
+                </select>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+                <p className="text-xs text-gray-400">{t('cv_field_skills')}</p>
+                <textarea
+                  value={cvEdits.skills.join(", ")}
+                  onChange={(e) =>
+                    setCvEdits({
+                      ...cvEdits,
+                      skills: e.target.value.split(",").map((s) => s.trim()).filter(Boolean),
+                    })
+                  }
+                  rows={3}
+                  className="w-full text-sm border border-gray-200 rounded-lg p-3 resize-none"
+                />
+                <select
+                  value={cvChoices.skills}
+                  onChange={(e) => setCvChoices({ ...cvChoices, skills: e.target.value as "keep" | "replace" | "merge" })}
+                  className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white"
+                >
+                  <option value="keep">{t('cv_choice_keep')}</option>
+                  <option value="merge">{t('cv_choice_merge')}</option>
+                  <option value="replace">{t('cv_choice_replace')}</option>
+                </select>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+                <p className="text-xs text-gray-400">{t('cv_field_interests')}</p>
+                <textarea
+                  value={(cvEdits.interests ?? []).join(", ")}
+                  onChange={(e) =>
+                    setCvEdits({
+                      ...cvEdits,
+                      interests: e.target.value.split(",").map((s) => s.trim()).filter(Boolean),
+                    })
+                  }
+                  rows={2}
+                  className="w-full text-sm border border-gray-200 rounded-lg p-3 resize-none"
+                />
+                <select
+                  value={cvChoices.interests}
+                  onChange={(e) => setCvChoices({ ...cvChoices, interests: e.target.value as "keep" | "replace" | "merge" })}
+                  className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white"
+                >
+                  <option value="keep">{t('cv_choice_keep')}</option>
+                  <option value="merge">{t('cv_choice_merge')}</option>
+                  <option value="replace">{t('cv_choice_replace')}</option>
+                </select>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+                <p className="text-xs text-gray-400">{t('cv_field_experience')}</p>
+                <textarea
+                  value={(cvEdits.experience ?? []).join("\n")}
+                  onChange={(e) =>
+                    setCvEdits({
+                      ...cvEdits,
+                      experience: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean),
+                    })
+                  }
+                  rows={3}
+                  className="w-full text-sm border border-gray-200 rounded-lg p-3 resize-none"
+                />
+                <select
+                  value={cvChoices.experience}
+                  onChange={(e) => setCvChoices({ ...cvChoices, experience: e.target.value as "keep" | "replace" | "merge" })}
+                  className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white"
+                >
+                  <option value="keep">{t('cv_choice_keep')}</option>
+                  <option value="merge">{t('cv_choice_merge')}</option>
+                  <option value="replace">{t('cv_choice_replace')}</option>
+                </select>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+                <p className="text-xs text-gray-400">{t('cv_field_education')}</p>
+                <textarea
+                  value={(cvEdits.education ?? []).join("\n")}
+                  onChange={(e) =>
+                    setCvEdits({
+                      ...cvEdits,
+                      education: e.target.value.split("\n").map((s) => s.trim()).filter(Boolean),
+                    })
+                  }
+                  rows={2}
+                  className="w-full text-sm border border-gray-200 rounded-lg p-3 resize-none"
+                />
+                <select
+                  value={cvChoices.education}
+                  onChange={(e) => setCvChoices({ ...cvChoices, education: e.target.value as "keep" | "replace" | "merge" })}
+                  className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white"
+                >
+                  <option value="keep">{t('cv_choice_keep')}</option>
+                  <option value="merge">{t('cv_choice_merge')}</option>
+                  <option value="replace">{t('cv_choice_replace')}</option>
+                </select>
+              </div>
+              <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+                <p className="text-xs text-gray-400">{t('cv_field_availability')}</p>
+                <input
+                  value={cvEdits.availability ?? ""}
+                  onChange={(e) => setCvEdits({ ...cvEdits, availability: e.target.value })}
+                  className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2"
+                />
+                <select
+                  value={cvChoices.availability}
+                  onChange={(e) => setCvChoices({ ...cvChoices, availability: e.target.value as "keep" | "replace" })}
+                  className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white"
+                >
+                  <option value="keep">{t('cv_choice_keep')}</option>
+                  <option value="replace">{t('cv_choice_replace')}</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 rounded-xl p-4 space-y-3">
+              <p className="text-sm font-semibold text-gray-900">{t('cv_field_projects')}</p>
+              <div className="space-y-3">
+                {cvEdits.projects.map((project) => (
+                  <div key={project.id} className="border border-gray-200 rounded-lg p-3 space-y-2 bg-white">
+                    <input
+                      value={project.name}
+                      onChange={(e) => updateCvProject(project.id, "name", e.target.value)}
+                      className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2"
+                    />
+                    <textarea
+                      value={project.description}
+                      onChange={(e) => updateCvProject(project.id, "description", e.target.value)}
+                      rows={2}
+                      className="w-full text-sm border border-gray-200 rounded-lg p-3 resize-none"
+                    />
+                    <input
+                      value={project.link ?? ""}
+                      onChange={(e) => updateCvProject(project.id, "link", e.target.value)}
+                      className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2"
+                    />
+                    <input
+                      value={project.skills?.join(", ") ?? ""}
+                      onChange={(e) => updateCvProject(project.id, "skills", e.target.value)}
+                      className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2"
+                    />
+                    <div className="flex justify-end">
+                      <Button variant="outline" size="sm" onClick={() => removeCvProject(project.id)}>
+                        {t('btn_remove')}
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <select
+                value={cvChoices.projects}
+                onChange={(e) => setCvChoices({ ...cvChoices, projects: e.target.value as "keep" | "replace" | "merge" })}
+                className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1.5 bg-white"
+              >
+                <option value="keep">{t('cv_choice_keep')}</option>
+                <option value="merge">{t('cv_choice_merge')}</option>
+                <option value="replace">{t('cv_choice_replace')}</option>
+              </select>
+            </div>
+
+            <div className="bg-white border border-gray-100 rounded-xl p-4 space-y-3">
+              <h4 className="text-sm font-semibold text-gray-900">{t('cv_insights_title')}</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-gray-600">
+                <div>
+                  <p className="font-semibold text-gray-800 mb-1">{t('cv_insights_strengths')}</p>
+                  <ul className="space-y-1">
+                    {cvInsights.strengths.map((item) => (
+                      <li key={item}>• {item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-800 mb-1">{t('cv_insights_gaps')}</p>
+                  <ul className="space-y-1">
+                    {cvInsights.gaps.map((item) => (
+                      <li key={item}>• {item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-800 mb-1">{t('cv_insights_suggestions')}</p>
+                  <ul className="space-y-1">
+                    {cvInsights.suggestions.map((item) => (
+                      <li key={item}>• {item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-800 mb-1">{t('cv_insights_missing')}</p>
+                  <ul className="space-y-1">
+                    {cvInsights.missingInfo.map((item) => (
+                      <li key={item}>• {item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end">
+              <Button
+                size="sm"
+                className="bg-[#FF0078] hover:bg-[#d60065]"
+                onClick={handleApplyCv}
+              >
+                {t('cv_apply_profile')}
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Skills */}
@@ -246,6 +734,58 @@ export default function ProfilePage() {
             )}
           </div>
         )}
+      </div>
+
+      {/* Experience + Education */}
+      <div className="bg-white border border-gray-100 rounded-xl p-6 space-y-4">
+        <div>
+          <h3 className="font-semibold text-gray-900">{t('section_experience')}</h3>
+          {editing ? (
+            <textarea
+              value={experienceInput}
+              onChange={(e) => setExperienceInput(e.target.value)}
+              placeholder={t('placeholder_experience')}
+              rows={3}
+              className="mt-2 w-full text-sm border border-gray-200 rounded-lg p-3 resize-none"
+            />
+          ) : (
+            <div className="mt-2 space-y-2">
+              {currentStudent.experience?.length ? (
+                currentStudent.experience.map((item) => (
+                  <p key={item} className="text-xs text-gray-500">
+                    {item}
+                  </p>
+                ))
+              ) : (
+                <p className="text-xs text-gray-400">{t('empty_experience')}</p>
+              )}
+            </div>
+          )}
+        </div>
+        <div>
+          <h3 className="font-semibold text-gray-900">{t('section_education')}</h3>
+          {editing ? (
+            <textarea
+              value={educationInput}
+              onChange={(e) => setEducationInput(e.target.value)}
+              placeholder={t('placeholder_education')}
+              rows={2}
+              className="mt-2 w-full text-sm border border-gray-200 rounded-lg p-3 resize-none"
+            />
+          ) : (
+            <div className="mt-2 space-y-2">
+              {currentStudent.education?.length ? (
+                currentStudent.education.map((item) => (
+                  <p key={item} className="text-xs text-gray-500">
+                    {item}
+                  </p>
+                ))
+              ) : (
+                <p className="text-xs text-gray-400">{t('empty_education')}</p>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Projects */}

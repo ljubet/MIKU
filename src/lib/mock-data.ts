@@ -1,10 +1,108 @@
-import { Job, Student, Organization, Application, OrgReview } from "@/types";
+import { Job, Student, Organization, Application, OrgReview, Achievement } from "@/types";
+
+const ACHIEVEMENT_CATALOG: Achievement[] = [
+  {
+    id: "profile_complete",
+    title: "Profile Complete",
+    description: "Completed all key profile fields.",
+    icon: "sparkles",
+    category: "profile",
+    earned: false,
+  },
+  {
+    id: "verified_iknow",
+    title: "Verified via iKnow",
+    description: "Identity verified through iKnow.",
+    icon: "shield-check",
+    category: "verification",
+    earned: false,
+  },
+  {
+    id: "top_match",
+    title: "Top Match",
+    description: "High match score on a key role.",
+    icon: "target",
+    category: "matching",
+    earned: false,
+  },
+  {
+    id: "fast_responder",
+    title: "Fast Responder",
+    description: "Responds quickly to company requests.",
+    icon: "clock",
+    category: "activity",
+    earned: false,
+  },
+  {
+    id: "project_builder",
+    title: "Project Builder",
+    description: "Showcased multiple projects.",
+    icon: "rocket",
+    category: "projects",
+    earned: false,
+  },
+  {
+    id: "hackathon_participant",
+    title: "Hackathon Participant",
+    description: "Participated in a hackathon.",
+    icon: "medal",
+    category: "competition",
+    earned: false,
+  },
+  {
+    id: "hackathon_winner",
+    title: "Hackathon Winner",
+    description: "Won a hackathon.",
+    icon: "trophy",
+    category: "competition",
+    earned: false,
+  },
+  {
+    id: "early_applicant",
+    title: "Early Applicant",
+    description: "Applied within 24 hours of posting.",
+    icon: "calendar-check",
+    category: "activity",
+    earned: false,
+  },
+  {
+    id: "skill_verified",
+    title: "Skill Verified",
+    description: "Skill verified by assessment or project.",
+    icon: "badge-check",
+    category: "verification",
+    earned: false,
+  },
+  {
+    id: "consistent_applicant",
+    title: "Consistent Applicant",
+    description: "Applies consistently every week.",
+    icon: "zap",
+    category: "activity",
+    earned: false,
+  },
+];
+
+const buildAchievements = (earnedIds: string[], highlightedIds: string[] = []) => {
+  const earnedSet = new Set(earnedIds);
+  const highlightedSet = new Set(highlightedIds);
+  return ACHIEVEMENT_CATALOG.map((achievement) => {
+    const earned = earnedSet.has(achievement.id);
+    return {
+      ...achievement,
+      earned,
+      highlighted: earned && highlightedSet.has(achievement.id),
+      earnedAt: earned ? "2026-04-01" : undefined,
+    };
+  });
+};
 
 export const mockStudent: Student = {
   id: "22222222-2222-2222-2222-222222222222",
   name: "Alex Petrov",
   email: "alex.petrov@candidates.ukim.mk",
   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
+  headline: "Frontend Engineer · React / TypeScript",
   university: "Ss. Cyril and Methodius University",
   major: "Computer Science",
   year: "3rd Year",
@@ -28,9 +126,15 @@ export const mockStudent: Student = {
     },
   ],
   interests: ["Product design", "EdTech", "AI tools"],
+  experience: ["Frontend Intern · BrightLabs (2024)", "UI Freelancer · Self-employed (2023)"],
+  education: ["BSc Computer Science · Ss. Cyril and Methodius University"],
   availability: "Available 20–30h/week, June–September",
   linkedin: "linkedin.com/in/alexpetrov",
   github: "github.com/alexpetrov",
+  achievements: buildAchievements(
+    ["profile_complete", "verified_iknow", "top_match", "project_builder", "hackathon_participant", "skill_verified", "early_applicant"],
+    ["profile_complete", "verified_iknow", "top_match"]
+  ),
 };
 
 export const mockOrg: Organization = {
@@ -638,6 +742,10 @@ export const mockOrgApplicants: Application[] = [
     studentLinkedin: "linkedin.com/in/sara-nikolovska",
     studentGithub: "github.com/saranikolovska",
     studentIknowVerified: true,
+    studentAchievements: buildAchievements(
+      ["profile_complete", "verified_iknow", "project_builder", "top_match", "early_applicant"],
+      ["verified_iknow", "top_match"]
+    ),
     coverNote: "Frontend is my passion — I've shipped 3 side projects using React.",
     status: "reviewing",
     appliedAt: "2026-04-11",
@@ -665,6 +773,10 @@ export const mockOrgApplicants: Application[] = [
     studentLinkedin: "linkedin.com/in/nikola-ristevski",
     studentGithub: "github.com/nristevski",
     studentIknowVerified: false,
+    studentAchievements: buildAchievements(
+      ["profile_complete", "project_builder", "consistent_applicant"],
+      ["profile_complete"]
+    ),
     coverNote: "Strong TypeScript skills, looking to grow in a product-focused company.",
     status: "applied",
     appliedAt: "2026-04-12",
@@ -693,6 +805,10 @@ export const mockOrgApplicants: Application[] = [
     studentLinkedin: "linkedin.com/in/elena-trajkoska",
     studentGithub: "github.com/elenatrajkoska",
     studentIknowVerified: true,
+    studentAchievements: buildAchievements(
+      ["profile_complete", "verified_iknow", "hackathon_participant", "top_match", "skill_verified"],
+      ["verified_iknow", "top_match"]
+    ),
     status: "interview",
     appliedAt: "2026-04-10",
     updatedAt: "2026-04-15",
@@ -720,6 +836,10 @@ export const mockOrgApplicants: Application[] = [
     studentLinkedin: "linkedin.com/in/marko-dimitrov",
     studentGithub: "github.com/markodimitrov",
     studentIknowVerified: true,
+    studentAchievements: buildAchievements(
+      ["profile_complete", "verified_iknow", "project_builder", "hackathon_winner", "top_match", "skill_verified"],
+      ["hackathon_winner", "top_match"]
+    ),
     coverNote: "3 years of React, 2 years of Node. Looking for a place to grow.",
     status: "offered",
     appliedAt: "2026-04-14",
@@ -744,6 +864,10 @@ export const mockOrgApplicants: Application[] = [
     studentAvailability: "Part-time 15h/week",
     studentBio: "Backend developer with Python focus. Comfortable with REST APIs and relational databases.",
     studentIknowVerified: false,
+    studentAchievements: buildAchievements(
+      ["profile_complete", "early_applicant"],
+      ["profile_complete"]
+    ),
     status: "rejected",
     appliedAt: "2026-04-14",
     updatedAt: "2026-04-16",
@@ -769,6 +893,10 @@ export const mockOrgApplicants: Application[] = [
     studentBio: "Mobile-first developer. React Native enthusiast shipping to iOS and Android simultaneously.",
     studentGithub: "github.com/petargeorgijev",
     studentIknowVerified: true,
+    studentAchievements: buildAchievements(
+      ["profile_complete", "verified_iknow", "project_builder", "fast_responder", "skill_verified"],
+      ["verified_iknow", "skill_verified"]
+    ),
     coverNote: "Been building React Native apps for 2 years. Expo is my daily driver.",
     status: "shortlisted",
     appliedAt: "2026-04-15",

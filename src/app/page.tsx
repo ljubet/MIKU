@@ -16,14 +16,12 @@ import {
   Plus,
   TrendingUp,
   Zap,
-  Menu,
 } from "lucide-react";
 
 export default function LandingPage() {
   const { setRole } = useApp();
   const { t, lang, setLang } = useLang();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pricingTiers = [
     {
       name: t("pricing_tier_starter_name"),
@@ -91,6 +89,23 @@ export default function LandingPage() {
         t("pricing_feature_pro_6"),
       ],
     },
+    {
+      name: t("pricing_tier_yearly_name"),
+      price: "3068 ден",
+      period: t("pricing_period_year"),
+      sub: t("pricing_save_label"),
+      tagline: t("pricing_tier_yearly_tagline"),
+      highlight: false,
+      cta: t("pricing_cta_start"),
+      ctaHref: "/auth/provider",
+      features: [
+        t("pricing_feature_growth_1"),
+        t("pricing_feature_growth_2"),
+        t("pricing_feature_growth_3"),
+        t("pricing_feature_growth_4"),
+        t("pricing_feature_growth_5"),
+      ],
+    },
   ];
 
   const stats = [
@@ -133,10 +148,10 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/90 backdrop-blur px-4 sm:px-6 py-4 pt-[calc(env(safe-area-inset-top)+1rem)] sm:pt-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between gap-3 flex-wrap sm:flex-nowrap">
+      <header className="border-b border-gray-100 px-6 py-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
           <img src="/Logo LINKER FINAL 3.png" alt="Linker" className="h-8 w-auto" />
-          <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
+          <div className="flex items-center gap-2 sm:gap-3">
             <select
               value={lang}
               onChange={(event) => setLang(event.target.value as typeof lang)}
@@ -154,54 +169,29 @@ export default function LandingPage() {
                 {t('landing_login')}
               </Button>
             </Link>
-            <Link href="/auth?mode=signup" className="hidden sm:block">
+            <Link href="/auth?mode=signup">
               <Button size="sm" className="bg-[#FF0078] hover:bg-[#d60065] font-semibold">
                 {t('landing_getStarted')}
               </Button>
             </Link>
-            <div className="relative sm:hidden">
-              <button
-                type="button"
-                onClick={() => setMobileMenuOpen((prev) => !prev)}
-                className="h-9 w-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:text-gray-900 hover:border-gray-300 transition-colors"
-                aria-label="Open menu"
-                aria-expanded={mobileMenuOpen}
-              >
-                <Menu className="w-4 h-4" />
-              </button>
-              {mobileMenuOpen && (
-                <div className="absolute right-0 mt-2 w-44 rounded-2xl border border-gray-100 bg-white shadow-lg p-2 z-50">
-                  <Link
-                    href="/auth?mode=signin"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block rounded-xl px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                  >
-                    {t('landing_login')}
-                  </Link>
-                  <Link
-                    href="/auth?mode=signup"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block rounded-xl px-3 py-2 text-sm font-semibold text-[#FF0078] hover:bg-[#FF0078]/10"
-                  >
-                    {t('landing_getStarted')}
-                  </Link>
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </header>
 
       {/* Hero */}
-      <section data-anim="hero" className="relative max-w-4xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-8 text-center overflow-hidden">
-        <h1 data-anim="hero-item" className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-[1.15] mb-5 tracking-tight">
-          <span>
-            {t('landing_headline_1')}{' '}
-            <span className="inline-block align-baseline line-through text-gray-300 decoration-2">
-              {t('landing_headline_strike')}
-            </span>
-          </span>
-          <br />
+      <section
+        data-anim="hero"
+        className="relative mx-auto px-4 sm:px-6 pt-10 sm:pt-14 pb-8 text-center overflow-hidden"
+        style={{
+          backgroundImage: "linear-gradient(180deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.92) 55%, rgba(255,255,255,1) 100%), url('/bg.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="max-w-4xl mx-auto">
+        <h1 data-anim="hero-item" className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-[1.15] mb-5 tracking-tight max-w-4xl mx-auto">
+          {t('landing_headline_1')}{' '}
+          {t('landing_headline_strike')}{' '}
           {t('landing_headline_2')}
         </h1>
 
@@ -229,6 +219,7 @@ export default function LandingPage() {
               {t('landing_postBtn')}
             </Button>
           </Link>
+        </div>
         </div>
       </section>
 
@@ -357,40 +348,6 @@ export default function LandingPage() {
               </Link>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section data-anim="cta" className="relative max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-14 overflow-hidden">
-        <div className="bg-white rounded-[32px] px-6 sm:px-8 py-10 sm:py-12 lg:px-14 lg:py-16 border border-gray-100 shadow-[0_20px_50px_rgba(15,23,42,0.06)]">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
-            <div>
-              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-gray-900 mb-5">
-                {t('cta_title')}
-              </h2>
-              <p className="text-base sm:text-lg text-gray-500 mb-8 sm:mb-10 max-w-xl">
-                {t('cta_subtitle')}
-              </p>
-              <Link href="/auth/candidate">
-                <Button
-                  size="lg"
-                  className="bg-[#FF0078] hover:bg-[#d60065] text-white gap-2 font-semibold px-8 text-base rounded-2xl shadow-md shadow-[#FF0078]/20 w-full sm:w-auto"
-                >
-                  {t('cta_btn')}
-                  <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
-            </div>
-            <div className="relative h-[220px] sm:h-[320px]">
-              <div className="absolute left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-0 top-2 h-48 w-64 rounded-3xl bg-white shadow-[0_20px_50px_rgba(15,23,42,0.08)] border border-gray-100" />
-              <div className="absolute left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-10 top-16 h-36 w-56 rounded-3xl bg-gradient-to-br from-gray-900 to-gray-800 shadow-[0_20px_50px_rgba(15,23,42,0.2)]" />
-              <div className="absolute left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 bottom-0 h-28 w-[70%] rounded-3xl bg-white shadow-[0_20px_50px_rgba(15,23,42,0.08)] border border-gray-100" />
-              <div className="absolute left-1/2 -translate-x-1/2 sm:left-6 sm:translate-x-0 bottom-8 h-6 w-1.5 rounded-full bg-[#FF0078]" />
-              <div className="absolute left-1/2 -translate-x-1/2 sm:left-10 sm:translate-x-0 bottom-10 text-xs font-semibold text-gray-500">
-                {t("cta_match_label")}
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
