@@ -24,7 +24,7 @@ const pricingTiers = [
     highlight: false,
     cta: "Започни бесплатно",
     ctaHref: "/auth/provider",
-    features: ["2 активни огласи неделно", "Основна листа на кандидати", "Стандарден профил на компанија", "Пристап до апликации"],
+    features: ["2 активни огласи месечно", "Основна листа на кандидати", "Стандарден профил на компанија", "Пристап до апликации"],
   },
   {
     name: "Basic",
@@ -35,7 +35,7 @@ const pricingTiers = [
     highlight: false,
     cta: "Започни",
     ctaHref: "/auth/provider",
-    features: ["Сè од Starter", "5–7 активни огласи неделно", "Основен кандидат pipeline", "Основен AI ranking"],
+    features: ["Сè од Starter", "5–7 активни огласи месечно", "Основен кандидат pipeline", "Основен AI ranking"],
   },
   {
     name: "Growth",
@@ -46,7 +46,7 @@ const pricingTiers = [
     highlight: true,
     cta: "Започни",
     ctaHref: "/auth/provider",
-    features: ["Сè од Basic", "10–12 активни огласи неделно", "Напреден pipeline (applied → interview)", "Подобрен AI ranking и shortlist", "Приоритетна обработка"],
+    features: ["Сè од Basic", "10–12 активни огласи месечно", "Напреден pipeline (applied → interview)", "Подобрен AI ranking и shortlist", "Приоритетна обработка"],
   },
   {
     name: "Pro",

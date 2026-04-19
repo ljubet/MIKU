@@ -30,7 +30,7 @@ const tiers = [
     ctaHref: "/auth/provider",
     features: [
       "Сè од Starter",
-      "5–7 активни огласи неделно",
+      "5–7 активни огласи месечно",
       "Основен кандидат pipeline",
       "Основен AI ranking",
       "Стандарден профил",
@@ -47,7 +47,7 @@ const tiers = [
     ctaHref: "/auth/provider",
     features: [
       "Сè од Basic",
-      "10–12 активни огласи неделно",
+      "10–12 активни огласи месечно",
       "Напреден pipeline (applied → interview)",
       "Подобрен AI ranking и shortlist",
       "Приоритетна обработка на апликации",
