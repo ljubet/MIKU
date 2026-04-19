@@ -16,6 +16,7 @@ import {
   PlusCircle,
   List,
   Users,
+  Trophy,
 } from "lucide-react";
 
 export function Sidebar({ onClose }: { onClose?: () => void }) {
@@ -28,7 +29,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
     { href: "/student/dashboard", label: t('nav_dashboard'), icon: LayoutDashboard },
     { href: "/student/saved", label: t('nav_savedJobs'), icon: Bookmark },
     { href: "/student/applications", label: t('nav_applications'), icon: FileText },
-    { href: "/student/profile", label: t('nav_myProfile'), icon: User },
+    { href: "/student/hackathons", label: "Hackathons", icon: Trophy },
   ];
 
   const orgNav = [
@@ -144,17 +145,22 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
 
       {/* User profile at bottom */}
       <div className="px-4 py-4 border-t border-gray-50">
-        <div className="flex items-center gap-3">
+        <Link
+          href={role === "student" ? "/student/profile" : "/org/profile"}
+          onClick={onClose}
+          className="flex items-center gap-3 rounded-xl p-2 -mx-2 hover:bg-gray-50 transition-colors group"
+        >
           <img
             src={avatar}
             alt={name}
-            className="w-8 h-8 rounded-full border border-gray-100"
+            className="w-8 h-8 rounded-full border border-gray-100 shrink-0"
           />
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-gray-900 truncate">{name}</p>
+            <p className="text-sm font-medium text-gray-900 truncate group-hover:text-[#FF0078] transition-colors">{name}</p>
             <p className="text-xs text-gray-400 truncate">{sub}</p>
           </div>
-        </div>
+          <User className="w-3.5 h-3.5 text-gray-300 group-hover:text-[#FF0078] transition-colors shrink-0" />
+        </Link>
       </div>
     </aside>
   );

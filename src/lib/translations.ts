@@ -14,24 +14,25 @@ const mk = {
   nav_dashboard: 'Преглед',
   nav_savedJobs: 'Зачувани огласи',
   nav_applications: 'Пријави',
-  nav_myProfile: 'Мој профил',
+  nav_myProfile: 'Профил',
   nav_postJob: 'Објави оглас',
   nav_listings: 'Огласи',
   nav_applicants: 'Апликанти',
   nav_companyProfile: 'Профил на компанија',
-  role_student: 'Студент',
+  role_student: 'Кандидат',
   role_org: 'Организација',
 
   // Landing page
   landing_headline_1: 'Престани да бараш низ',
   landing_headline_strike: 'Discord групи.',
-  landing_headline_2: 'Најди практикантство овде.',
-  landing_subheadline: 'Секое верифицирано практикантство и почетна работа на едно место. Виж го твојот резултат за совпаѓање пред да аплицираш, дознај го целиот процес на вработување и аплицирај за помалку од 60 секунди.',
-  landing_browseBtn: 'Прегледај отворени практикантства',
+  landing_headline_2: 'Најди можност овде.',
+  landing_subheadline: 'Секој верифициран оглас и прва работа на едно место. Види го твојот резултат за совпаѓање, дознај го процесот на вработување и аплицирај за помалку од 60 секунди.',
+  landing_browseBtn: 'Прегледај отворени можности',
   landing_postBtn: 'Објави позиција',
-  landing_forStudents: 'За студенти',
-  landing_forOrgs: 'За организации',
+  landing_forStudents: 'За кандидати',
+  landing_forOrgs: 'За компании',
   landing_getStarted: 'Започни бесплатно',
+  landing_tagline: 'Помалку апликации. Подобри совпаѓања.',
 
   // Stats
   stats_openPositions: 'Отворени позиции',
@@ -41,7 +42,7 @@ const mk = {
 
   // Features
   features_title: 'Сè она што ти недостасуваше',
-  features_subtitle: 'Linker е изграден за да ги реши точните фрустрации кои веќе ги имаш при барање практикантство.',
+  features_subtitle: 'Linker е изграден за да ги реши точните фрустрации при барање прва можност.',
   feature1_title: 'Прилагодено кон тебе',
   feature1_desc: 'Секој оглас го прикажува твојот резултат за совпаѓање врз основа на твоите вештини. Нема повеќе гатање дали се квалификуваш.',
   feature2_title: 'Само верифицирани компании',
@@ -67,17 +68,17 @@ const mk = {
   social_verified: 'Сите компании се рачно верифицирани',
   social_hiringProcess: 'Процесот на вработување е прикажан за секоја позиција',
   social_skillMatch: 'Совпаѓање на вештини пред да аплицираш',
-  social_free: 'Бесплатно за студенти, засекогаш',
+  social_free: 'Бесплатно за кандидати, засекогаш',
 
   // CTA
-  cta_title: 'Твоето практикантство е веќе објавено.',
-  cta_subtitle: 'Стотици студенти од УКИМ веќе го користат Linker. Не го пропуштај рокот.',
+  cta_title: 'Твојата можност е веќе објавена.',
+  cta_subtitle: 'Стотици кандидати веќе го користат Linker. Не го пропуштај рокот.',
   cta_btn: 'Најди го моето совпаѓање',
 
   // Footer
-  footer_tagline: 'Linker — Создаден за студенти кои заслужуваат повеќе од Discord пораки',
+  footer_tagline: 'Linker — Создаден за кандидати кои заслужуваат повеќе од Discord пораки',
 
-  // Student dashboard
+  // Candidate dashboard
   search_placeholder: 'Пребарај по наслов, компанија или вештина...',
   filter_all: 'Сите огласи',
   filter_internship: 'Практикантство',
@@ -86,6 +87,9 @@ const mk = {
   filter_remote: 'Само далечинска работа',
   sort_mostRelevant: 'Најрелевантни',
   label_results: 'резултати',
+  label_sort: 'Сортирај',
+  label_step: 'Чекор',
+  label_closesIn: 'Затвора за',
   match_profile: 'Совпаѓање со профил',
   match_yourScore: 'Твојот резултат за совпаѓање',
   match_notOnProfile: 'Нема во профилот',
@@ -105,7 +109,7 @@ const mk = {
   empty_noResultsHint: 'Обиди се да ги промениш критериумите за пребарување',
   empty_selectJob: 'Избери оглас за да ги видиш деталите',
 
-  // Student applications
+  // Candidate applications
   page_applications: 'Пријави',
   label_total: 'вкупно',
   label_inInterview: 'во интервју',
@@ -121,10 +125,10 @@ const mk = {
   tip_rejected: 'Не секоја позиција е вистинската. Продолжи со аплицирање — твоето следно „да" е поблиску.',
   empty_noApplications: 'Нема пријави сè уште',
   empty_noApplicationsHint: 'Аплицирај за твојата прва позиција за помалку од 60 секунди.',
-  btn_findInternships: 'Најди практикантства',
+  btn_findInternships: 'Најди можности',
 
-  // Student profile
-  page_myProfile: 'Мој профил',
+  // Candidate profile
+  page_myProfile: 'Профил',
   btn_edit: 'Уреди',
   label_university: 'Универзитет',
   label_major: 'Насока',
@@ -189,7 +193,7 @@ const mk = {
   label_skills: 'Вештини / Тагови',
   btn_publish: 'Објави оглас',
   success_jobPosted: 'Огласот е објавен!',
-  success_jobPostedDesc: 'е сега активен и видлив за студентите.',
+  success_jobPostedDesc: 'е сега активен и видлив за кандидатите.',
   btn_postAnother: 'Објави уште еден',
   btn_viewListings: 'Прикажи огласи',
 
@@ -201,9 +205,52 @@ const mk = {
   label_founded: 'Основана',
   label_location: 'Локација',
   section_openPositions: 'Отворени позиции',
-  label_studentsHired: 'Студенти вработени преку Linker',
+  label_studentsHired: 'Кандидати вработени преку Linker',
   label_responseTime: 'Време за одговор',
   section_contact: 'Контакт',
+
+  // Application limits
+  limit_weekly: 'Неделен лимит',
+  limit_remaining: 'преостанати апликации',
+  limit_available: 'Достапно',
+  limit_reached: 'Лимит достигнат',
+  limit_loading: 'Се вчитува...',
+  limit_hint: 'Овој лимит важи за последните 7 дена.',
+  limit_reached_desc: 'Го достигна неделниот лимит. Обиди се повторно по ресетирањето.',
+  limit_duplicate: 'Веќе имаш аплицирано за оваа позиција.',
+
+  // Speed hiring
+  tab_shortlisted: 'Во потесен избор',
+  btn_shortlist: 'Стави во потесен избор',
+  tip_shortlisted: 'Твојата апликација е во потесен избор. Очекувај брз следен чекор.',
+
+  // Structured profile
+  section_projects: 'Проекти',
+  label_projectsAdded: 'проекти',
+  section_interests: 'Интереси',
+  section_availability: 'Достапност',
+  label_availability: 'Достапност',
+  placeholder_projectName: 'Име на проект',
+  placeholder_projectDesc: 'Краток опис',
+  placeholder_projectLink: 'Линк (опционално)',
+  placeholder_projectSkills: 'Вештини (одделени со запирка)',
+  placeholder_interests: 'UX, финтек, едукација...',
+  placeholder_availability: 'на пр. 20–30ч/нед, јуни–септ',
+  empty_projects: 'Сè уште нема додадени проекти.',
+  empty_interests: 'Додај интереси за подобро совпаѓање.',
+  empty_availability: 'Додај достапност за побрзо вработување.',
+  empty_skills: 'Додај барем 3 клучни вештини.',
+  btn_addProject: 'Додај проект',
+  btn_remove: 'Отстрани',
+  btn_cancel: 'Откажи',
+  profile_projectsAdded: 'Проекти додадени',
+  profile_interestsAdded: 'Интереси додадени',
+  profile_availabilityAdded: 'Достапност додадена',
+  profile_structuredTip: 'Структуриран профил ги зголемува шансите за брз одговор.',
+  profile_missing: 'Профилот не е пронајден во базата. Зачувај за да се креира.',
+  profile_error: 'Не можевме да го вчитаме профилот. Обиди се повторно.',
+  linker_no_cv: 'Linker не користи CV. Проектите и вештините се доволни.',
+  match_badge: 'совпаѓање',
 
   // Shared
   label_open: 'Отворен',
@@ -218,24 +265,25 @@ const en: typeof mk = {
   nav_dashboard: 'Dashboard',
   nav_savedJobs: 'Saved Jobs',
   nav_applications: 'Applications',
-  nav_myProfile: 'My Profile',
+  nav_myProfile: 'Profile',
   nav_postJob: 'Post a Job',
   nav_listings: 'Listings',
   nav_applicants: 'Applicants',
   nav_companyProfile: 'Company Profile',
-  role_student: 'Student',
+  role_student: 'Candidate',
   role_org: 'Org',
 
   // Landing page
   landing_headline_1: 'Stop hunting through',
   landing_headline_strike: 'Discord groups.',
-  landing_headline_2: 'Find your internship here.',
-  landing_subheadline: 'Every verified internship and junior job in one place. See your match score before you apply, know the full hiring process upfront, and apply in under 60 seconds.',
-  landing_browseBtn: 'Browse open internships',
+  landing_headline_2: 'Find your next opportunity here.',
+  landing_subheadline: 'Every verified early‑career role in one place. See your match score, know the full hiring process upfront, and apply in under 60 seconds.',
+  landing_browseBtn: 'Browse open opportunities',
   landing_postBtn: 'Post a role',
-  landing_forStudents: 'For Students',
-  landing_forOrgs: 'For Organizations',
+  landing_forStudents: 'For Candidates',
+  landing_forOrgs: 'For Companies',
   landing_getStarted: 'Get started free',
+  landing_tagline: 'Fewer applications. Better matches.',
 
   // Stats
   stats_openPositions: 'Open positions',
@@ -245,7 +293,7 @@ const en: typeof mk = {
 
   // Features
   features_title: 'Everything you were missing',
-  features_subtitle: 'We built Linker to solve the exact frustrations you already have with internship hunting.',
+  features_subtitle: 'We built Linker to solve the exact frustrations you already have with early‑career hiring.',
   feature1_title: 'Matched to you',
   feature1_desc: 'Every listing shows your match score based on your skills. No more guessing if you qualify.',
   feature2_title: 'Verified companies only',
@@ -271,17 +319,17 @@ const en: typeof mk = {
   social_verified: 'All companies manually verified',
   social_hiringProcess: 'Hiring process shown for every role',
   social_skillMatch: 'Skill matching before you apply',
-  social_free: 'Free for students, always',
+  social_free: 'Free for candidates, always',
 
   // CTA
-  cta_title: 'Your internship is already posted.',
-  cta_subtitle: 'Hundreds of students from UKIM are already using Linker. Don\'t miss the deadline.',
+  cta_title: 'Your next opportunity is already posted.',
+  cta_subtitle: 'Hundreds of candidates are already using Linker. Don\'t miss the deadline.',
   cta_btn: 'Find my match now',
 
   // Footer
-  footer_tagline: 'Linker — Made for students who deserve better than Discord DMs',
+  footer_tagline: 'Linker — Made for candidates who deserve better than Discord DMs',
 
-  // Student dashboard
+  // Candidate dashboard
   search_placeholder: 'Search by title, company, or skill...',
   filter_all: 'All jobs',
   filter_internship: 'Internship',
@@ -290,6 +338,9 @@ const en: typeof mk = {
   filter_remote: 'Remote only',
   sort_mostRelevant: 'Most relevant',
   label_results: 'results',
+  label_sort: 'Sort',
+  label_step: 'Step',
+  label_closesIn: 'Closes in',
   match_profile: 'Profile match',
   match_yourScore: 'Your match score',
   match_notOnProfile: 'Not on profile',
@@ -309,7 +360,7 @@ const en: typeof mk = {
   empty_noResultsHint: 'Try adjusting your search',
   empty_selectJob: 'Select a job to view details',
 
-  // Student applications
+  // Candidate applications
   page_applications: 'Applications',
   label_total: 'total',
   label_inInterview: 'in interview',
@@ -325,10 +376,10 @@ const en: typeof mk = {
   tip_rejected: 'Not every role is the right fit. Keep applying — your next yes is closer.',
   empty_noApplications: 'No applications yet',
   empty_noApplicationsHint: 'Apply to your first role in under 60 seconds.',
-  btn_findInternships: 'Find internships',
+  btn_findInternships: 'Find opportunities',
 
-  // Student profile
-  page_myProfile: 'My Profile',
+  // Candidate profile
+  page_myProfile: 'Profile',
   btn_edit: 'Edit',
   label_university: 'University',
   label_major: 'Major',
@@ -393,7 +444,7 @@ const en: typeof mk = {
   label_skills: 'Skills / Tags',
   btn_publish: 'Publish Job',
   success_jobPosted: 'Job posted!',
-  success_jobPostedDesc: 'is now live and visible to students.',
+  success_jobPostedDesc: 'is now live and visible to candidates.',
   btn_postAnother: 'Post another',
   btn_viewListings: 'View listings',
 
@@ -405,9 +456,52 @@ const en: typeof mk = {
   label_founded: 'Founded',
   label_location: 'Location',
   section_openPositions: 'Open positions',
-  label_studentsHired: 'Students hired via Linker',
+  label_studentsHired: 'Candidates hired via Linker',
   label_responseTime: 'Response time',
   section_contact: 'Contact',
+
+  // Application limits
+  limit_weekly: 'Weekly limit',
+  limit_remaining: 'applications left',
+  limit_available: 'Available',
+  limit_reached: 'Limit reached',
+  limit_loading: 'Loading...',
+  limit_hint: 'This limit applies to the last 7 days.',
+  limit_reached_desc: 'You hit your weekly limit. Try again after the reset.',
+  limit_duplicate: 'You already applied to this role.',
+
+  // Speed hiring
+  tab_shortlisted: 'Shortlisted',
+  btn_shortlist: 'Shortlist',
+  tip_shortlisted: 'You have been shortlisted. Expect a quick next step.',
+
+  // Structured profile
+  section_projects: 'Projects',
+  label_projectsAdded: 'projects',
+  section_interests: 'Interests',
+  section_availability: 'Availability',
+  label_availability: 'Availability',
+  placeholder_projectName: 'Project name',
+  placeholder_projectDesc: 'Short description',
+  placeholder_projectLink: 'Link (optional)',
+  placeholder_projectSkills: 'Skills (comma separated)',
+  placeholder_interests: 'UX, fintech, education...',
+  placeholder_availability: 'e.g. 20–30h/week, June–September',
+  empty_projects: 'No projects added yet.',
+  empty_interests: 'Add interests for better matching.',
+  empty_availability: 'Add availability for faster hiring.',
+  empty_skills: 'Add at least 3 key skills.',
+  btn_addProject: 'Add project',
+  btn_remove: 'Remove',
+  btn_cancel: 'Cancel',
+  profile_projectsAdded: 'Projects added',
+  profile_interestsAdded: 'Interests added',
+  profile_availabilityAdded: 'Availability added',
+  profile_structuredTip: 'Structured profiles improve response speed.',
+  profile_missing: 'Profile not found in the database. Save to create it.',
+  profile_error: 'Could not load profile. Please try again.',
+  linker_no_cv: 'Linker doesn’t use CVs. Projects and skills are enough.',
+  match_badge: 'match',
 
   // Shared
   label_open: 'Open',
@@ -427,7 +521,7 @@ const sq: typeof mk = {
   nav_listings: 'Listimet',
   nav_applicants: 'Aplikantët',
   nav_companyProfile: 'Profili i kompanisë',
-  role_student: 'Student',
+  role_student: 'Kandidat',
   role_org: 'Organizatë',
 
   // Landing page
@@ -437,9 +531,10 @@ const sq: typeof mk = {
   landing_subheadline: 'Çdo praktikë dhe punë e verifikuar në një vend. Shiko pikën tënde të përputhjes para se të aplikosh, mëso të gjithë procesin e punësimit dhe apliko në më pak se 60 sekonda.',
   landing_browseBtn: 'Shfleto praktikat e hapura',
   landing_postBtn: 'Posto një rol',
-  landing_forStudents: 'Për studentët',
+  landing_forStudents: 'Për kandidatë',
   landing_forOrgs: 'Për organizatat',
   landing_getStarted: 'Fillo falas',
+  landing_tagline: 'Fewer applications. Better matches.',
 
   // Stats
   stats_openPositions: 'Pozicione të hapura',
@@ -475,17 +570,17 @@ const sq: typeof mk = {
   social_verified: 'Të gjitha kompanitë janë verifikuar manualisht',
   social_hiringProcess: 'Procesi i punësimit tregohet për çdo rol',
   social_skillMatch: 'Përputhja e aftësive para se të aplikosh',
-  social_free: 'Falas për studentët, gjithmonë',
+  social_free: 'Falas për kandidatë, gjithmonë',
 
   // CTA
   cta_title: 'Praktika jote është tashmë e postuar.',
-  cta_subtitle: 'Qindra studentë nga UKIM tashmë po përdorin Linker. Mos humb afatin.',
+  cta_subtitle: 'Qindra kandidatë nga UKIM tashmë po përdorin Linker. Mos humb afatin.',
   cta_btn: 'Gjej përputhjen time tani',
 
   // Footer
-  footer_tagline: 'Linker — Krijuar për studentët që meritojnë më shumë se mesazhe Discord',
+  footer_tagline: 'Linker — Krijuar për kandidatë që meritojnë më shumë se mesazhe Discord',
 
-  // Student dashboard
+  // Candidate dashboard
   search_placeholder: 'Kërko sipas titullit, kompanisë ose aftësisë...',
   filter_all: 'Të gjitha punët',
   filter_internship: 'Praktikë',
@@ -494,6 +589,9 @@ const sq: typeof mk = {
   filter_remote: 'Vetëm në distancë',
   sort_mostRelevant: 'Më relevante',
   label_results: 'rezultate',
+  label_sort: 'Rendit',
+  label_step: 'Hapi',
+  label_closesIn: 'Mbyllet për',
   match_profile: 'Përputhja e profilit',
   match_yourScore: 'Pikët tuaja të përputhjes',
   match_notOnProfile: 'Nuk është në profil',
@@ -513,7 +611,7 @@ const sq: typeof mk = {
   empty_noResultsHint: 'Provo të ndryshosh kërkimin tënd',
   empty_selectJob: 'Zgjidh një punë për të parë detajet',
 
-  // Student applications
+  // Candidate applications
   page_applications: 'Aplikimet',
   label_total: 'gjithsej',
   label_inInterview: 'në intervistë',
@@ -531,7 +629,7 @@ const sq: typeof mk = {
   empty_noApplicationsHint: 'Apliko për rolin tënd të parë në më pak se 60 sekonda.',
   btn_findInternships: 'Gjej praktika',
 
-  // Student profile
+  // Candidate profile
   page_myProfile: 'Profili im',
   btn_edit: 'Ndrysho',
   label_university: 'Universiteti',
@@ -597,7 +695,7 @@ const sq: typeof mk = {
   label_skills: 'Aftësi / Etiketa',
   btn_publish: 'Publiko punën',
   success_jobPosted: 'Puna u postua!',
-  success_jobPostedDesc: 'tani është aktive dhe e dukshme për studentët.',
+  success_jobPostedDesc: 'tani është aktive dhe e dukshme për kandidatë.',
   btn_postAnother: 'Posto tjetër',
   btn_viewListings: 'Shiko listimet',
 
@@ -609,9 +707,52 @@ const sq: typeof mk = {
   label_founded: 'Themeluar',
   label_location: 'Vendndodhja',
   section_openPositions: 'Pozicione të hapura',
-  label_studentsHired: 'Studentë të punësuar nëpërmjet Linker',
+  label_studentsHired: 'Kandidatë të punësuar nëpërmjet Linker',
   label_responseTime: 'Koha e reagimit',
   section_contact: 'Kontakti',
+
+  // Application limits
+  limit_weekly: 'Limiti javor',
+  limit_remaining: 'aplikime të mbetura',
+  limit_available: 'E disponueshme',
+  limit_reached: 'Limiti u arrit',
+  limit_loading: 'Duke u ngarkuar...',
+  limit_hint: 'Ky limit vlen për 7 ditët e fundit.',
+  limit_reached_desc: 'E arritët limitin javor. Provoni sërish pas rifreskimit.',
+  limit_duplicate: 'Ke aplikuar tashmë për këtë rol.',
+
+  // Speed hiring
+  tab_shortlisted: 'Në listën e ngushtë',
+  btn_shortlist: 'Vendos në listën e ngushtë',
+  tip_shortlisted: 'Jeni në listën e ngushtë. Prisni një hap të shpejtë.',
+
+  // Structured profile
+  section_projects: 'Projektet',
+  label_projectsAdded: 'projekte',
+  section_interests: 'Interesat',
+  section_availability: 'Disponueshmëria',
+  label_availability: 'Disponueshmëria',
+  placeholder_projectName: 'Emri i projektit',
+  placeholder_projectDesc: 'Përshkrim i shkurtër',
+  placeholder_projectLink: 'Lidhje (opsionale)',
+  placeholder_projectSkills: 'Aftësi (të ndara me presje)',
+  placeholder_interests: 'UX, fintech, edukim...',
+  placeholder_availability: 'p.sh. 20–30h/javë, Qershor–Shtator',
+  empty_projects: 'Ende nuk ka projekte.',
+  empty_interests: 'Shto interesa për përputhje më të mirë.',
+  empty_availability: 'Shto disponueshmëri për punësim më të shpejtë.',
+  empty_skills: 'Shto të paktën 3 aftësi kryesore.',
+  btn_addProject: 'Shto projekt',
+  btn_remove: 'Hiq',
+  btn_cancel: 'Anulo',
+  profile_projectsAdded: 'Projekte të shtuara',
+  profile_interestsAdded: 'Interesa të shtuar',
+  profile_availabilityAdded: 'Disponueshmëri e shtuar',
+  profile_structuredTip: 'Profilet e strukturuara rrisin shpejtësinë e përgjigjes.',
+  profile_missing: 'Profili nuk u gjet në bazë. Ruaj për ta krijuar.',
+  profile_error: 'Nuk mundëm ta ngarkojmë profilin. Provo sërish.',
+  linker_no_cv: 'Linker nuk përdor CV. Projektet dhe aftësitë mjaftojnë.',
+  match_badge: 'përputhje',
 
   // Shared
   label_open: 'I hapur',
@@ -631,7 +772,7 @@ const sr: typeof mk = {
   nav_listings: 'Oglasi',
   nav_applicants: 'Aplikanti',
   nav_companyProfile: 'Profil kompanije',
-  role_student: 'Student',
+  role_student: 'Kandidat',
   role_org: 'Organizacija',
 
   // Landing page
@@ -641,9 +782,10 @@ const sr: typeof mk = {
   landing_subheadline: 'Svaka verifikovana praksa i početnička pozicija na jednom mestu. Vidi svoje bodove podudaranja pre apliciranja, upoznaj ceo proces zapošljavanja i apliciraj za manje od 60 sekundi.',
   landing_browseBtn: 'Pregledaj otvorene prakse',
   landing_postBtn: 'Objavi poziciju',
-  landing_forStudents: 'Za studente',
+  landing_forStudents: 'Za kandidate',
   landing_forOrgs: 'Za organizacije',
   landing_getStarted: 'Počni besplatno',
+  landing_tagline: 'Fewer applications. Better matches.',
 
   // Stats
   stats_openPositions: 'Otvorene pozicije',
@@ -679,7 +821,7 @@ const sr: typeof mk = {
   social_verified: 'Sve kompanije su ručno verifikovane',
   social_hiringProcess: 'Proces zapošljavanja prikazan za svaku poziciju',
   social_skillMatch: 'Podudaranje veština pre apliciranja',
-  social_free: 'Besplatno za studente, uvek',
+  social_free: 'Besplatno za kandidate, uvek',
 
   // CTA
   cta_title: 'Tvoja praksa je već objavljena.',
@@ -687,9 +829,9 @@ const sr: typeof mk = {
   cta_btn: 'Pronađi moje podudaranje',
 
   // Footer
-  footer_tagline: 'Linker — Napravljen za studente koji zaslužuju više od Discord poruka',
+  footer_tagline: 'Linker — Napravljen za kandidate koji zaslužuju više od Discord poruka',
 
-  // Student dashboard
+  // Candidate dashboard
   search_placeholder: 'Pretraži po naslovu, kompaniji ili veštini...',
   filter_all: 'Svi oglasi',
   filter_internship: 'Praksa',
@@ -698,6 +840,9 @@ const sr: typeof mk = {
   filter_remote: 'Samo udaljeni rad',
   sort_mostRelevant: 'Najrelevantnije',
   label_results: 'rezultata',
+  label_sort: 'Sortiraj',
+  label_step: 'Korak',
+  label_closesIn: 'Zatvara se za',
   match_profile: 'Podudaranje profila',
   match_yourScore: 'Tvoji bodovi podudaranja',
   match_notOnProfile: 'Nije u profilu',
@@ -717,7 +862,7 @@ const sr: typeof mk = {
   empty_noResultsHint: 'Pokušaj da izmeniš kriterijume pretrage',
   empty_selectJob: 'Izaberi oglas da vidiš detalje',
 
-  // Student applications
+  // Candidate applications
   page_applications: 'Prijave',
   label_total: 'ukupno',
   label_inInterview: 'u intervjuu',
@@ -735,7 +880,7 @@ const sr: typeof mk = {
   empty_noApplicationsHint: 'Apliciraj za prvu poziciju za manje od 60 sekundi.',
   btn_findInternships: 'Pronađi prakse',
 
-  // Student profile
+  // Candidate profile
   page_myProfile: 'Moj profil',
   btn_edit: 'Uredi',
   label_university: 'Univerzitet',
@@ -801,7 +946,7 @@ const sr: typeof mk = {
   label_skills: 'Veštine / Tagovi',
   btn_publish: 'Objavi oglas',
   success_jobPosted: 'Oglas objavljen!',
-  success_jobPostedDesc: 'je sada aktivan i vidljiv studentima.',
+  success_jobPostedDesc: 'je sada aktivan i vidljiv kandidatima.',
   btn_postAnother: 'Objavi još jedan',
   btn_viewListings: 'Vidi oglase',
 
@@ -813,9 +958,52 @@ const sr: typeof mk = {
   label_founded: 'Osnovana',
   label_location: 'Lokacija',
   section_openPositions: 'Otvorene pozicije',
-  label_studentsHired: 'Studenti zaposleni putem Linkera',
+  label_studentsHired: 'Kandidati zaposleni putem Linkera',
   label_responseTime: 'Vreme odgovora',
   section_contact: 'Kontakt',
+
+  // Application limits
+  limit_weekly: 'Nedeljni limit',
+  limit_remaining: 'preostalih prijava',
+  limit_available: 'Dostupno',
+  limit_reached: 'Limit dostignut',
+  limit_loading: 'Učitavanje...',
+  limit_hint: 'Ovaj limit važi za poslednjih 7 dana.',
+  limit_reached_desc: 'Dostigli ste nedeljni limit. Pokušajte ponovo nakon resetovanja.',
+  limit_duplicate: 'Već ste se prijavili na ovu poziciju.',
+
+  // Speed hiring
+  tab_shortlisted: 'U užem izboru',
+  btn_shortlist: 'Stavi u uži izbor',
+  tip_shortlisted: 'U užem ste izboru. Očekujte brz sledeći korak.',
+
+  // Structured profile
+  section_projects: 'Projekti',
+  label_projectsAdded: 'projekata',
+  section_interests: 'Interesovanja',
+  section_availability: 'Dostupnost',
+  label_availability: 'Dostupnost',
+  placeholder_projectName: 'Naziv projekta',
+  placeholder_projectDesc: 'Kratak opis',
+  placeholder_projectLink: 'Link (opciono)',
+  placeholder_projectSkills: 'Veštine (odvojene zarezom)',
+  placeholder_interests: 'UX, fintech, edukacija...',
+  placeholder_availability: 'npr. 20–30h/nedelja, jun–septembar',
+  empty_projects: 'Još nema dodatih projekata.',
+  empty_interests: 'Dodaj interesovanja za bolje podudaranje.',
+  empty_availability: 'Dodaj dostupnost za brže zapošljavanje.',
+  empty_skills: 'Dodaj bar 3 ključne veštine.',
+  btn_addProject: 'Dodaj projekat',
+  btn_remove: 'Ukloni',
+  btn_cancel: 'Otkaži',
+  profile_projectsAdded: 'Projekti dodati',
+  profile_interestsAdded: 'Interesovanja dodata',
+  profile_availabilityAdded: 'Dostupnost dodata',
+  profile_structuredTip: 'Strukturisan profil ubrzava odgovore.',
+  profile_missing: 'Profil nije pronađen u bazi. Sačuvaj da bi se kreirao.',
+  profile_error: 'Profil nije moguće učitati. Pokušaj ponovo.',
+  linker_no_cv: 'Linker ne koristi CV. Projekti i veštine su dovoljni.',
+  match_badge: 'podudaranje',
 
   // Shared
   label_open: 'Otvoreno',
@@ -835,7 +1023,7 @@ const tr: typeof mk = {
   nav_listings: 'İlanlar',
   nav_applicants: 'Başvuranlar',
   nav_companyProfile: 'Şirket Profili',
-  role_student: 'Öğrenci',
+  role_student: 'Aday',
   role_org: 'Kuruluş',
 
   // Landing page
@@ -845,9 +1033,10 @@ const tr: typeof mk = {
   landing_subheadline: 'Tüm doğrulanmış stajlar ve giriş seviyesi işler tek bir yerde. Başvurmadan önce uyum puanını gör, işe alım sürecini öğren ve 60 saniyeden kısa sürede başvur.',
   landing_browseBtn: 'Açık stajlara göz at',
   landing_postBtn: 'Pozisyon yayınla',
-  landing_forStudents: 'Öğrenciler için',
+  landing_forStudents: 'Adaylar için',
   landing_forOrgs: 'Kuruluşlar için',
   landing_getStarted: 'Ücretsiz başla',
+  landing_tagline: 'Fewer applications. Better matches.',
 
   // Stats
   stats_openPositions: 'Açık pozisyonlar',
@@ -893,7 +1082,7 @@ const tr: typeof mk = {
   // Footer
   footer_tagline: "Linker — Discord DM'lerinden daha fazlasını hak eden öğrenciler için yapıldı",
 
-  // Student dashboard
+  // Candidate dashboard
   search_placeholder: 'Başlık, şirket veya beceriye göre ara...',
   filter_all: 'Tüm işler',
   filter_internship: 'Staj',
@@ -902,6 +1091,9 @@ const tr: typeof mk = {
   filter_remote: 'Yalnızca uzaktan',
   sort_mostRelevant: 'En alakalı',
   label_results: 'sonuç',
+  label_sort: 'Sırala',
+  label_step: 'Adım',
+  label_closesIn: 'Kapanıyor',
   match_profile: 'Profil eşleşmesi',
   match_yourScore: 'Uyum puanın',
   match_notOnProfile: 'Profilde yok',
@@ -921,7 +1113,7 @@ const tr: typeof mk = {
   empty_noResultsHint: 'Aramanı değiştirmeyi dene',
   empty_selectJob: 'Detayları görmek için bir iş seç',
 
-  // Student applications
+  // Candidate applications
   page_applications: 'Başvurular',
   label_total: 'toplam',
   label_inInterview: 'mülakatta',
@@ -939,7 +1131,7 @@ const tr: typeof mk = {
   empty_noApplicationsHint: 'İlk pozisyona 60 saniyeden kısa sürede başvur.',
   btn_findInternships: 'Staj bul',
 
-  // Student profile
+  // Candidate profile
   page_myProfile: 'Profilim',
   btn_edit: 'Düzenle',
   label_university: 'Üniversite',
@@ -1017,9 +1209,52 @@ const tr: typeof mk = {
   label_founded: 'Kuruluş yılı',
   label_location: 'Konum',
   section_openPositions: 'Açık pozisyonlar',
-  label_studentsHired: "Linker üzerinden işe alınan öğrenciler",
+  label_studentsHired: "Linker üzerinden işe alınan adaylar",
   label_responseTime: 'Yanıt süresi',
   section_contact: 'İletişim',
+
+  // Application limits
+  limit_weekly: 'Haftalık limit',
+  limit_remaining: 'kalan başvuru',
+  limit_available: 'Kullanılabilir',
+  limit_reached: 'Limit doldu',
+  limit_loading: 'Yükleniyor...',
+  limit_hint: 'Bu limit son 7 günü kapsar.',
+  limit_reached_desc: 'Haftalık limite ulaştın. Sıfırlama sonrası tekrar dene.',
+  limit_duplicate: 'Bu ilana zaten başvurdun.',
+
+  // Speed hiring
+  tab_shortlisted: 'Kısa liste',
+  btn_shortlist: 'Kısa listeye al',
+  tip_shortlisted: 'Kısa listeye alındın. Hızlı bir sonraki adım bekle.',
+
+  // Structured profile
+  section_projects: 'Projeler',
+  label_projectsAdded: 'proje',
+  section_interests: 'İlgi alanları',
+  section_availability: 'Uygunluk',
+  label_availability: 'Uygunluk',
+  placeholder_projectName: 'Proje adı',
+  placeholder_projectDesc: 'Kısa açıklama',
+  placeholder_projectLink: 'Bağlantı (opsiyonel)',
+  placeholder_projectSkills: 'Beceriler (virgülle ayır)',
+  placeholder_interests: 'UX, fintech, eğitim...',
+  placeholder_availability: 'örn. haftada 20–30 saat, Haziran–Eylül',
+  empty_projects: 'Henüz proje eklenmedi.',
+  empty_interests: 'Daha iyi eşleşme için ilgi alanlarını ekle.',
+  empty_availability: 'Daha hızlı işe alım için uygunluğunu ekle.',
+  empty_skills: 'En az 3 temel beceri ekle.',
+  btn_addProject: 'Proje ekle',
+  btn_remove: 'Kaldır',
+  btn_cancel: 'İptal',
+  profile_projectsAdded: 'Projeler eklendi',
+  profile_interestsAdded: 'İlgi alanları eklendi',
+  profile_availabilityAdded: 'Uygunluk eklendi',
+  profile_structuredTip: 'Yapılandırılmış profil yanıt hızını artırır.',
+  profile_missing: 'Profil veritabanında bulunamadı. Oluşturmak için kaydet.',
+  profile_error: 'Profil yüklenemedi. Lütfen tekrar deneyin.',
+  linker_no_cv: 'Linker CV kullanmaz. Projeler ve beceriler yeterlidir.',
+  match_badge: 'eşleşme',
 
   // Shared
   label_open: 'Açık',
@@ -1039,7 +1274,7 @@ const bs: typeof mk = {
   nav_listings: 'Oglasi',
   nav_applicants: 'Aplikanti',
   nav_companyProfile: 'Profil kompanije',
-  role_student: 'Student',
+  role_student: 'Kandidat',
   role_org: 'Organizacija',
 
   // Landing page
@@ -1049,9 +1284,10 @@ const bs: typeof mk = {
   landing_subheadline: 'Svaka verificirana praksa i početnička pozicija na jednom mjestu. Vidi svoje bodove podudaranja prije apliciranja, upoznaj cijeli proces zapošljavanja i apliciraj za manje od 60 sekundi.',
   landing_browseBtn: 'Pretraži otvorene prakse',
   landing_postBtn: 'Objavi poziciju',
-  landing_forStudents: 'Za studente',
+  landing_forStudents: 'Za kandidate',
   landing_forOrgs: 'Za organizacije',
   landing_getStarted: 'Počni besplatno',
+  landing_tagline: 'Fewer applications. Better matches.',
 
   // Stats
   stats_openPositions: 'Otvorene pozicije',
@@ -1087,7 +1323,7 @@ const bs: typeof mk = {
   social_verified: 'Sve kompanije su ručno verificirane',
   social_hiringProcess: 'Proces zapošljavanja prikazan za svaku poziciju',
   social_skillMatch: 'Podudaranje vještina prije apliciranja',
-  social_free: 'Besplatno za studente, uvijek',
+  social_free: 'Besplatno za kandidate, uvijek',
 
   // CTA
   cta_title: 'Tvoja praksa je već objavljena.',
@@ -1095,9 +1331,9 @@ const bs: typeof mk = {
   cta_btn: 'Pronađi moje podudaranje',
 
   // Footer
-  footer_tagline: 'Linker — Napravljen za studente koji zaslužuju više od Discord poruka',
+  footer_tagline: 'Linker — Napravljen za kandidate koji zaslužuju više od Discord poruka',
 
-  // Student dashboard
+  // Candidate dashboard
   search_placeholder: 'Pretraži po naslovu, kompaniji ili vještini...',
   filter_all: 'Svi oglasi',
   filter_internship: 'Praksa',
@@ -1106,6 +1342,9 @@ const bs: typeof mk = {
   filter_remote: 'Samo udaljeni rad',
   sort_mostRelevant: 'Najrelevantnije',
   label_results: 'rezultata',
+  label_sort: 'Sortiraj',
+  label_step: 'Korak',
+  label_closesIn: 'Zatvara se za',
   match_profile: 'Podudaranje profila',
   match_yourScore: 'Tvoji bodovi podudaranja',
   match_notOnProfile: 'Nije u profilu',
@@ -1125,7 +1364,7 @@ const bs: typeof mk = {
   empty_noResultsHint: 'Pokušaj promijeniti kriterije pretrage',
   empty_selectJob: 'Odaberi oglas da vidiš detalje',
 
-  // Student applications
+  // Candidate applications
   page_applications: 'Prijave',
   label_total: 'ukupno',
   label_inInterview: 'u intervjuu',
@@ -1143,7 +1382,7 @@ const bs: typeof mk = {
   empty_noApplicationsHint: 'Apliciraj za prvu poziciju za manje od 60 sekundi.',
   btn_findInternships: 'Pronađi prakse',
 
-  // Student profile
+  // Candidate profile
   page_myProfile: 'Moj profil',
   btn_edit: 'Uredi',
   label_university: 'Univerzitet',
@@ -1209,7 +1448,7 @@ const bs: typeof mk = {
   label_skills: 'Vještine / Tagovi',
   btn_publish: 'Objavi oglas',
   success_jobPosted: 'Oglas objavljen!',
-  success_jobPostedDesc: 'je sada aktivan i vidljiv studentima.',
+  success_jobPostedDesc: 'je sada aktivan i vidljiv kandidatima.',
   btn_postAnother: 'Objavi još jedan',
   btn_viewListings: 'Vidi oglase',
 
@@ -1221,9 +1460,52 @@ const bs: typeof mk = {
   label_founded: 'Osnovana',
   label_location: 'Lokacija',
   section_openPositions: 'Otvorene pozicije',
-  label_studentsHired: 'Studenti zaposleni putem Linkera',
+  label_studentsHired: 'Kandidati zaposleni putem Linkera',
   label_responseTime: 'Vrijeme odgovora',
   section_contact: 'Kontakt',
+
+  // Application limits
+  limit_weekly: 'Sedmični limit',
+  limit_remaining: 'preostalih prijava',
+  limit_available: 'Dostupno',
+  limit_reached: 'Limit dostignut',
+  limit_loading: 'Učitavanje...',
+  limit_hint: 'Ovaj limit važi za posljednjih 7 dana.',
+  limit_reached_desc: 'Dostigli ste sedmični limit. Pokušajte ponovo nakon resetovanja.',
+  limit_duplicate: 'Već ste aplicirali na ovu poziciju.',
+
+  // Speed hiring
+  tab_shortlisted: 'U užem izboru',
+  btn_shortlist: 'Stavi u uži izbor',
+  tip_shortlisted: 'U užem ste izboru. Očekujte brz sljedeći korak.',
+
+  // Structured profile
+  section_projects: 'Projekti',
+  label_projectsAdded: 'projekata',
+  section_interests: 'Interesi',
+  section_availability: 'Dostupnost',
+  label_availability: 'Dostupnost',
+  placeholder_projectName: 'Naziv projekta',
+  placeholder_projectDesc: 'Kratak opis',
+  placeholder_projectLink: 'Link (opciono)',
+  placeholder_projectSkills: 'Vještine (odvojene zarezom)',
+  placeholder_interests: 'UX, fintech, edukacija...',
+  placeholder_availability: 'npr. 20–30h/sedmica, juni–septembar',
+  empty_projects: 'Još nema dodanih projekata.',
+  empty_interests: 'Dodaj interese za bolje podudaranje.',
+  empty_availability: 'Dodaj dostupnost za brže zapošljavanje.',
+  empty_skills: 'Dodaj barem 3 ključne vještine.',
+  btn_addProject: 'Dodaj projekat',
+  btn_remove: 'Ukloni',
+  btn_cancel: 'Otkaži',
+  profile_projectsAdded: 'Projekti dodani',
+  profile_interestsAdded: 'Interesi dodani',
+  profile_availabilityAdded: 'Dostupnost dodana',
+  profile_structuredTip: 'Strukturisan profil ubrzava odgovore.',
+  profile_missing: 'Profil nije pronađen u bazi. Sačuvaj da bi se kreirao.',
+  profile_error: 'Profil se ne može učitati. Pokušaj ponovo.',
+  linker_no_cv: 'Linker ne koristi CV. Projekti i vještine su dovoljni.',
+  match_badge: 'podudaranje',
 
   // Shared
   label_open: 'Otvoreno',

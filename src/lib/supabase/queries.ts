@@ -1,5 +1,6 @@
 import { createClient } from './client'
-import { Job, Organization } from '@/types'
+import { Application, Job, Organization, Student } from '@/types'
+import { mockJobs, mockOrganizations } from '@/lib/mock-data'
 
 // Generates dicebear logo URL from org name — same pattern as the original mock data
 function orgLogoUrl(name: string): string {
@@ -68,12 +69,9 @@ export async function fetchJobs(): Promise<Job[]> {
     .eq('status', 'open')
     .order('posted_at', { ascending: false })
 
-  if (error) {
-    console.error('[fetchJobs]', error.message)
-    return []
-  }
+  if (error || !data?.length) return mockJobs
 
-  return (data ?? []).map(mapJob)
+  return data.map(mapJob)
 }
 
 export async function fetchOrganizations(): Promise<Organization[]> {
@@ -83,10 +81,95 @@ export async function fetchOrganizations(): Promise<Organization[]> {
     .select('*')
     .order('name')
 
+  if (error || !data?.length) return mockOrganizations
+
+  return data.map(mapOrg)
+}
+
+export async function fetchStudentProfile(studentId: string): Promise<Student | null> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('student_profiles')
+    .select('*')
+    .eq('id', studentId)
+    .maybeSingle()
+
   if (error) {
-    console.error('[fetchOrganizations]', error.message)
+    console.error('[fetchStudentProfile]', error.message)
+    throw new Error(error.message)
+  }
+
+  if (!data) return null
+
+  return {
+    id: data.id,
+    name: data.name ?? '',
+    email: data.email ?? '',
+    avatar: data.avatar ?? undefined,
+    university: data.university ?? '',
+    major: data.major ?? '',
+    year: data.year ?? '',
+    gpa: data.gpa ?? undefined,
+    bio: data.bio ?? '',
+    skills: data.skills ?? [],
+    projects: data.projects ?? [],
+    interests: data.interests ?? [],
+    availability: data.availability ?? undefined,
+    linkedin: data.linkedin ?? undefined,
+    github: data.github ?? undefined,
+  }
+}
+
+function mapApplication(row: any): Application {
+  return {
+    id: row.id,
+    jobId: row.job_id,
+    orgId: row.org_id ?? undefined,
+    studentId: row.student_id,
+    studentName: row.student_name ?? '',
+    studentEmail: row.student_email ?? '',
+    studentUniversity: row.student_university ?? '',
+    studentMajor: row.student_major ?? '',
+    studentAvatar: row.student_avatar ?? undefined,
+    studentSkills: row.student_skills ?? undefined,
+    studentProjects: row.student_projects ?? undefined,
+    studentInterests: row.student_interests ?? undefined,
+    studentAvailability: row.student_availability ?? undefined,
+    coverNote: row.cover_note ?? undefined,
+    status: row.status,
+    appliedAt: row.created_at ?? '',
+    updatedAt: row.updated_at ?? row.created_at ?? '',
+  }
+}
+
+export async function fetchStudentApplications(studentId: string): Promise<Application[]> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('applications')
+    .select('*')
+    .eq('student_id', studentId)
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('[fetchStudentApplications]', error.message)
     return []
   }
 
-  return (data ?? []).map(mapOrg)
+  return (data ?? []).map(mapApplication)
+}
+
+export async function fetchOrgApplications(orgId: string): Promise<Application[]> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('applications')
+    .select('*')
+    .eq('org_id', orgId)
+    .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('[fetchOrgApplications]', error.message)
+    return []
+  }
+
+  return (data ?? []).map(mapApplication)
 }

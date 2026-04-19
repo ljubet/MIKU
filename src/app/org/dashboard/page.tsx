@@ -2,20 +2,19 @@
 
 import { useApp } from "@/lib/app-context";
 import { useLang } from "@/lib/language-context";
-import { mockOrgApplicants } from "@/lib/mock-data";
 import { AppStatusBadge, JobTypeBadge } from "@/components/shared/StatusBadge";
 import { List, Users, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export default function OrgDashboard() {
-  const { currentOrg, jobs } = useApp();
+  const { currentOrg, jobs, orgApplications } = useApp();
   const { t } = useLang();
 
   const orgJobs = jobs.filter((j) => j.orgId === currentOrg.id);
   const totalApplicants = orgJobs.reduce((sum, j) => sum + j.applicantCount, 0);
   const openJobs = orgJobs.filter((j) => j.status === "open").length;
-  const recentApplicants = mockOrgApplicants.slice(0, 4);
+  const recentApplicants = orgApplications.slice(0, 4);
 
   const stats = [
     {
@@ -36,7 +35,7 @@ export default function OrgDashboard() {
     },
     {
       label: t('stat_inInterview'),
-      value: mockOrgApplicants.filter((a) => a.status === "interview").length,
+      value: orgApplications.filter((a) => a.status === "interview").length,
       icon: TrendingUp,
       href: "/org/applicants",
       color: "text-emerald-600",

@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 
 const statusConfig: Record<ApplicationStatus, { label: string; className: string }> = {
   applied: { label: "Applied", className: "bg-blue-50 text-blue-700 border-blue-200" },
+  shortlisted: { label: "Shortlisted", className: "bg-violet-50 text-violet-700 border-violet-200" },
   reviewing: { label: "Reviewing", className: "bg-amber-50 text-amber-700 border-amber-200" },
   interview: { label: "Interview", className: "bg-[#FF0078]/10 text-[#FF0078] border-[#FF0078]/30" },
   offered: { label: "Offered!", className: "bg-emerald-50 text-emerald-700 border-emerald-200" },

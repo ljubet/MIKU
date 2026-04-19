@@ -13,7 +13,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Linker — Find internships in 60 seconds",
   description:
-    "Linker helps students discover and apply to internships and jobs faster than ever.",
+    "Linker helps candidates discover and apply to internships and jobs faster than ever.",
 };
 
 export default function RootLayout({

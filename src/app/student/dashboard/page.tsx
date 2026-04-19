@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { computeMatchScore } from "@/lib/mock-data";
+import { computeMatchScore } from "@/lib/match";
 import { JobType } from "@/types";
 import { useApp } from "@/lib/app-context";
 import { useLang } from "@/lib/language-context";
@@ -30,35 +30,67 @@ const TYPE_STYLES: Record<string, string> = {
 };
 
 export default function DashboardPage() {
-  const { savedJobs, toggleSave, hasApplied, applyToJob, currentStudent, jobs } = useApp();
+  const { savedJobs, toggleSave, hasApplied, applyToJob, currentStudent, jobs, applicationQuota } =
+    useApp();
   const { t } = useLang();
 
-  const FILTER_PILLS: { value: JobType | "all" | "remote"; label: string }[] = [
-    { value: "all", label: t('filter_all') },
-    { value: "internship", label: t('filter_internship') },
-    { value: "full-time", label: t('filter_fulltime') },
-    { value: "part-time", label: t('filter_parttime') },
-    { value: "remote", label: t('filter_remote') },
-  ];
-
   const [query, setQuery] = useState("");
-  const [activeFilter, setActiveFilter] = useState<string>("all");
   const [selectedJobId, setSelectedJobId] = useState<string>("");
+  const [openFilter, setOpenFilter] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<"relevant" | "newest" | "salary" | "deadline">("relevant");
+
+  // Filter state
+  const [jobTypes, setJobTypes] = useState<string[]>([]);
+  const [salaryOnly, setSalaryOnly] = useState(false);
+  const [salaryMin, setSalaryMin] = useState<number | null>(null);
+  const [remoteOptions, setRemoteOptions] = useState<string[]>([]);
+  const [datePosted, setDatePosted] = useState<string>("all");
+
+  const toggleArr = (arr: string[], val: string) =>
+    arr.includes(val) ? arr.filter((x) => x !== val) : [...arr, val];
+
+  const activeCount = (checks: boolean[]) => checks.filter(Boolean).length;
 
   const filtered = useMemo(() => {
-    return jobs.filter((job) => {
+    const cutoff: Record<string, number> = { "7days": 7, "14days": 14, "30days": 30 };
+    const results = jobs.filter((job) => {
       const q = query.toLowerCase();
-      const matchQuery =
-        !q ||
-        job.title.toLowerCase().includes(q) ||
-        job.orgName.toLowerCase().includes(q) ||
-        job.tags.some((t) => t.toLowerCase().includes(q));
-      const matchFilter =
-        activeFilter === "all" ||
-        (activeFilter === "remote" ? job.remote : job.type === activeFilter);
-      return matchQuery && matchFilter;
+      if (q && !job.title.toLowerCase().includes(q) && !job.orgName.toLowerCase().includes(q) && !job.tags.some((t) => t.toLowerCase().includes(q))) return false;
+      if (jobTypes.length && !jobTypes.includes(job.type)) return false;
+      if (salaryOnly && !job.salary) return false;
+      if (salaryMin !== null && job.salary) {
+        const num = parseInt(job.salary.replace(/[^0-9]/g, "")) || 0;
+        if (num < salaryMin) return false;
+      }
+      if (remoteOptions.length) {
+        const wantsRemote = remoteOptions.includes("remote");
+        const wantsOnsite = remoteOptions.includes("onsite");
+        if (wantsRemote && !job.remote) return false;
+        if (wantsOnsite && job.remote) return false;
+      }
+      if (datePosted !== "all" && cutoff[datePosted]) {
+        const days = (Date.now() - new Date(job.postedAt).getTime()) / 86400000;
+        if (days > cutoff[datePosted]) return false;
+      }
+      return true;
     });
-  }, [query, activeFilter]);
+
+    return [...results].sort((a, b) => {
+      if (sortBy === "relevant") return computeMatchScore(b.tags, currentStudent.skills) - computeMatchScore(a.tags, currentStudent.skills);
+      if (sortBy === "newest") return new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime();
+      if (sortBy === "salary") {
+        const sa = parseInt(a.salary?.replace(/[^0-9]/g, "") || "0");
+        const sb = parseInt(b.salary?.replace(/[^0-9]/g, "") || "0");
+        return sb - sa;
+      }
+      if (sortBy === "deadline") {
+        const da = a.daysUntilDeadline ?? 999;
+        const db = b.daysUntilDeadline ?? 999;
+        return da - db;
+      }
+      return 0;
+    });
+  }, [jobs, query, jobTypes, salaryOnly, salaryMin, remoteOptions, datePosted, sortBy, currentStudent.skills]);
 
   const selectedJob = filtered.find((j) => j.id === selectedJobId) ?? filtered[0] ?? null;
   const matchScore = selectedJob ? computeMatchScore(selectedJob.tags, currentStudent.skills) : 0;
@@ -75,12 +107,31 @@ export default function DashboardPage() {
 
   const isSavedDetail = selectedJob ? savedJobs.includes(selectedJob.id) : false;
   const isApplied = selectedJob ? hasApplied(selectedJob.id) : false;
+  const remaining = applicationQuota?.remaining ?? null;
+  const limitReached = remaining !== null && remaining <= 0;
 
   return (
     <div className="-mx-4 -my-4 md:-mx-8 md:-my-8 min-h-screen md:h-screen px-4 py-4 md:px-6 md:py-5 bg-gray-50 flex flex-col">
 
-      {/* ── Search bar ── */}
-      <div className="relative mb-3">
+       {/* ── Weekly quota ── */}
+       <div className="bg-white border border-gray-100 rounded-xl px-4 py-3 mb-3 flex items-center justify-between">
+         <div>
+           <p className="text-xs uppercase tracking-wide text-gray-400">{t('limit_weekly')}</p>
+           <p className="text-sm font-semibold text-gray-900">
+             {remaining !== null ? `${remaining} ${t('limit_remaining')}` : t('limit_loading')}
+           </p>
+         </div>
+         <div
+           className={`text-xs font-semibold px-2 py-1 rounded-full ${
+             limitReached ? "bg-red-50 text-red-600" : "bg-emerald-50 text-emerald-600"
+           }`}
+         >
+           {limitReached ? t('limit_reached') : t('limit_available')}
+         </div>
+       </div>
+
+       {/* ── Search bar ── */}
+       <div className="relative mb-3">
         <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
         <Input
           value={query}
@@ -91,20 +142,135 @@ export default function DashboardPage() {
       </div>
 
       {/* ── Filter pills ── */}
-      <div className="flex items-center gap-2 mb-4 overflow-x-auto pb-1 scrollbar-none">
-        {FILTER_PILLS.map(({ value, label }) => (
-          <button
-            key={value}
-            onClick={() => setActiveFilter(value)}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all whitespace-nowrap ${
-              activeFilter === value
-                ? "bg-gray-900 text-white border-gray-900"
-                : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
-            }`}
-          >
-            {label}
-          </button>
-        ))}
+      <div className="relative mb-4">
+        <div className="flex items-center gap-2 flex-wrap">
+
+          {/* Job Type */}
+          {(() => {
+            const count = jobTypes.length;
+            const active = count > 0;
+            return (
+              <div className="relative shrink-0">
+                <button
+                  onClick={() => setOpenFilter(openFilter === "type" ? null : "type")}
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all whitespace-nowrap ${active ? "bg-gray-900 text-white border-gray-900" : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"}`}
+                >
+                  Job Type {count > 0 && <span className="bg-white text-gray-900 text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">{count}</span>}
+                  <ChevronDown className="w-3 h-3 opacity-60" />
+                </button>
+                {openFilter === "type" && (
+                  <div className="absolute top-full left-0 mt-1.5 bg-white border border-gray-200 rounded-2xl shadow-lg p-3 z-50 min-w-[180px]">
+                    {["internship", "full-time", "part-time"].map((v) => (
+                      <label key={v} className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" checked={jobTypes.includes(v)} onChange={() => setJobTypes(toggleArr(jobTypes, v))} className="accent-gray-900 w-4 h-4" />
+                        <span className="text-sm text-gray-700 capitalize">{v}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
+          {/* Salary */}
+          {(() => {
+            const count = activeCount([salaryOnly, salaryMin !== null]);
+            const active = count > 0;
+            return (
+              <div className="relative shrink-0">
+                <button
+                  onClick={() => setOpenFilter(openFilter === "salary" ? null : "salary")}
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all whitespace-nowrap ${active ? "bg-gray-900 text-white border-gray-900" : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"}`}
+                >
+                  Salary {count > 0 && <span className="bg-white text-gray-900 text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">{count}</span>}
+                  <ChevronDown className="w-3 h-3 opacity-60" />
+                </button>
+                {openFilter === "salary" && (
+                  <div className="absolute top-full left-0 mt-1.5 bg-white border border-gray-200 rounded-2xl shadow-lg p-3 z-50 min-w-[230px]">
+                    <label className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-gray-50 cursor-pointer border-b border-gray-100 mb-1">
+                      <input type="checkbox" checked={salaryOnly} onChange={() => setSalaryOnly(!salaryOnly)} className="accent-gray-900 w-4 h-4" />
+                      <span className="text-sm text-gray-700">Only show jobs with salary</span>
+                    </label>
+                    {[null, 200, 300, 400, 500].map((v) => (
+                      <label key={v ?? "all"} className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" checked={salaryMin === v} onChange={() => setSalaryMin(v)} className="accent-gray-900 w-4 h-4" />
+                        <span className="text-sm text-gray-700">{v === null ? "All salaries" : `€${v}+/mo`}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
+          {/* Remote */}
+          {(() => {
+            const count = remoteOptions.length;
+            const active = count > 0;
+            return (
+              <div className="relative shrink-0">
+                <button
+                  onClick={() => setOpenFilter(openFilter === "remote" ? null : "remote")}
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all whitespace-nowrap ${active ? "bg-gray-900 text-white border-gray-900" : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"}`}
+                >
+                  Remote {count > 0 && <span className="bg-white text-gray-900 text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">{count}</span>}
+                  <ChevronDown className="w-3 h-3 opacity-60" />
+                </button>
+                {openFilter === "remote" && (
+                  <div className="absolute top-full left-0 mt-1.5 bg-white border border-gray-200 rounded-2xl shadow-lg p-3 z-50 min-w-[170px]">
+                    {[{ v: "remote", label: "Remote" }, { v: "onsite", label: "On-site" }].map(({ v, label }) => (
+                      <label key={v} className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" checked={remoteOptions.includes(v)} onChange={() => setRemoteOptions(toggleArr(remoteOptions, v))} className="accent-gray-900 w-4 h-4" />
+                        <span className="text-sm text-gray-700">{label}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
+          {/* Date Posted */}
+          {(() => {
+            const active = datePosted !== "all";
+            return (
+              <div className="relative shrink-0">
+                <button
+                  onClick={() => setOpenFilter(openFilter === "date" ? null : "date")}
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium border transition-all whitespace-nowrap ${active ? "bg-gray-900 text-white border-gray-900" : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"}`}
+                >
+                  Date Posted {active && <span className="bg-white text-gray-900 text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center">1</span>}
+                  <ChevronDown className="w-3 h-3 opacity-60" />
+                </button>
+                {openFilter === "date" && (
+                  <div className="absolute top-full left-0 mt-1.5 bg-white border border-gray-200 rounded-2xl shadow-lg p-3 z-50 min-w-[170px]">
+                    {[{ v: "all", label: "Any time" }, { v: "7days", label: "Last 7 days" }, { v: "14days", label: "Last 14 days" }, { v: "30days", label: "Last 30 days" }].map(({ v, label }) => (
+                      <label key={v} className="flex items-center gap-2.5 px-2 py-2 rounded-xl hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" checked={datePosted === v} onChange={() => setDatePosted(v)} className="accent-gray-900 w-4 h-4" />
+                        <span className="text-sm text-gray-700">{label}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
+          {/* Clear all */}
+          {(jobTypes.length || salaryOnly || salaryMin !== null || remoteOptions.length || datePosted !== "all") ? (
+            <button
+              onClick={() => { setJobTypes([]); setSalaryOnly(false); setSalaryMin(null); setRemoteOptions([]); setDatePosted("all"); }}
+              className="shrink-0 text-xs text-gray-400 hover:text-gray-700 underline transition-colors whitespace-nowrap"
+            >
+              Clear all
+            </button>
+          ) : null}
+        </div>
+
+        {/* Click-outside dismiss */}
+        {openFilter && (
+          <div className="fixed inset-0 z-40" onClick={() => setOpenFilter(null)} />
+        )}
       </div>
 
       {/* ── Master-detail ── */}
@@ -118,10 +284,36 @@ export default function DashboardPage() {
             <p className="text-sm text-gray-500">
               <span className="font-semibold text-gray-900">{filtered.length}</span> {t('label_results')}
             </p>
-            <button className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-800 transition-colors">
-              Sort: <span className="font-medium text-gray-700 ml-0.5">{t('sort_mostRelevant')}</span>
-              <ChevronDown className="w-3 h-3 ml-0.5" />
-            </button>
+            <div className="relative">
+              <button
+                onClick={() => setOpenFilter(openFilter === "sort" ? null : "sort")}
+                className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-800 transition-colors"
+              >
+                {t('label_sort')}:{" "}
+                <span className="font-medium text-gray-700 ml-0.5">
+                  {sortBy === "relevant" ? t('sort_mostRelevant') : sortBy === "newest" ? "Најнови" : sortBy === "salary" ? "Плата" : "Рок"}
+                </span>
+                <ChevronDown className="w-3 h-3 ml-0.5" />
+              </button>
+              {openFilter === "sort" && (
+                <div className="absolute right-0 top-full mt-1.5 bg-white border border-gray-200 rounded-2xl shadow-lg p-2 z-50 min-w-[160px]">
+                  {([
+                    { v: "relevant", label: t('sort_mostRelevant') },
+                    { v: "newest", label: "Најнови" },
+                    { v: "salary", label: "Највисока плата" },
+                    { v: "deadline", label: "Рок (итни прво)" },
+                  ] as const).map(({ v, label }) => (
+                    <button
+                      key={v}
+                      onClick={() => { setSortBy(v); setOpenFilter(null); }}
+                      className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-colors ${sortBy === v ? "bg-gray-900 text-white font-semibold" : "text-gray-700 hover:bg-gray-50"}`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Scrollable card list */}
@@ -355,7 +547,7 @@ export default function DashboardPage() {
                         </p>
                       </div>
                       <span className="text-xs font-medium text-gray-400 shrink-0 mt-0.5 bg-gray-50 border border-gray-200 px-2 py-0.5 rounded-full">
-                        Step {stage.step}
+                        {t('label_step')} {stage.step}
                       </span>
                     </div>
                   ))}
@@ -386,15 +578,22 @@ export default function DashboardPage() {
                   <CheckCircle2 className="w-4 h-4" /> {t('btn_applied')}
                 </span>
               ) : (
-                <button
-                  onClick={() => applyToJob(selectedJob, "")}
-                  className="bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold px-8 py-2.5 rounded-lg transition-colors"
-                >
-                  {t('btn_applyNow')}
-                </button>
-              )}
-            </div>
-          </div>
+                 <button
+                   onClick={async () => {
+                     if (!limitReached) await applyToJob(selectedJob);
+                   }}
+                   disabled={limitReached}
+                   className={`text-white text-sm font-semibold px-8 py-2.5 rounded-lg transition-colors ${
+                     limitReached
+                       ? "bg-gray-300 cursor-not-allowed"
+                       : "bg-gray-900 hover:bg-gray-800"
+                   }`}
+                 >
+                   {limitReached ? t('limit_reached') : t('btn_applyNow')}
+                 </button>
+               )}
+             </div>
+           </div>
         ) : (
           <div className="hidden md:flex w-full md:w-[62%] bg-white border border-gray-200 rounded-2xl items-center justify-center">
             <p className="text-sm text-gray-400">{t('empty_selectJob')}</p>

@@ -1,16 +1,29 @@
 export type Role = "student" | "org";
+export type AccountType = "candidate" | "provider";
+
+export interface StudentProject {
+  id: string;
+  name: string;
+  description: string;
+  link?: string;
+  skills?: string[];
+}
 
 export interface Student {
   id: string;
   name: string;
   email: string;
   avatar?: string;
+  iknow_verified?: boolean;
   university: string;
   major: string;
   year: string;
   gpa?: string;
   bio: string;
   skills: string[];
+  projects?: StudentProject[];
+  interests?: string[];
+  availability?: string;
   linkedin?: string;
   github?: string;
   resume?: string;
@@ -71,6 +84,7 @@ export interface Job {
 
 export type ApplicationStatus =
   | "applied"
+  | "shortlisted"
   | "reviewing"
   | "interview"
   | "offered"
@@ -79,12 +93,23 @@ export type ApplicationStatus =
 export interface Application {
   id: string;
   jobId: string;
+  orgId?: string;
   studentId: string;
   studentName: string;
   studentEmail: string;
   studentUniversity: string;
   studentMajor: string;
   studentAvatar?: string;
+  studentSkills?: string[];
+  studentProjects?: StudentProject[];
+  studentInterests?: string[];
+  studentAvailability?: string;
+  studentBio?: string;
+  studentGpa?: string;
+  studentYear?: string;
+  studentLinkedin?: string;
+  studentGithub?: string;
+  studentIknowVerified?: boolean;
   coverNote?: string;
   status: ApplicationStatus;
   appliedAt: string;

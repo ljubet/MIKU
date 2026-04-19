@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Sidebar } from "./Sidebar";
-import { Menu } from "lucide-react";
+import { Menu, X, Zap } from "lucide-react";
 import Link from "next/link";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -32,7 +32,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {/* Mobile top bar */}
         <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-white border-b border-gray-100 sticky top-0 z-40">
           <Link href="/">
-            <img src="/Logo LINKER FINAL 3.png" alt="Linker" className="h-7 w-auto" />
+            <img src="/Logo LINKER FINAL 3.png" alt="Linker" className="h-8 w-auto" />
           </Link>
           <button
             onClick={() => setOpen(true)}

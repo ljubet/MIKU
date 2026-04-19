@@ -1,9 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { Role, Job, Organization, Application } from "@/types";
-import { mockApplications, mockStudent, mockOrg } from "@/lib/mock-data";
-import { fetchJobs, fetchOrganizations } from "@/lib/supabase/queries";
+import { Application, Job, Organization, Role, Student } from "@/types";
+import { mockStudent, mockOrg, mockJobs, mockOrganizations, mockApplications, mockOrgApplicants } from "@/lib/mock-data";
 
 interface AppContextType {
   role: Role;
@@ -11,32 +10,70 @@ interface AppContextType {
   savedJobs: string[];
   toggleSave: (jobId: string) => void;
   applications: Application[];
-  applyToJob: (job: Job, coverNote?: string) => void;
+  applicationsLoading: boolean;
+  applyToJob: (job: Job) => Promise<{ ok: boolean; reason?: "limit" | "duplicate" }>;
   hasApplied: (jobId: string) => boolean;
-  currentStudent: typeof mockStudent;
+  currentStudent: Student;
+  profileStatus: "loading" | "ready" | "missing" | "error";
+  updateStudentProfile: (profile: Student) => Promise<void>;
+  applicationQuota: {
+    limit: number;
+    used: number;
+    remaining: number;
+    resetAt: string | null;
+  } | null;
+  refreshApplicationQuota: () => Promise<void>;
   currentOrg: typeof mockOrg;
   jobs: Job[];
   organizations: Organization[];
   jobsLoading: boolean;
+  orgApplications: Application[];
+  orgApplicationsLoading: boolean;
+  setOrgApplicationStatus: (applicationId: string, status: Application["status"]) => Promise<void>;
 }
 
 const AppContext = createContext<AppContextType | null>(null);
+
+const WEEKLY_LIMIT = 7;
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<Role>("student");
   const [savedJobs, setSavedJobs] = useState<string[]>([]);
   const [applications, setApplications] = useState<Application[]>(mockApplications);
-  const [jobs, setJobs] = useState<Job[]>([]);
-  const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [jobsLoading, setJobsLoading] = useState(true);
+  const [orgApplications, setOrgApplications] = useState<Application[]>(mockOrgApplicants);
+  const [currentStudent, setCurrentStudent] = useState<Student>(mockStudent);
+  const [profileStatus, setProfileStatus] = useState<"loading" | "ready" | "missing" | "error">("ready");
+  const [applicationQuota, setApplicationQuota] = useState({
+    limit: WEEKLY_LIMIT,
+    used: mockApplications.length,
+    remaining: WEEKLY_LIMIT - mockApplications.length,
+    resetAt: null as string | null,
+  });
 
+  // Read mock user from localStorage (set at login)
   useEffect(() => {
-    Promise.all([fetchJobs(), fetchOrganizations()]).then(([j, o]) => {
-      setJobs(j);
-      setOrganizations(o);
-      setJobsLoading(false);
-    });
+    try {
+      const raw = localStorage.getItem("mock_user");
+      if (raw) {
+        const { name, email, accountType } = JSON.parse(raw);
+        setCurrentStudent((prev) => ({
+          ...prev,
+          name: name || prev.name,
+          email: email || prev.email,
+        }));
+        if (accountType === "provider") setRole("org");
+      }
+    } catch {}
   }, []);
+
+  const refreshApplicationQuota = async () => {
+    setApplicationQuota({
+      limit: WEEKLY_LIMIT,
+      used: applications.length,
+      remaining: Math.max(0, WEEKLY_LIMIT - applications.length),
+      resetAt: null,
+    });
+  };
 
   const toggleSave = (jobId: string) => {
     setSavedJobs((prev) =>
@@ -44,26 +81,49 @@ export function AppProvider({ children }: { children: ReactNode }) {
     );
   };
 
-  const hasApplied = (jobId: string) =>
-    applications.some((a) => a.jobId === jobId);
+  const hasApplied = (jobId: string) => applications.some((a) => a.jobId === jobId);
 
-  const applyToJob = (job: Job, coverNote?: string) => {
-    if (hasApplied(job.id)) return;
+  const applyToJob = async (job: Job) => {
+    if (hasApplied(job.id)) return { ok: false, reason: "duplicate" as const };
+    if (applicationQuota.remaining <= 0) return { ok: false, reason: "limit" as const };
+
     const newApp: Application = {
-      id: `a${Date.now()}`,
+      id: `app-${Date.now()}`,
       jobId: job.id,
-      studentId: mockStudent.id,
-      studentName: mockStudent.name,
-      studentEmail: mockStudent.email,
-      studentUniversity: mockStudent.university,
-      studentMajor: mockStudent.major,
-      studentAvatar: mockStudent.avatar,
-      coverNote,
+      orgId: job.orgId,
+      studentId: currentStudent.id,
+      studentName: currentStudent.name,
+      studentEmail: currentStudent.email,
+      studentUniversity: currentStudent.university,
+      studentMajor: currentStudent.major,
+      studentAvatar: currentStudent.avatar,
+      studentSkills: currentStudent.skills,
       status: "applied",
-      appliedAt: new Date().toISOString().split("T")[0],
-      updatedAt: new Date().toISOString().split("T")[0],
+      appliedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
-    setApplications((prev) => [...prev, newApp]);
+
+    setApplications((prev) => [newApp, ...prev]);
+    setApplicationQuota((prev) => ({
+      ...prev,
+      used: prev.used + 1,
+      remaining: Math.max(0, prev.remaining - 1),
+    }));
+
+    return { ok: true };
+  };
+
+  const updateStudentProfile = async (profile: Student) => {
+    setCurrentStudent(profile);
+    setProfileStatus("ready");
+  };
+
+  const setOrgApplicationStatus = async (applicationId: string, status: Application["status"]) => {
+    setOrgApplications((prev) =>
+      prev.map((app) =>
+        app.id === applicationId ? { ...app, status, updatedAt: new Date().toISOString() } : app
+      )
+    );
   };
 
   return (
@@ -74,13 +134,21 @@ export function AppProvider({ children }: { children: ReactNode }) {
         savedJobs,
         toggleSave,
         applications,
+        applicationsLoading: false,
         applyToJob,
         hasApplied,
-        currentStudent: mockStudent,
+        currentStudent,
+        profileStatus,
+        updateStudentProfile,
+        applicationQuota,
+        refreshApplicationQuota,
         currentOrg: mockOrg,
-        jobs,
-        organizations,
-        jobsLoading,
+        jobs: mockJobs,
+        organizations: mockOrganizations,
+        jobsLoading: false,
+        orgApplications,
+        orgApplicationsLoading: false,
+        setOrgApplicationStatus,
       }}
     >
       {children}

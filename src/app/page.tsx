@@ -12,7 +12,54 @@ import {
   Sparkles,
   CheckCircle2,
   TrendingUp,
+  Zap,
 } from "lucide-react";
+
+const pricingTiers = [
+  {
+    name: "Starter",
+    price: "€0",
+    period: "/месечно",
+    tagline: "За мали компании",
+    highlight: false,
+    cta: "Започни бесплатно",
+    ctaHref: "/auth/provider",
+    features: ["2 активни огласи неделно", "Основна листа на кандидати", "Стандарден профил на компанија", "Пристап до апликации"],
+  },
+  {
+    name: "Basic",
+    price: "119 ден",
+    period: "/мес",
+    sub: "~€1.99",
+    tagline: "За редовно огласување",
+    highlight: false,
+    cta: "Започни",
+    ctaHref: "/auth/provider",
+    features: ["Сè од Starter", "5–7 активни огласи неделно", "Основен кандидат pipeline", "Основен AI ranking"],
+  },
+  {
+    name: "Growth",
+    price: "239 ден",
+    period: "/мес",
+    sub: "~€3.99",
+    tagline: "Најдобар баланс за раст",
+    highlight: true,
+    cta: "Започни",
+    ctaHref: "/auth/provider",
+    features: ["Сè од Basic", "10–12 активни огласи неделно", "Напреден pipeline (applied → interview)", "Подобрен AI ranking и shortlist", "Приоритетна обработка"],
+  },
+  {
+    name: "Pro",
+    price: "599 ден",
+    period: "/мес",
+    sub: "~€9.99",
+    tagline: "За максимален reach",
+    highlight: false,
+    cta: "Започни",
+    ctaHref: "/auth/provider",
+    features: ["Сè од Growth", "Неограничени огласи", "Advanced AI matching", "Featured visibility", "Напредна аналитика", "Приоритетна поддршка"],
+  },
+];
 
 export default function LandingPage() {
   const { setRole } = useApp();
@@ -62,7 +109,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <img src="/Logo LINKER FINAL 3.png" alt="Linker" className="h-8 w-auto" />
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link href="/student/dashboard" className="hidden sm:block">
+            <Link href="/auth/candidate" className="hidden sm:block">
               <Button
                 variant="ghost"
                 size="sm"
@@ -72,7 +119,7 @@ export default function LandingPage() {
                 {t('landing_forStudents')}
               </Button>
             </Link>
-            <Link href="/org/dashboard" className="hidden sm:block">
+            <Link href="/auth/provider" className="hidden sm:block">
               <Button
                 variant="ghost"
                 size="sm"
@@ -82,11 +129,10 @@ export default function LandingPage() {
                 {t('landing_forOrgs')}
               </Button>
             </Link>
-            <Link href="/student/dashboard">
+            <Link href="/auth">
               <Button
                 size="sm"
                 className="bg-[#FF0078] hover:bg-[#d60065] font-semibold"
-                onClick={() => setRole("student")}
               >
                 {t('landing_getStarted')}
               </Button>
@@ -106,12 +152,16 @@ export default function LandingPage() {
           {t('landing_headline_2')}
         </h1>
 
+        <p className="text-sm font-semibold uppercase tracking-wide text-[#FF0078] mb-3">
+          {t('landing_tagline')}
+        </p>
+
         <p className="text-lg text-gray-500 mb-8 max-w-2xl mx-auto leading-relaxed">
           {t('landing_subheadline')}
         </p>
 
         <div className="flex items-center justify-center gap-4 flex-wrap">
-          <Link href="/student/dashboard" onClick={() => setRole("student")}>
+          <Link href="/auth/candidate">
             <Button
               size="lg"
               className="bg-[#FF0078] hover:bg-[#d60065] gap-2 px-8 font-semibold text-base"
@@ -120,7 +170,7 @@ export default function LandingPage() {
               <ArrowRight className="w-4 h-4" />
             </Button>
           </Link>
-          <Link href="/org/dashboard" onClick={() => setRole("org")}>
+          <Link href="/auth/provider">
             <Button size="lg" variant="outline" className="gap-2 px-8 font-medium text-base">
               <Building2 className="w-4 h-4" />
               {t('landing_postBtn')}
@@ -217,6 +267,61 @@ export default function LandingPage() {
         </div>
       </div>
 
+      {/* Pricing */}
+      <section className="max-w-6xl mx-auto px-6 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-3">
+            Едноставен, транспарентен pricing
+          </h2>
+          <p className="text-gray-500 text-base">Почни бесплатно и расти со платформата. Без обврски.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-start">
+          {pricingTiers.map((tier) => (
+            <div
+              key={tier.name}
+              className={`relative rounded-3xl p-6 flex flex-col gap-5 ${
+                tier.highlight
+                  ? "bg-[#FF0078] text-white shadow-2xl shadow-[#FF0078]/30 scale-[1.03]"
+                  : "bg-white border border-gray-200 text-gray-900"
+              }`}
+            >
+              {tier.highlight && (
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                  <span className="bg-gray-900 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                    <Zap className="w-3 h-3" /> Популарно
+                  </span>
+                </div>
+              )}
+              <div>
+                <p className={`text-xs font-semibold uppercase tracking-widest mb-2 ${tier.highlight ? "text-white/70" : "text-gray-400"}`}>{tier.name}</p>
+                <div className="flex items-end gap-1.5">
+                  <span className="text-3xl font-extrabold leading-none">{tier.price}</span>
+                  <span className={`text-xs mb-1 ${tier.highlight ? "text-white/70" : "text-gray-400"}`}>{tier.period}</span>
+                </div>
+                {"sub" in tier && <p className={`text-xs mt-0.5 ${tier.highlight ? "text-white/60" : "text-gray-400"}`}>{tier.sub}</p>}
+                <p className={`text-sm mt-1.5 ${tier.highlight ? "text-white/80" : "text-gray-500"}`}>{tier.tagline}</p>
+              </div>
+              <ul className="flex flex-col gap-2 flex-1">
+                {tier.features.map((f) => (
+                  <li key={f} className="flex items-start gap-2 text-sm">
+                    <CheckCircle2 className={`w-4 h-4 mt-0.5 shrink-0 ${tier.highlight ? "text-white" : "text-[#FF0078]"}`} />
+                    <span className={tier.highlight ? "text-white/90" : "text-gray-700"}>{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href={tier.ctaHref}
+                className={`text-center text-sm font-bold py-2.5 rounded-xl transition-all ${
+                  tier.highlight ? "bg-gray-900 text-white hover:bg-gray-800" : "bg-[#FF0078] text-white hover:bg-[#e0006b]"
+                }`}
+              >
+                {tier.cta}
+              </Link>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="max-w-4xl mx-auto px-6 py-14 text-center">
         <div className="bg-gradient-to-br from-violet-600 to-violet-700 rounded-2xl px-8 py-14 text-white shadow-lg shadow-violet-200">
@@ -226,7 +331,7 @@ export default function LandingPage() {
           <p className="text-white/60 mb-8 text-base max-w-md mx-auto">
             {t('cta_subtitle')}
           </p>
-          <Link href="/student/dashboard" onClick={() => setRole("student")}>
+          <Link href="/auth/candidate">
             <Button
               size="lg"
               className="bg-white text-[#FF0078] hover:bg-[#FF0078]/10 gap-2 font-bold px-8 text-base shadow-sm"

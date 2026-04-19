@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Job } from "@/types";
 import { useApp } from "@/lib/app-context";
 import { useLang } from "@/lib/language-context";
-import { computeMatchScore } from "@/lib/mock-data";
+import { computeMatchScore } from "@/lib/match";
 import {
   Dialog,
   DialogContent,
@@ -24,10 +24,10 @@ interface ApplyModalProps {
 }
 
 export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
-  const { applyToJob, hasApplied, currentStudent } = useApp();
+  const { applyToJob, hasApplied, currentStudent, applicationQuota } = useApp();
   const { t } = useLang();
-  const [coverNote, setCoverNote] = useState("");
   const [applied, setApplied] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   if (!job) return null;
 
@@ -40,14 +40,27 @@ export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
     (sk) => !currentStudent.skills.map((s) => s.toLowerCase()).includes(sk.toLowerCase())
   );
 
-  const handleApply = () => {
-    applyToJob(job, coverNote);
+  const remaining = applicationQuota?.remaining ?? null;
+  const limitReached = remaining !== null && remaining <= 0;
+
+  const handleApply = async () => {
+    setError(null);
+    if (limitReached) {
+      setError(t('limit_reached_desc'));
+      return;
+    }
+    const result = await applyToJob(job);
+    if (!result.ok) {
+      if (result.reason === "limit") setError(t('limit_reached_desc'));
+      if (result.reason === "duplicate") setError(t('limit_duplicate'));
+      return;
+    }
     setApplied(true);
   };
 
   const handleClose = () => {
     setApplied(false);
-    setCoverNote("");
+    setError(null);
     onClose();
   };
 
@@ -212,20 +225,22 @@ export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
           </div>
         </div>
 
-        {/* Cover note */}
-        <div>
-          <label className="text-xs font-medium text-gray-500 block mb-1.5">
-            Cover Note{" "}
-            <span className="text-gray-300 font-normal">(optional)</span>
-          </label>
-          <textarea
-            value={coverNote}
-            onChange={(e) => setCoverNote(e.target.value)}
-            placeholder="Why are you a great fit? 2–3 sentences is plenty."
-            rows={3}
-            className="w-full text-sm border border-gray-200 rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#FF0078] focus:border-transparent placeholder:text-gray-300 font-[family-name:var(--font-poppins)]"
-          />
+        {/* Weekly quota */}
+        <div className="bg-gray-50 rounded-xl p-4 text-xs text-gray-600">
+          <div className="flex items-center justify-between">
+            <span className="font-semibold text-gray-700">{t('limit_weekly')}</span>
+            <span className={limitReached ? "text-red-500 font-semibold" : "text-emerald-600 font-semibold"}>
+              {remaining !== null ? `${remaining} ${t('limit_remaining')}` : t('limit_loading')}
+            </span>
+          </div>
+          <p className="text-gray-400 mt-1">{t('limit_hint')}</p>
         </div>
+
+        {error && (
+          <div className="text-xs text-red-500 bg-red-50 border border-red-100 rounded-lg px-3 py-2">
+            {error}
+          </div>
+        )}
 
         <div className="flex gap-3">
           <Button variant="outline" onClick={handleClose} className="flex-1">
@@ -233,7 +248,10 @@ export function ApplyModal({ job, open, onClose }: ApplyModalProps) {
           </Button>
           <Button
             onClick={handleApply}
-            className="flex-1 bg-[#FF0078] hover:bg-[#d60065] gap-1.5 font-semibold"
+            disabled={limitReached}
+            className={`flex-1 gap-1.5 font-semibold ${
+              limitReached ? "bg-gray-300 text-white cursor-not-allowed" : "bg-[#FF0078] hover:bg-[#d60065]"
+            }`}
           >
             <Zap className="w-4 h-4" />
             {t('btn_applyNow')}

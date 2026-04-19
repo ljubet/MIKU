@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Job } from "@/types";
 import { useApp } from "@/lib/app-context";
 import { useLang } from "@/lib/language-context";
-import { computeMatchScore } from "@/lib/mock-data";
+import { computeMatchScore } from "@/lib/match";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -35,7 +35,8 @@ interface JobDetailPanelProps {
 }
 
 export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
-  const { savedJobs, toggleSave, hasApplied, currentStudent, organizations } = useApp();
+  const { savedJobs, toggleSave, hasApplied, currentStudent, organizations, applicationQuota } =
+    useApp();
   const { t } = useLang();
   const [applyOpen, setApplyOpen] = useState(false);
 
@@ -52,6 +53,8 @@ export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
   );
   const org = organizations.find((o) => o.id === job.orgId);
   const isUrgent = job.daysUntilDeadline !== undefined && job.daysUntilDeadline <= 7;
+  const remaining = applicationQuota?.remaining ?? null;
+  const limitReached = remaining !== null && remaining <= 0;
 
   return (
     <>
@@ -267,14 +270,17 @@ export function JobDetailPanel({ job, open, onClose }: JobDetailPanelProps) {
                       <><Bookmark className="w-4 h-4 mr-1.5" /> {t('btn_save')}</>
                     )}
                   </Button>
-                  <Button
-                    className="flex-1 bg-[#FF0078] hover:bg-[#d60065] gap-1.5 font-semibold"
-                    onClick={() => setApplyOpen(true)}
-                  >
-                    <Zap className="w-4 h-4" /> {t('btn_applyNow')}
-                  </Button>
-                </div>
-              )}
+                   <Button
+                     className={`flex-1 gap-1.5 font-semibold ${
+                       limitReached ? "bg-gray-300 text-white cursor-not-allowed" : "bg-[#FF0078] hover:bg-[#d60065]"
+                     }`}
+                     onClick={() => !limitReached && setApplyOpen(true)}
+                     disabled={limitReached}
+                   >
+                     <Zap className="w-4 h-4" /> {limitReached ? t('limit_reached') : t('btn_applyNow')}
+                   </Button>
+                 </div>
+               )}
             </div>
           </div>
         </SheetContent>

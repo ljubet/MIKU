@@ -33,20 +33,6 @@ export async function updateSession(request: NextRequest) {
   // createServerClient and this call — it causes hard-to-debug logout issues.
   await supabase.auth.getClaims()
 
-  // Auth-based redirects go here once login/signup is implemented.
-  // Uncomment and adjust when /auth/login exists:
-  //
-  // const { data } = await supabase.auth.getClaims()
-  // const isAuthed = !!data?.claims
-  // const isPublicPath =
-  //   request.nextUrl.pathname === '/' ||
-  //   request.nextUrl.pathname.startsWith('/auth')
-  //
-  // if (!isAuthed && !isPublicPath) {
-  //   const url = request.nextUrl.clone()
-  //   url.pathname = '/auth/login'
-  //   return NextResponse.redirect(url)
-  // }
-
+  // Auth guard disabled for mock MVP — re-enable when real auth is wired up.
   return supabaseResponse
 }

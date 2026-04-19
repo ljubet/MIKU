@@ -2,7 +2,8 @@
 
 import { Job } from "@/types";
 import { useApp } from "@/lib/app-context";
-import { computeMatchScore } from "@/lib/mock-data";
+import { useLang } from "@/lib/language-context";
+import { computeMatchScore } from "@/lib/match";
 import { JobTypeBadge } from "./StatusBadge";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -24,7 +25,7 @@ interface JobCardProps {
   compact?: boolean;
 }
 
-function MatchScoreBadge({ score }: { score: number }) {
+function MatchScoreBadge({ score, label }: { score: number; label: string }) {
   const color =
     score >= 80
       ? "bg-emerald-50 text-emerald-700 border-emerald-200"
@@ -37,13 +38,14 @@ function MatchScoreBadge({ score }: { score: number }) {
       className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full border ${color}`}
     >
       <Zap className="w-3 h-3" />
-      {score}% match
+      {score}% {label}
     </span>
   );
 }
 
 export function JobCard({ job, onClick, compact = false }: JobCardProps) {
   const { savedJobs, toggleSave, hasApplied, currentStudent } = useApp();
+  const { t } = useLang();
   const saved = savedJobs.includes(job.id);
   const applied = hasApplied(job.id);
   const matchScore = computeMatchScore(job.tags, currentStudent.skills);
@@ -114,7 +116,7 @@ export function JobCard({ job, onClick, compact = false }: JobCardProps) {
             {job.remote && (
               <span className="flex items-center gap-1 text-xs text-gray-400">
                 <Wifi className="w-3 h-3" />
-                Remote OK
+                {t('label_remoteOk')}
               </span>
             )}
             {job.salary && (
@@ -160,12 +162,12 @@ export function JobCard({ job, onClick, compact = false }: JobCardProps) {
               </span>
               <span className="flex items-center gap-1">
                 <Users className="w-3 h-3" />
-                {job.applicantCount} applied
+                {job.applicantCount} {t('label_applicants')}
               </span>
               {isUrgent && job.daysUntilDeadline !== undefined && (
                 <span className="flex items-center gap-1 text-amber-600 font-medium">
                   <AlertCircle className="w-3 h-3" />
-                  Closes in {job.daysUntilDeadline}d
+                  {t('label_closesIn')} {job.daysUntilDeadline}d
                 </span>
               )}
             </div>
@@ -176,10 +178,10 @@ export function JobCard({ job, onClick, compact = false }: JobCardProps) {
                   variant="outline"
                   className="text-xs bg-green-50 text-green-700 border-green-200"
                 >
-                  Applied ✓
+                  {t('btn_applied')} ✓
                 </Badge>
               ) : (
-                <MatchScoreBadge score={matchScore} />
+                <MatchScoreBadge score={matchScore} label={t('match_badge')} />
               )}
             </div>
           </div>

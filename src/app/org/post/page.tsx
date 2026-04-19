@@ -175,7 +175,7 @@ export default function PostJobPage() {
               required
               value={form.description}
               onChange={(e) => set("description", e.target.value)}
-              placeholder="Describe the role, what students will learn, and the team culture."
+              placeholder="Describe the role, what candidates will learn, and the team culture."
               rows={4}
               className="w-full text-sm border border-gray-200 rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#FF0078] focus:border-transparent placeholder:text-gray-300"
             />

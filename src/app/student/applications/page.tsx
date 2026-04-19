@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const STATUS_ORDER: ApplicationStatus[] = [
+  "shortlisted",
   "interview",
   "offered",
   "reviewing",
@@ -18,13 +19,17 @@ const STATUS_ORDER: ApplicationStatus[] = [
 ];
 
 export default function ApplicationsPage() {
-  const { applications, jobs } = useApp();
+  const { applications, jobs, applicationsLoading } = useApp();
   const { t } = useLang();
 
   const nextActionTip: Record<ApplicationStatus, { text: string; tone: string }> = {
     applied: {
       text: t('tip_applied'),
       tone: "text-blue-500",
+    },
+    shortlisted: {
+      text: t('tip_shortlisted'),
+      tone: "text-violet-500",
     },
     reviewing: {
       text: t('tip_reviewing'),
@@ -59,8 +64,10 @@ export default function ApplicationsPage() {
       </div>
 
       {/* Status summary */}
-      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-        {(["applied", "reviewing", "interview", "offered", "rejected"] as ApplicationStatus[]).map(
+      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+        {(
+          ["applied", "shortlisted", "reviewing", "interview", "offered", "rejected"] as ApplicationStatus[]
+        ).map(
           (status) => {
             const count = applications.filter((a) => a.status === status).length;
             return (
@@ -78,7 +85,9 @@ export default function ApplicationsPage() {
         )}
       </div>
 
-      {sorted.length === 0 ? (
+      {applicationsLoading ? (
+        <div className="text-center py-20 text-gray-400 text-sm">{t('limit_loading')}</div>
+      ) : sorted.length === 0 ? (
         <div className="text-center py-20">
           <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center mx-auto mb-4">
             <FileText className="w-7 h-7 text-gray-300" />
