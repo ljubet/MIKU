@@ -1,12 +1,11 @@
 "use client";
 
-import { useRef } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useApp } from "@/lib/app-context";
 import { useLang } from "@/lib/language-context";
-import { useLandingScrollAnimations } from "@/lib/useLandingScrollAnimations";
-import { AnimatedVisualPlaceholder } from "@/components/shared/AnimatedVisualPlaceholder";
+import { LANGUAGES } from "@/lib/translations";
 import {
   ArrowRight,
   ShieldCheck,
@@ -14,62 +13,83 @@ import {
   Building2,
   Sparkles,
   CheckCircle2,
+  Plus,
   TrendingUp,
   Zap,
 } from "lucide-react";
 
-const pricingTiers = [
-  {
-    name: "Starter",
-    price: "€0",
-    period: "/месечно",
-    tagline: "За мали компании",
-    highlight: false,
-    cta: "Започни бесплатно",
-    ctaHref: "/auth/provider",
-    features: ["2 активни огласи месечно", "Основна листа на кандидати", "Стандарден профил на компанија", "Пристап до апликации"],
-  },
-  {
-    name: "Basic",
-    price: "119 ден",
-    period: "/мес",
-    sub: "~€1.99",
-    tagline: "За редовно огласување",
-    highlight: false,
-    cta: "Започни",
-    ctaHref: "/auth/provider",
-    features: ["Сè од Starter", "5–7 активни огласи месечно", "Основен кандидат pipeline", "Основен AI ranking"],
-  },
-  {
-    name: "Growth",
-    price: "239 ден",
-    period: "/мес",
-    sub: "~€3.99",
-    tagline: "Најдобар баланс за раст",
-    highlight: true,
-    cta: "Започни",
-    ctaHref: "/auth/provider",
-    features: ["Сè од Basic", "10–12 активни огласи месечно", "Напреден pipeline (applied → interview)", "Подобрен AI ranking и shortlist", "Приоритетна обработка"],
-  },
-  {
-    name: "Pro",
-    price: "599 ден",
-    period: "/мес",
-    sub: "~€9.99",
-    tagline: "За максимален reach",
-    highlight: false,
-    cta: "Започни",
-    ctaHref: "/auth/provider",
-    features: ["Сè од Growth", "Неограничени огласи", "Advanced AI matching", "Featured visibility", "Напредна аналитика", "Приоритетна поддршка"],
-  },
-];
-
 export default function LandingPage() {
   const { setRole } = useApp();
-  const { t } = useLang();
-  const rootRef = useRef<HTMLDivElement>(null);
-
-  useLandingScrollAnimations(rootRef);
+  const { t, lang, setLang } = useLang();
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const pricingTiers = [
+    {
+      name: t("pricing_tier_starter_name"),
+      price: "€0",
+      period: t("pricing_period_month"),
+      tagline: t("pricing_tier_starter_tagline"),
+      highlight: false,
+      cta: t("pricing_cta_start_free"),
+      ctaHref: "/auth/provider",
+      features: [
+        t("pricing_feature_starter_1"),
+        t("pricing_feature_starter_2"),
+        t("pricing_feature_starter_3"),
+        t("pricing_feature_starter_4"),
+      ],
+    },
+    {
+      name: t("pricing_tier_basic_name"),
+      price: "119 ден",
+      period: t("pricing_period_month_short"),
+      sub: "~€1.99",
+      tagline: t("pricing_tier_basic_tagline"),
+      highlight: false,
+      cta: t("pricing_cta_start"),
+      ctaHref: "/auth/provider",
+      features: [
+        t("pricing_feature_basic_1"),
+        t("pricing_feature_basic_2"),
+        t("pricing_feature_basic_3"),
+        t("pricing_feature_basic_4"),
+      ],
+    },
+    {
+      name: t("pricing_tier_growth_name"),
+      price: "239 ден",
+      period: t("pricing_period_month_short"),
+      sub: "~€3.99",
+      tagline: t("pricing_tier_growth_tagline"),
+      highlight: true,
+      cta: t("pricing_cta_start"),
+      ctaHref: "/auth/provider",
+      features: [
+        t("pricing_feature_growth_1"),
+        t("pricing_feature_growth_2"),
+        t("pricing_feature_growth_3"),
+        t("pricing_feature_growth_4"),
+        t("pricing_feature_growth_5"),
+      ],
+    },
+    {
+      name: t("pricing_tier_pro_name"),
+      price: "599 ден",
+      period: t("pricing_period_month_short"),
+      sub: "~€9.99",
+      tagline: t("pricing_tier_pro_tagline"),
+      highlight: false,
+      cta: t("pricing_cta_start"),
+      ctaHref: "/auth/provider",
+      features: [
+        t("pricing_feature_pro_1"),
+        t("pricing_feature_pro_2"),
+        t("pricing_feature_pro_3"),
+        t("pricing_feature_pro_4"),
+        t("pricing_feature_pro_5"),
+        t("pricing_feature_pro_6"),
+      ],
+    },
+  ];
 
   const stats = [
     { value: "200+", label: t('stats_openPositions') },
@@ -109,12 +129,24 @@ export default function LandingPage() {
   ];
 
   return (
-    <div ref={rootRef} className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="border-b border-gray-100 px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <img src="/Logo LINKER FINAL 3.png" alt="Linker" className="h-8 w-auto" />
           <div className="flex items-center gap-2 sm:gap-3">
+            <select
+              value={lang}
+              onChange={(event) => setLang(event.target.value as typeof lang)}
+              aria-label="Select language"
+              className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:border-[#FF0078]/40 hover:text-[#FF0078] focus:outline-none focus:ring-2 focus:ring-[#FF0078]/30 focus:border-[#FF0078]/50 sm:text-sm"
+            >
+              {LANGUAGES.map(({ code, label, flag }) => (
+                <option key={code} value={code}>
+                  {flag} {label}
+                </option>
+              ))}
+            </select>
             <Link href="/auth?mode=signin" className="hidden sm:block">
               <Button variant="ghost" size="sm" className="text-gray-500 font-medium">
                 {t('landing_login')}
@@ -131,14 +163,12 @@ export default function LandingPage() {
 
       {/* Hero */}
       <section data-anim="hero" className="relative max-w-4xl mx-auto px-6 pt-14 pb-8 text-center overflow-hidden">
-        <AnimatedVisualPlaceholder
-          id="hero"
-          className="hidden md:block absolute -top-10 left-1/2 -translate-x-1/2 w-56 h-56 bg-[#FF0078]/15"
-        />
         <h1 data-anim="hero-item" className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-[1.15] mb-5 tracking-tight">
-          <span className="whitespace-nowrap">
+          <span>
             {t('landing_headline_1')}{' '}
-            <span className="line-through text-gray-300">{t('landing_headline_strike')}</span>
+            <span className="inline-block align-baseline line-through text-gray-300 decoration-2">
+              {t('landing_headline_strike')}
+            </span>
           </span>
           <br />
           {t('landing_headline_2')}
@@ -187,10 +217,6 @@ export default function LandingPage() {
 
       {/* Features */}
       <section data-anim="features" className="relative max-w-4xl mx-auto px-6 py-14 overflow-hidden">
-        <AnimatedVisualPlaceholder
-          id="features"
-          className="hidden md:block absolute -right-12 top-6 w-40 h-40 bg-[#FF0078]/10"
-        />
         <div className="text-center mb-12">
           <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-3">
             {t('features_title')}
@@ -218,10 +244,6 @@ export default function LandingPage() {
 
       {/* How it works */}
       <section data-anim="steps" className="relative bg-gray-50 border-y border-gray-100 py-14 overflow-hidden">
-        <AnimatedVisualPlaceholder
-          id="steps"
-          className="hidden md:block absolute -left-10 top-10 w-44 h-44 bg-[#FF0078]/10"
-        />
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-3">
@@ -252,16 +274,12 @@ export default function LandingPage() {
 
       {/* Pricing */}
       <section data-anim="pricing" className="relative max-w-6xl mx-auto px-6 py-16 overflow-hidden">
-        <AnimatedVisualPlaceholder
-          id="pricing"
-          className="hidden md:block absolute right-6 -bottom-10 w-52 h-52 bg-[#FF0078]/10"
-        />
         <div className="text-center mb-12">
           <h2 className="text-3xl font-medium text-gray-900 tracking-tight mb-3">
-            Едноставен, транспарентен pricing{" "}
-            <span className="underline decoration-[#FF0078] underline-offset-4">за компании</span>
+            {t("pricing_title")}{" "}
+            <span className="underline decoration-[#FF0078] underline-offset-4">{t("pricing_title_companies")}</span>
           </h2>
-          <p className="text-gray-500 text-base">Почни бесплатно и расти со платформата. Без обврски.</p>
+          <p className="text-gray-500 text-base">{t("pricing_subtitle")}</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-start">
           {pricingTiers.map((tier) => (
@@ -277,7 +295,7 @@ export default function LandingPage() {
               {tier.highlight && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                   <span className="bg-gray-900 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
-                    <Zap className="w-3 h-3" /> Популарно
+                    <Zap className="w-3 h-3" /> {t("pricing_badge_popular")}
                   </span>
                 </div>
               )}
@@ -313,23 +331,19 @@ export default function LandingPage() {
 
       {/* CTA */}
       <section data-anim="cta" className="relative max-w-6xl mx-auto px-6 py-14 overflow-hidden">
-        <AnimatedVisualPlaceholder
-          id="cta"
-          className="hidden md:block absolute -right-6 -top-6 w-44 h-44 bg-[#FF0078]/15"
-        />
-        <div className="bg-[#FFF0F6] rounded-[36px] px-8 py-12 lg:px-14 lg:py-16 shadow-[0_24px_60px_rgba(255,0,120,0.15)]">
+        <div className="bg-white rounded-[32px] px-8 py-12 lg:px-14 lg:py-16 border border-gray-100 shadow-[0_20px_50px_rgba(15,23,42,0.06)]">
           <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
             <div>
-              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-[#FF0078] mb-5">
+              <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 mb-5">
                 {t('cta_title')}
               </h2>
-              <p className="text-lg text-[#9E4A74] mb-10 max-w-xl">
+              <p className="text-lg text-gray-500 mb-10 max-w-xl">
                 {t('cta_subtitle')}
               </p>
               <Link href="/auth/candidate">
                 <Button
                   size="lg"
-                  className="bg-[#FF0078] hover:bg-[#d60065] text-white gap-2 font-semibold px-8 text-base rounded-2xl shadow-md shadow-[#FF0078]/30"
+                  className="bg-[#FF0078] hover:bg-[#d60065] text-white gap-2 font-semibold px-8 text-base rounded-2xl shadow-md shadow-[#FF0078]/20"
                 >
                   {t('cta_btn')}
                   <ArrowRight className="w-4 h-4" />
@@ -337,24 +351,62 @@ export default function LandingPage() {
               </Link>
             </div>
             <div className="relative h-[280px] sm:h-[320px]">
-              <div className="absolute right-0 top-2 h-48 w-64 rounded-3xl bg-white shadow-[0_20px_50px_rgba(255,0,120,0.18)] border border-white/60" />
-              <div className="absolute right-10 top-16 h-36 w-56 rounded-3xl bg-gradient-to-br from-[#FF4DA3] to-[#FF0078] shadow-[0_20px_50px_rgba(255,0,120,0.35)]" />
-              <div className="absolute left-0 bottom-0 h-28 w-[70%] rounded-3xl bg-white shadow-[0_20px_50px_rgba(255,0,120,0.18)] border border-white/60" />
+              <div className="absolute right-0 top-2 h-48 w-64 rounded-3xl bg-white shadow-[0_20px_50px_rgba(15,23,42,0.08)] border border-gray-100" />
+              <div className="absolute right-10 top-16 h-36 w-56 rounded-3xl bg-gradient-to-br from-gray-900 to-gray-800 shadow-[0_20px_50px_rgba(15,23,42,0.2)]" />
+              <div className="absolute left-0 bottom-0 h-28 w-[70%] rounded-3xl bg-white shadow-[0_20px_50px_rgba(15,23,42,0.08)] border border-gray-100" />
               <div className="absolute left-6 bottom-8 h-6 w-1.5 rounded-full bg-[#FF0078]" />
-              <div className="absolute left-10 bottom-10 text-xs font-semibold text-[#8B2A5C]">
-                Linker match
+              <div className="absolute left-10 bottom-10 text-xs font-semibold text-gray-500">
+                {t("cta_match_label")}
               </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* FAQ */}
+      <section className="bg-[#FFE9F1] border-y border-[#FF0078]/10">
+        <div className="max-w-4xl mx-auto px-6 py-16">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-10">
+            {t('faq_title')}
+          </h2>
+          <div className="space-y-4">
+            {[
+              { q: t('faq_q1'), a: t('faq_a1') },
+              { q: t('faq_q2'), a: t('faq_a2') },
+              { q: t('faq_q3'), a: t('faq_a3') },
+              { q: t('faq_q4'), a: t('faq_a4') },
+            ].map(({ q, a }, index) => {
+              const isOpen = openFaq === index;
+              return (
+                <div
+                  key={q}
+                  className="rounded-2xl border border-[#FF0078]/10 bg-white/70 backdrop-blur-sm"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaq(isOpen ? null : index)}
+                    className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left"
+                    aria-expanded={isOpen}
+                  >
+                    <span className="text-base sm:text-lg font-semibold text-gray-900">{q}</span>
+                    <Plus
+                      className={`w-5 h-5 text-[#FF0078] transition-transform ${isOpen ? "rotate-45" : ""}`}
+                    />
+                  </button>
+                  {isOpen && (
+                    <div className="px-5 pb-4 text-sm text-gray-600 max-w-2xl">
+                      {a}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Footer */}
       <section data-anim="footer-cta" className="relative bg-gray-50 border-t border-gray-100 overflow-hidden">
-        <AnimatedVisualPlaceholder
-          id="footer"
-          className="hidden md:block absolute left-1/2 -translate-x-1/2 -top-14 w-64 h-64 bg-[#FF0078]/10"
-        />
         <div className="max-w-6xl mx-auto px-6 py-12 sm:py-16 text-center">
           <p className="text-sm sm:text-base text-gray-500 mb-6">{t('footer_cta_tagline')}</p>
           <Link href="/auth?mode=signup">
