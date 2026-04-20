@@ -205,6 +205,14 @@ const mk = {
   interview_insights_process: 'Преглед на процесот',
   interview_insights_locked_title: 'Интервју увидите се отклучуваат по покана за интервју',
   interview_insights_locked_desc: 'Добиј покана за да ги видиш веројатните прашања и совети за подготовка.',
+  interview_insights_fallback_q1: 'Кажи ни нешто за себе.',
+  interview_insights_fallback_q2: 'Зошто сакаш да работиш кај нас?',
+  interview_insights_fallback_q3: 'Кои се твоите силни страни?',
+  interview_insights_fallback_tip1: 'Истражи ја компанијата пред интервјуто.',
+  interview_insights_fallback_tip2: 'Подготви примери за минати искуства.',
+  interview_insights_fallback_tip3: 'Подготви прашања за интервјуерот.',
+  interview_insights_fallback_stage1: 'Иницијален разговор',
+  interview_insights_fallback_stage2: 'Техничко/финално интервју',
 
   // Candidate profile
   page_myProfile: 'Профил',
@@ -581,6 +589,14 @@ const en: typeof mk = {
   interview_insights_process: 'Interview process overview',
   interview_insights_locked_title: 'Interview Insights unlock once you’re invited',
   interview_insights_locked_desc: 'Get invited to access likely questions and preparation tips.',
+  interview_insights_fallback_q1: 'Tell us about yourself.',
+  interview_insights_fallback_q2: 'Why do you want to work here?',
+  interview_insights_fallback_q3: 'What are your strengths?',
+  interview_insights_fallback_tip1: 'Research the company before the interview.',
+  interview_insights_fallback_tip2: 'Prepare examples from past experience.',
+  interview_insights_fallback_tip3: 'Prepare questions for the interviewer.',
+  interview_insights_fallback_stage1: 'Initial screening',
+  interview_insights_fallback_stage2: 'Technical / final interview',
 
   // Candidate profile
   page_myProfile: 'Profile',
@@ -957,6 +973,14 @@ const sq: typeof mk = {
   interview_insights_process: 'Përmbledhje e procesit të intervistës',
   interview_insights_locked_title: 'Interview Insights hapen vetëm pas ftesës',
   interview_insights_locked_desc: 'Merr ftesë për të parë pyetjet dhe këshillat e përgatitjes.',
+  interview_insights_fallback_q1: 'Na tregoni diçka rreth vetes.',
+  interview_insights_fallback_q2: 'Pse doni të punoni këtu?',
+  interview_insights_fallback_q3: 'Cilat janë pikat tuaja të forta?',
+  interview_insights_fallback_tip1: 'Hulumtoni kompaninë para intervistës.',
+  interview_insights_fallback_tip2: 'Përgatitni shembuj nga përvoja e kaluar.',
+  interview_insights_fallback_tip3: 'Përgatitni pyetje për intervistuesin.',
+  interview_insights_fallback_stage1: 'Filtrimi fillestar',
+  interview_insights_fallback_stage2: 'Intervistë teknike / finale',
 
   // Candidate profile
   page_myProfile: 'Profili im',
@@ -1333,6 +1357,14 @@ const sr: typeof mk = {
   interview_insights_process: 'Pregled procesa intervjua',
   interview_insights_locked_title: 'Interview Insights se otključava nakon poziva',
   interview_insights_locked_desc: 'Dobij poziv da vidiš pitanja i savete za pripremu.',
+  interview_insights_fallback_q1: 'Recite nam nešto o sebi.',
+  interview_insights_fallback_q2: 'Zašto želite da radite ovde?',
+  interview_insights_fallback_q3: 'Koje su vaše snage?',
+  interview_insights_fallback_tip1: 'Istražite kompaniju pre intervjua.',
+  interview_insights_fallback_tip2: 'Pripremite primere iz prošlog iskustva.',
+  interview_insights_fallback_tip3: 'Pripremite pitanja za intervjuera.',
+  interview_insights_fallback_stage1: 'Inicijalni razgovor',
+  interview_insights_fallback_stage2: 'Tehničko / finalno intervju',
 
   // Candidate profile
   page_myProfile: 'Moj profil',
@@ -1709,6 +1741,14 @@ const tr: typeof mk = {
   interview_insights_process: 'Mülakat süreci özeti',
   interview_insights_locked_title: 'Interview Insights davet edilince açılır',
   interview_insights_locked_desc: 'Olası sorular ve hazırlık ipuçları için davet al.',
+  interview_insights_fallback_q1: 'Bize kendinizden bahsedin.',
+  interview_insights_fallback_q2: 'Neden burada çalışmak istiyorsunuz?',
+  interview_insights_fallback_q3: 'Güçlü yönleriniz nelerdir?',
+  interview_insights_fallback_tip1: 'Mülakattan önce şirketi araştırın.',
+  interview_insights_fallback_tip2: 'Geçmiş deneyimlerden örnekler hazırlayın.',
+  interview_insights_fallback_tip3: 'Mülakatçı için sorular hazırlayın.',
+  interview_insights_fallback_stage1: 'İlk eleme',
+  interview_insights_fallback_stage2: 'Teknik / final mülakat',
 
   // Candidate profile
   page_myProfile: 'Profilim',
@@ -2085,6 +2125,14 @@ const bs: typeof mk = {
   interview_insights_process: 'Pregled procesa intervjua',
   interview_insights_locked_title: 'Interview Insights se otključava nakon poziva',
   interview_insights_locked_desc: 'Dobij poziv da vidiš pitanja i savjete za pripremu.',
+  interview_insights_fallback_q1: 'Recite nam nešto o sebi.',
+  interview_insights_fallback_q2: 'Zašto želite raditi ovdje?',
+  interview_insights_fallback_q3: 'Koje su vaše snage?',
+  interview_insights_fallback_tip1: 'Istražite kompaniju prije intervjua.',
+  interview_insights_fallback_tip2: 'Pripremite primjere iz prošlog iskustva.',
+  interview_insights_fallback_tip3: 'Pripremite pitanja za intervjuera.',
+  interview_insights_fallback_stage1: 'Inicijalni razgovor',
+  interview_insights_fallback_stage2: 'Tehničko / finalno intervju',
 
   // Candidate profile
   page_myProfile: 'Moj profil',
